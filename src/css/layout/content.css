@@ -1,0 +1,43 @@
+.m-content {
+  height: calc(100vh - 44px);
+  width: 100%;
+  padding: 10px 16px 16px 16px;
+  /* background-color: #f4f7ff; */
+  background-color: red;
+  overflow: hidden;
+}
+
+.m-content .m-toolbar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  height: 36px;
+}
+
+.m-content .m-toolbar .toolbar-field {
+  height: 36px;
+}
+
+.m-content .m-toolbar .toolbar-field.combobox-field {
+  width: 219px;
+}
+
+.m-content .m-toolbar .m-toolbar-left,
+.m-content .m-toolbar .m-toolbar-right {
+  display: flex;
+  gap: 11px;
+}
+
+.m-content .m-toolbar .m-toolbar-right .toolbar-btn {
+  width: 36px;
+  height: 36px;
+  background-color: #ffffff;
+  border-radius: 3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

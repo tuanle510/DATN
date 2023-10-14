@@ -1,0 +1,48 @@
+.m-header {
+  height: 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.m-header .header-left {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.m-header .header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.m-header .header-right .header-year {
+  background-color: rgba(26, 164, 200, 0.2);
+  border-radius: 3px;
+  width: 112px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.header-year-content {
+  font-weight: bold;
+}
+.m-header .header-right .header-year .year-btn-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.m-header .header-right .header-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.m-header .header-right .header-icon-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

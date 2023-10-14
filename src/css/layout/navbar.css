@@ -1,0 +1,73 @@
+.m-navbar {
+  width: 226px;
+  height: 100vh;
+  background-color: #1c3048;
+  position: relative;
+}
+
+/* navbar header */
+.m-navbar .m-navbar-header {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 15px;
+}
+
+.m-navbar .m-navbar-header .navbar-header-logo {
+  background-image: url(../../assets/icon/QLTS-Icon-16x16.ico);
+  width: 36px;
+  height: 36px;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.m-navbar .m-navbar-header .navbar-header-title {
+  color: #fff;
+  font-size: 25px;
+}
+
+/* navbar list */
+.m-navbar .m-navbar-list {
+  padding: 15px 11px 0 11px;
+}
+
+.m-navbar .navbar-logo {
+  width: 44px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* navbar close */
+.m-navbar .close-navbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-top: 1px solid #afafaf;
+  height: 44px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 16px;
+}
+
+/* router-link */
+.m-navbar .m-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 6px;
+  color: #fff;
+  text-decoration: none;
+}
+.m-navbar ul li:hover,
+.m-navbar .router-link-active,
+.m-navbar .router-link-exact-active {
+  background-color: #1aa4c8 !important;
+  border-radius: 6px;
+}
