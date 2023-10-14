@@ -3,7 +3,10 @@ import { ref } from 'vue';
 export default {
   props: {},
   setup() {
-    return {};
+    const year = ref(new Date().getFullYear());
+    return {
+      year,
+    };
   },
 };
 </script>

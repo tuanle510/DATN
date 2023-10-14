@@ -1,6 +1,9 @@
 <script>
 import { ref } from 'vue';
+import TheNavbar from './TheNavbar.vue';
+import TheHeader from './TheHeader.vue';
 export default {
+  components: { TheNavbar, TheHeader },
   props: {},
   setup() {
     const navBarWidth = ref(266);
@@ -28,16 +31,16 @@ export default {
 <template>
   <main>
     <div class="m-layout">
-      <MISANavbar
+      <the-navbar
         @onCloseNavBar="onCloseNavBar"
         :isNavBarClose="isNavBarClose"
         :style="{ width: navBarWidth + 'px' }"
-      />
+      ></the-navbar>
       <div
         class="m-main"
         :style="{ width: 'calc(100% - ' + navBarWidth + 'px)' }"
       >
-        <MISAHeader />
+        <the-header />
         <div class="m-content">
           <RouterView></RouterView>
         </div>

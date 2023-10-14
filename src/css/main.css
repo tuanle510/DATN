@@ -3,8 +3,8 @@
 /* main */
 @import url(./layout/header.css);
 @import url(./layout/navbar.css);
-/* @import url(./layout/content.css);
-@import url(./layout/license.css); */
+@import url(./layout/content.css);
+/* @import url(./layout/license.css); */
 
 /* login */
 /* @import url(./page/login.css); */

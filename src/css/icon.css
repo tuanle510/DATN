@@ -172,6 +172,17 @@
   height: 23px;
 }
 
+.navbar-logo .dashboard {
+  background: url('/src/assets/icon/qlts-icon.png') no-repeat -329px -153px;
+  width: 22px;
+  height: 22px;
+}
+.router-link-exact-active .navbar-logo .dashboard-active {
+  background: url('/src/assets/icon/qlts-icon.png') no-repeat -330px -198px;
+  width: 20px;
+  height: 20px;
+}
+
 .navbar-logo .line {
   background: url('/src/assets/icon/qlts-icon.png') no-repeat -110px -153px;
   width: 21px;

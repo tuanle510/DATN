@@ -10,19 +10,14 @@ export default {
   setup(props, { emit }) {
     const routerList = ref([
       {
-        link: '/asset',
-        icon: 'asset',
+        path: '/dashboard',
+        icon: 'dashboard',
         name: 'Tổng quát',
       },
       {
-        link: '/license',
+        path: '/client',
         icon: 'setting',
         name: 'Quản lý',
-      },
-      {
-        link: '/license',
-        icon: 'setting',
-        name: 'Hóa đơn',
       },
     ]);
 
@@ -42,13 +37,12 @@ export default {
   <div class="m-navbar">
     <div class="m-navbar-header">
       <div class="navbar-header-logo"></div>
-      <!-- <div v-if="!isNavBarClose" class="navbar-header-title">HMS</div> -->
-      <div class="navbar-header-title">HMS</div>
+      <div v-if="!isNavBarClose" class="navbar-header-title">HMS</div>
     </div>
 
     <ul class="m-navbar-list">
       <li v-for="(router, index) in routerList" :key="index">
-        <RouterLink class="m-link" :to="{ path: router.link }">
+        <RouterLink class="m-link" :to="router.path">
           <div class="navbar-logo">
             <div :class="[router.icon, `${router.icon}-active`]"></div>
           </div>
@@ -59,9 +53,8 @@ export default {
 
     <div class="close-navbar">
       <div class="close-navbar-box" @click="onClickToggleNavBar">
-        <!-- <div v-if="!isNavBarClose" class="close-navbar-icon"></div> -->
-        <!-- <div v-else class="open-navbar-icon"></div> -->
-        <div class="open-navbar-icon"></div>
+        <div v-if="!isNavBarClose" class="close-navbar-icon"></div>
+        <div v-else class="open-navbar-icon"></div>
       </div>
     </div>
   </div>

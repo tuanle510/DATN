@@ -1,6 +1,5 @@
 <script>
 export default {
-  components: {},
   props: {},
   setup() {},
 };

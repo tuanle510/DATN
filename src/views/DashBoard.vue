@@ -9,5 +9,5 @@ export default {
 </script>
 
 <template>
-  <div>Đây là home view</div>
+  <div>Đây là DashBoard</div>
 </template>
