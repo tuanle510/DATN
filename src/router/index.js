@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import DashBoard from '../views/DashBoard.vue';
-import ClientView from '../views/ClientView.vue';
+import ChuNhaView from '../views/ChuNhaView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,8 +16,8 @@ const router = createRouter({
     },
     {
       path: '/client',
-      name: 'home',
-      component: ClientView,
+      name: 'chunha',
+      component: ChuNhaView,
     },
     // {
     //   path: '/about',
