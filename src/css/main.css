@@ -10,6 +10,8 @@
 /* @import url(./page/login.css); */
 
 /* base */
+@import url(./components/GridViewer.css);
+@import url(./components/TheInput.css);
 /* @import url(./base/alert.css);
 @import url(./base/input.css);
 @import url(./base/button.css);

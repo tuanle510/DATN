@@ -1,0 +1,54 @@
+input:disabled {
+  background: #f5f5f5;
+  color: black;
+}
+
+input.m-input {
+  position: relative;
+  height: 36px;
+  width: 100%;
+  border: 1px solid #afafaf;
+  outline: none;
+  border-radius: 2.5px;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+input.m-input:focus {
+  border: 1px solid #22a7ca !important;
+}
+
+.m-input-focus {
+  border: 1px solid #22a7ca !important;
+}
+
+input.m-input-error {
+  border: 1px solid #ec4b4b !important;
+}
+
+input:placeholder-shown {
+  font-family: MISA Font Italic;
+}
+
+input.number-input {
+  text-align: right;
+  padding-right: 14px;
+}
+
+.number-input-icon {
+  text-align: right;
+  padding-right: 25px !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.m-input-msg {
+  position: absolute;
+  bottom: -16px;
+  color: #ec4b4b;
+  font-size: 12px;
+}
