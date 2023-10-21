@@ -6,7 +6,10 @@ export default {
 </script>
 
 <template>
-  <MainLayout></MainLayout>
+  <div>
+    <MainLayout></MainLayout>
+    <ModalsContainer />
+  </div>
 </template>
 
 <style></style>

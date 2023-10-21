@@ -9,5 +9,5 @@ export default {
 </script>
 
 <template>
-  <div>Đây là ÁDFÁDF</div>
+  <div>Đây là cawn hoo</div>
 </template>

@@ -1,0 +1,112 @@
+.m-modal {
+  position: absolute;
+  width: 850px;
+  height: auto;
+  background-color: #fff;
+  margin: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 3px;
+}
+
+.m-modal-header {
+  padding: 16px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.m-modal-title {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.m-modal-close {
+  border-radius: 3px;
+}
+
+.m-modal-close:hover {
+  cursor: pointer;
+  background-color: #eee;
+}
+
+.m-modal-close:active {
+  background-color: #fefefe;
+}
+
+.m-modal-content {
+  overflow: auto;
+  padding: 0 16px 10px 16px;
+  border-radius: 0 0 3px 3px;
+}
+
+.modal-row {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+/*  */
+.m-modal-content .modal-field {
+  position: relative;
+  width: calc((100% - 32px) / 3);
+}
+
+.m-modal-content .modal-field-long {
+  width: calc(((100% - 32px) / 3) * 2 + 16px);
+}
+
+.m-modal-content .modal-field-long .icon-box-container {
+  position: absolute;
+  width: 72px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  margin-top: 23px;
+  right: -85px;
+  bottom: 0;
+}
+
+.m-modal-content .modal-field-full {
+  width: 100%;
+}
+
+.m-modal-content .modal-field .spin-button-container {
+  position: absolute;
+  right: 0px;
+  gap: 4px;
+  width: 20px;
+  height: 34px;
+  bottom: 0px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.m-modal-content .modal-field label {
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.m-modal-content .modal-field label span {
+  color: red;
+}
+
+/*  */
+.edit-field {
+  width: 65% !important;
+}
+
+.m-modal-footer {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 8px 16px;
+  width: 100%;
+  background-color: #f5f5f5;
+  border-radius: 0 0 3px 3px;
+}

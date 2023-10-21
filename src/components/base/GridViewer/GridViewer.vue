@@ -132,7 +132,7 @@ export default {
 
     <!-- paging -->
     <!-- v-if="isPaging"  -->
-    <div
+    <!-- <div
       class="m-footer-container"
       ref="FooterTable"
       @scroll="
@@ -152,7 +152,7 @@ export default {
           </tr>
         </tbody>
       </table>
-    </div>
+    </div> -->
   </div>
 </template>
 <style></style>

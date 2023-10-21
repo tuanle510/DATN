@@ -12,7 +12,7 @@ export default {
     // Đóng mở navbar
     const onCloseNavBar = () => {
       if (navBarWidth.value == 66) {
-        navBarWidth.value = 226;
+        navBarWidth.value = 266;
         isNavBarClose.value = false;
       } else {
         navBarWidth.value = 66;
