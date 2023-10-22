@@ -15,7 +15,12 @@ export default {
 </script>
 
 <template>
-  <DynamicModal ref="ThemChuNha" modalName="Thêm chủ nhà">
+  <DynamicModal
+    ref="ThemChuNha"
+    width="1000px"
+    title="Thêm chủ nhà"
+    position="right"
+  >
     <template #header>
       <h1>Custom Header</h1>
     </template>

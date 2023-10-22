@@ -3,12 +3,18 @@ import { defineComponent, ref } from 'vue';
 
 export default {
   expose: ['close'],
-  props:
+  props: {
     // Tiêu đề popup
-    {
-      modalName: String,
-      default: '',
+    title: String,
+    width: {
+      type: String,
+      default: '850px',
     },
+    position: {
+      type: String,
+      default: 'center',
+    },
+  },
   emits: ['update:modelValue'],
   methods: {
     close() {
@@ -20,9 +26,9 @@ export default {
 
 <template>
   <VueFinalModal :clickToClose="false">
-    <div class="m-modal">
+    <div :class="[`m-modal-${position}`]" :style="{ width: width }">
       <div class="m-modal-header">
-        <div class="m-modal-title">{{ modalName }}</div>
+        <div class="m-modal-title">{{ title }}</div>
         <div
           class="m-modal-close icon-box-24 tooltip"
           tooltip="Hủy bỏ"
