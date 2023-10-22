@@ -1,22 +1,21 @@
 <script>
 import { defineComponent, ref } from 'vue';
 
-export default defineComponent({
-  expose: ['modalId'],
-  props: {
-    modalName: String,
-    default: 'Teen ',
-  },
+export default {
+  expose: ['close'],
+  props:
+    // Tiêu đề popup
+    {
+      modalName: String,
+      default: '',
+    },
   emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    // close modal
-    const close = () => {
-      emit('update:modelValue', false);
-    };
-
-    return { close };
+  methods: {
+    close() {
+      this.$emit('update:modelValue', false);
+    },
   },
-});
+};
 </script>
 
 <template>

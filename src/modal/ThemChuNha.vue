@@ -1,19 +1,21 @@
 <script>
+import { ref } from 'vue';
+import baseDetailPopup from '../components/base/DynamicModal/baseDetailPopup.js';
 export default {
+  extends: baseDetailPopup,
   props: {},
   setup() {
-    const closeModal = () => {
-      console.log(this);
-    };
+    const modalName = 'ThemChuNha';
     return {
-      closeModal,
+      modalName,
     };
   },
+  methods: {},
 };
 </script>
 
 <template>
-  <DynamicModal modalName="Thêm chủ nhà" modalId="ThemChuNha">
+  <DynamicModal ref="ThemChuNha" modalName="Thêm chủ nhà">
     <template #header>
       <h1>Custom Header</h1>
     </template>
@@ -21,8 +23,8 @@ export default {
       <p>Custom Content</p>
     </template>
     <template #footer>
-      <TheButton class="outline-button" @click="closeModal">Đóng</TheButton>
-      <TheButton @click="closeModal">Cất</TheButton>
+      <TheButton class="outline-button" @click="close">Đóng</TheButton>
+      <TheButton @click="save">Cất</TheButton>
     </template>
   </DynamicModal>
 </template>

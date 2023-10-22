@@ -2,7 +2,6 @@
 // import { show } from '../components/base/DynamicModal/popup.js';
 import { ref } from 'vue';
 import { useModal } from 'vue-final-modal';
-import popupUtil from '../components/base/DynamicModal/popupUtil';
 export default {
   props: {},
   setup() {
