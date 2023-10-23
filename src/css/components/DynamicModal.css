@@ -48,6 +48,8 @@
 }
 
 .m-modal-content {
+  display: flex;
+  flex-direction: column;
   height: calc(100% - 62px - 52px);
   overflow: auto;
   padding: 0 16px 0px 16px;

@@ -5,13 +5,12 @@ input:disabled {
 
 input.m-input {
   position: relative;
-  height: 36px;
+  height: 30px;
   width: 100%;
   border: 1px solid #afafaf;
   outline: none;
   border-radius: 2.5px;
-  padding-left: 14px;
-  padding-right: 14px;
+  padding: 0px 10px;
 }
 
 input.m-input:focus {
@@ -51,4 +50,11 @@ input::-webkit-inner-spin-button {
   bottom: -16px;
   color: #ec4b4b;
   font-size: 12px;
+}
+
+.m-label {
+  padding-bottom: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 15px;
 }

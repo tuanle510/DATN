@@ -14,6 +14,7 @@
 @import url(./components/TheInput.css);
 @import url(./components/TheButton.css);
 @import url(./components/DynamicModal.css);
+@import url(./components/TabContainer.css);
 
 /* @import url(./base/alert.css);
 @import url(./base/input.css);
@@ -105,10 +106,21 @@ ul li {
   width: 100%;
 }
 
-.visible-none {
-  visibility: hidden;
+.flex1 {
+  flex: 1;
 }
-
-.bgc-none {
-  background-color: transparent;
+.flex2 {
+  flex: 2;
+}
+.flex3 {
+  flex: 3;
+}
+.flex4 {
+  flex: 4;
+}
+.flex5 {
+  flex: 5;
+}
+.flex6 {
+  flex: 6;
 }

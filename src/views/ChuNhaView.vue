@@ -1,19 +1,15 @@
 <script>
-// import { show } from '../components/base/DynamicModal/popup.js';
 import { ref } from 'vue';
-import { useModal } from 'vue-final-modal';
+import popupUtil from '../components/base/DynamicModal/popupUtil';
+
 export default {
   props: {},
   setup() {
-    const modalName = ref('ThemChuNha');
-    const popup = useModal({
-      component: modalName,
-    });
-    const showAddDialog = () => {
-      popup.open();
+    const add = () => {
+      popupUtil.show('ThemChuNha');
     };
     return {
-      showAddDialog,
+      add,
     };
   },
 };
@@ -24,12 +20,12 @@ export default {
     <div class="m-toolbar">
       <div class="m-toolbar-left">
         <div class="search-field toolbar-field" style="width=179px">
-          <the-input placeholder="Tìm kiếm tài sản" />
+          <TheInput placeholder="Tìm kiếm tài sản" />
         </div>
       </div>
       <div class="m-toolbar-right">
         <TheButton
-          @click="showAddDialog()"
+          @click="add()"
           style="box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16)"
           >Thêm
         </TheButton>
@@ -42,6 +38,6 @@ export default {
       </div>
     </div>
 
-    <grid-viewer columns="" datas=""> </grid-viewer>
+    <GridViewer :columns="[]" :datas="[]"> </GridViewer>
   </div>
 </template>

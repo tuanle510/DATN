@@ -6,33 +6,29 @@
   overflow: hidden;
 }
 
-.m-content .m-toolbar {
+.m-toolbar {
   position: relative;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
-  height: 36px;
+  height: 30px;
 }
 
-.m-content .m-toolbar .toolbar-field {
-  height: 36px;
+.m-toolbar .toolbar-field {
+  height: 30px;
 }
 
-.m-content .m-toolbar .toolbar-field.combobox-field {
-  width: 219px;
-}
-
-.m-content .m-toolbar .m-toolbar-left,
-.m-content .m-toolbar .m-toolbar-right {
+.m-toolbar .m-toolbar-left,
+.m-toolbar .m-toolbar-right {
   display: flex;
   gap: 11px;
 }
 
-.m-content .m-toolbar .m-toolbar-right .toolbar-btn {
-  width: 36px;
-  height: 36px;
+.m-toolbar .m-toolbar-right .toolbar-btn {
+  width: 30px;
+  height: 30px;
   background-color: #ffffff;
   border-radius: 3px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);

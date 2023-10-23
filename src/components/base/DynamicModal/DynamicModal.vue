@@ -1,6 +1,4 @@
 <script>
-import { defineComponent, ref } from 'vue';
-
 export default {
   expose: ['close'],
   props: {
@@ -15,17 +13,13 @@ export default {
       default: 'center',
     },
   },
-  emits: ['update:modelValue'],
-  methods: {
-    close() {
-      this.$emit('update:modelValue', false);
-    },
-  },
+  emits: ['update:modelValue', 'close'],
+  setup(props, { emit }) {},
 };
 </script>
 
 <template>
-  <VueFinalModal :clickToClose="false">
+  <VueFinalModal v-slot="{ close }">
     <div :class="[`m-modal-${position}`]" :style="{ width: width }">
       <div class="m-modal-header">
         <div class="m-modal-title">{{ title }}</div>
@@ -38,9 +32,9 @@ export default {
         </div>
       </div>
 
-      <form class="m-modal-content" ref="form" autocomplete="off">
+      <div class="m-modal-content" autocomplete="off">
         <slot name="content"></slot>
-      </form>
+      </div>
 
       <div class="m-modal-footer">
         <slot name="footer"></slot>

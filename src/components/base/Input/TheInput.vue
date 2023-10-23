@@ -8,6 +8,12 @@ export default {
     placeholder: {
       default: null,
     },
+    label: {
+      default: null,
+    },
+    required: {
+      default: false,
+    },
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
@@ -33,6 +39,7 @@ export default {
       @blur="blurInput($event)"
       @focus="focusInput($event)"
     /> -->
+    <div v-if="label" class="m-label">{{ label }}</div>
     <input
       ref="input"
       class="m-input"

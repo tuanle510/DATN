@@ -1,22 +1,22 @@
 <script>
 import { onMounted, ref } from 'vue';
 export default {
-  //   props: {
-  //     // Danh sách cột
-  //     columns,
-  //     // Danh sách dữ liệu
-  //     datas,
-  //     // Có tích chọn nhiều không
-  //     isMulti: {
-  //       default: false,
-  //       type: Boolean,
-  //     },
-  //     // Có phân trang hay không
-  //     isPaging: {
-  //       default: false,
-  //       type: Boolean,
-  //     },
-  //   },
+  props: {
+    // Danh sách cột
+    columns: Array,
+    // Danh sách dữ liệu
+    datas: Array,
+    // Có tích chọn nhiều không
+    isMulti: {
+      default: false,
+      type: Boolean,
+    },
+    // Có phân trang hay không
+    isPaging: {
+      default: false,
+      type: Boolean,
+    },
+  },
   setup() {
     const defaultColumns = ref([
       {
@@ -98,7 +98,7 @@ export default {
         <thead>
           <tr>
             <th
-              v-for="(column, index) in defaultColumns"
+              v-for="(column, index) in columns"
               :key="index"
               :style="{ width: column.width + 'px' }"
             >
@@ -111,7 +111,7 @@ export default {
           <tr
             @dblclick="showEditDialog(item)"
             @click="onRowClick(item, $event)"
-            v-for="(item, index) in defaultDatas"
+            v-for="(item, index) in datas"
             :key="index"
             :class="[{ 'm-tr-seleced': item.checked }, 'm-tr']"
           >
