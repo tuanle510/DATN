@@ -1,9 +1,9 @@
 <script>
-import { ref, onMounted } from 'vue';
-import { $vfm } from 'vue-final-modal';
-import popupUtil from '../components/base/DynamicModal/popupUtil';
+import { ref, onMounted } from "vue";
+import { $vfm } from "vue-final-modal";
+import popupUtil from "../components/base/DynamicModal/popupUtil";
 export default {
-  name: 'ThemChuNha',
+  name: "ThemChuNha",
   props: {},
   setup() {
     // Mặd định vào tab đầu tiên
@@ -15,61 +15,62 @@ export default {
     });
     const tabList = [
       {
-        tabTitle: 'Nhà/Căn hộ sở hữu',
+        tabTitle: "Nhà/Căn hộ sở hữu",
         columns: [
           {
             width: 100,
-            name: 'Tên căn hộ',
-            dataField: 'ten_chu_nha',
+            name: "Tên căn hộ",
+            dataField: "ten_chu_nha",
           },
           {
             width: 100,
-            name: 'Tên tòa nhà',
-            dataField: 'so_dien_thoai',
+            name: "Tên tòa nhà",
+            dataField: "so_dien_thoai",
           },
           {
             width: 150,
-            name: 'Địa chỉ',
-            dataField: 'email',
+            name: "Địa chỉ",
+            dataField: "email",
           },
           {
             width: 150,
-            name: 'Giấy chứng nhận số',
-            dataField: 'chung_minh_thu',
+            name: "Giấy chứng nhận số",
+            dataField: "chung_minh_thu",
           },
           {
             width: 150,
-            name: 'Giấy chứng nhận',
-            dataField: 'Giấy chứng nhận',
+            name: "Giấy chứng nhận",
+            dataField: "Giấy chứng nhận",
           },
           {
             width: 150,
-            name: 'Giấy chứng nhận ngày cấp',
-            dataField: 'ngay_sinh',
+            name: "Giấy chứng nhận ngày cấp",
+            dataField: "ngay_sinh",
           },
           {
             width: 150,
-            name: ' Mô tả',
-            dataField: 'dia_chi',
+            name: " Mô tả",
+            dataField: "dia_chi",
           },
         ],
       },
       {
-        tabTitle: 'Bộ hợp đồng',
+        tabTitle: "Bộ hợp đồng",
       },
       {
-        tabTitle: 'Hợp đồng',
+        tabTitle: "Hợp đồng",
       },
     ];
     const onTabClick = (index) => {
       activeTab.value = index;
       columnTab.value = tabList[index]?.columns || [];
     };
+    // Đóng form
     const close = () => {
       popupUtil.hide($vfm.dynamicModals.pop().component);
     };
     const openDetail = () => {
-      popupUtil.show('ThemHopDong');
+      popupUtil.show("ThemHopDong");
     };
     return {
       tabList,

@@ -1,23 +1,35 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import DashBoard from '../views/DashBoard.vue';
-import ChuNhaView from '../views/ChuNhaView.vue';
+import { createRouter, createWebHistory } from "vue-router";
+import DashBoard from "../views/DashBoard.vue";
+import ChuNhaView from "../views/ChuNhaView.vue";
+import CanHoView from "../views/CanHoView.vue";
+import KhachHangView from "../views/KhachHangView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      redirect: '/dashboard',
+      path: "/",
+      redirect: "/dashboard",
     },
     {
-      path: '/dashboard',
-      name: 'dashboard',
+      path: "/dashboard",
+      name: "dashboard",
       component: DashBoard,
     },
     {
-      path: '/client',
-      name: 'chunha',
+      path: "/chunha",
+      name: "chunha",
       component: ChuNhaView,
+    },
+    {
+      path: "/canho",
+      name: "canho",
+      component: CanHoView,
+    },
+    {
+      path: "/khachhang",
+      name: "khachhang",
+      component: KhachHangView,
     },
     // {
     //   path: '/about',

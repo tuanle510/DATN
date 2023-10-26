@@ -1,5 +1,5 @@
 <script>
-import { ref } from 'vue';
+import { ref } from "vue";
 export default {
   props: {
     isNavBarClose: {
@@ -10,20 +10,30 @@ export default {
   setup(props, { emit }) {
     const routerList = ref([
       {
-        path: '/dashboard',
-        icon: 'dashboard',
-        name: 'Tổng quát',
+        path: "/dashboard",
+        icon: "dashboard",
+        name: "Tổng quát",
       },
       {
-        path: '/client',
-        icon: 'setting',
-        name: 'Quản lý',
+        path: "/chunha",
+        icon: "setting",
+        name: "Chủ nhà",
+      },
+      {
+        path: "/canho",
+        icon: "setting",
+        name: "Căn hộ",
+      },
+      {
+        path: "/khachhang",
+        icon: "setting",
+        name: "Khách hàng",
       },
     ]);
 
     // Icon đóng mở navbar
     function onClickToggleNavBar() {
-      emit('onCloseNavBar');
+      emit("onCloseNavBar");
     }
     return {
       routerList,

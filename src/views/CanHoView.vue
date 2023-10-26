@@ -1,5 +1,5 @@
 <script>
-import { ref } from 'vue';
+import { ref } from "vue";
 export default {
   props: {},
   setup() {
@@ -9,5 +9,5 @@ export default {
 </script>
 
 <template>
-  <div>Đây là cawn hoo</div>
+  <div>Đây là Căn hộ</div>
 </template>

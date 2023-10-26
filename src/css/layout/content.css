@@ -1,4 +1,5 @@
 .m-content {
+  display: flex;
   height: calc(100vh - 44px);
   width: 100%;
   padding: 10px 16px 16px 16px;
@@ -23,10 +24,13 @@
 .m-toolbar .m-toolbar-left,
 .m-toolbar .m-toolbar-right {
   display: flex;
-  gap: 11px;
+  gap: 16px;
 }
-
-.m-toolbar .m-toolbar-right .toolbar-btn {
+.m-toolbar .m-toolbar-left .m-toolbar-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+.toolbar-btn {
   width: 30px;
   height: 30px;
   background-color: #ffffff;

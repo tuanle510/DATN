@@ -1,25 +1,25 @@
 <script>
 export default {
-  expose: ['close'],
+  expose: ["close"],
   props: {
     // Tiêu đề popup
     title: String,
     width: {
       type: String,
-      default: '850px',
+      default: "850px",
     },
     position: {
       type: String,
-      default: 'center',
+      default: "center",
     },
   },
-  emits: ['update:modelValue', 'close'],
+  emits: ["update:modelValue", "close"],
   setup(props, { emit }) {},
 };
 </script>
 
 <template>
-  <VueFinalModal v-slot="{ close }">
+  <VueFinalModal>
     <div :class="[`m-modal-${position}`]" :style="{ width: width }">
       <div class="m-modal-header">
         <div class="m-modal-title">{{ title }}</div>
