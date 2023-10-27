@@ -9,6 +9,7 @@ export default {
   <div>
     <MainLayout></MainLayout>
     <ModalsContainer />
+    <TheLoading id="mloading"></TheLoading>
   </div>
 </template>
 

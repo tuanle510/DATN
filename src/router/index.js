@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
-import DashBoard from "../views/DashBoard.vue";
-import ChuNhaView from "../views/ChuNhaView.vue";
-import CanHoView from "../views/CanHoView.vue";
-import KhachHangView from "../views/KhachHangView.vue";
+import DashBoard from "../views/DashBoard/DashBoardView.vue";
+import ChuNhaList from "../views/ChuNha/ChuNhaList.vue";
+import CanHoView from "../views/CanHo/CanHoView.vue";
+import KhachHangView from "../views/KhachHang/KhachHangView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,7 +19,7 @@ const router = createRouter({
     {
       path: "/chunha",
       name: "chunha",
-      component: ChuNhaView,
+      component: ChuNhaList,
     },
     {
       path: "/canho",

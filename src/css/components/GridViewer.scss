@@ -1,0 +1,118 @@
+$background-color_1: #fff;
+$background-color_2: #f5f5f5;
+$background-color_3: rgba(26, 164, 200, 0.2);
+$background-color_4: transparent;
+$background-color_5: #b8bcc3;
+
+/* table */
+.m-grid {
+  width: 100%;
+  height: 100%;
+  background-color: $background-color_1;
+  border-radius: 3px;
+  overflow: auto;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  .m-table-container {
+    border-radius: 3px;
+    position: relative;
+    flex: 1;
+    height: calc(100% - 40px);
+    overflow: auto;
+  }
+  .m-footer-container {
+    position: absolute;
+    bottom: 0px;
+    height: 40px;
+    background-color: $background-color_1;
+    width: 100%;
+    left: 0;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    padding-left: 13px;
+  }
+}
+
+.m-table {
+  background-color: $background-color_1;
+  border-radius: 3px;
+  border-collapse: collapse;
+  width: 100%;
+  thead {
+    z-index: 4;
+    position: sticky;
+    top: 0;
+    right: 0;
+    width: 100%;
+    tr {
+      th {
+        height: 38px;
+        background-color: $background-color_2;
+      }
+    }
+    .m-th-checkbox {
+      width: 40px !important;
+      max-width: 40px !important;
+      min-width: 40px !important;
+      text-align: center;
+      position: sticky;
+      left: 0;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid #f5f5f5;
+      height: 40px;
+      td {
+        height: 40px;
+        padding: 0 10px;
+        border: 1px solid #f5f5f5;
+        background: #fff;
+      }
+      &:hover {
+        cursor: pointer;
+        td {
+          background-color: $background-color_3 !important;
+        }
+      }
+    }
+    .m-tr-checkbox {
+      width: 40px !important;
+      max-width: 40px !important;
+      min-width: 40px !important;
+      text-align: center;
+      position: sticky;
+      left: 0;
+      z-index: 2;
+    }
+    .m-tr-seleced {
+      background-color: $background-color_3;
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  background-color: $background-color_4;
+}
+::-webkit-scrollbar-track {
+  visibility: hidden;
+  transition: visibility;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: $background-color_5;
+  &:hover {
+    background: #a0a0a0;
+  }
+}
+
+.text-limit {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

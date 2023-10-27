@@ -1,7 +1,7 @@
 <script>
-import { ref } from 'vue';
-import TheNavbar from './TheNavbar.vue';
-import TheHeader from './TheHeader.vue';
+import { ref } from "vue";
+import TheNavbar from "./TheNavbar.vue";
+import TheHeader from "./TheHeader.vue";
 export default {
   components: { TheNavbar, TheHeader },
   props: {},
@@ -41,12 +41,14 @@ export default {
         :style="{ width: 'calc(100% - ' + navBarWidth + 'px)' }"
       >
         <the-header />
-        <div class="m-content">
+        <!-- <div class="m-content"> -->
           <RouterView></RouterView>
-        </div>
+        <!-- </div> -->
       </div>
     </div>
   </main>
 </template>
 
-<style lang="scss"></style>
+<style>
+@import url(../../css/layout/content.css);
+</style>

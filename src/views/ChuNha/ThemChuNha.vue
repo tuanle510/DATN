@@ -1,7 +1,7 @@
 <script>
 import { ref, onMounted } from "vue";
 import { $vfm } from "vue-final-modal";
-import popupUtil from "../components/base/DynamicModal/popupUtil";
+import popupUtil from "../../components/base/DynamicModal/popupUtil";
 export default {
   name: "ThemChuNha",
   props: {},
@@ -162,7 +162,7 @@ export default {
             </div>
           </div>
           <!-- Nội dung chính -->
-          <div v-if="activeTab == 0">
+          <div class="grids-tab-container" v-if="activeTab == 0">
             <GridViewer :columns="columnTab" :datas="[]"></GridViewer>
           </div>
           <div v-if="activeTab == 1">Tab2</div>
@@ -176,4 +176,8 @@ export default {
     </template>
   </DynamicModal>
 </template>
-<style scoped></style>
+<style scoped>
+.grids-tab-container {
+  height: calc(100% - 30px);
+}
+</style>

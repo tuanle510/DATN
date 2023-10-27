@@ -13,321 +13,326 @@
   justify-content: center;
   align-items: center;
 }
+.refresh {
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -110px -68px;
+  width: 20px;
+  height: 16px;
+}
 
 .zoom-out {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -245px -333px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -245px -333px;
   width: 14px;
   height: 14px;
 }
 
 .zoom-in {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -289px -333px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -289px -333px;
   width: 14px;
   height: 14px;
 }
 
 /* common icon */
 .calendar {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -287px -67px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -287px -67px;
   width: 18px;
   height: 18px;
 }
 
 .export {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -331px -67px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -331px -67px;
   width: 18px;
   height: 18px;
 }
 
 .clear {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -291px -247px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -291px -247px;
   width: 10px;
   height: 10px;
 }
 
 .down {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -72px -338px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -72px -338px;
   width: 8px;
   height: 5px;
 }
 
 .alert {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -416px -66px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -416px -66px;
   width: 24px;
   height: 20px;
 }
 
 .toast {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -111px -594px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -111px -594px;
   width: 18px;
   height: 20px;
 }
 
 .up {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -28px -338px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -28px -338px;
   width: 8px;
   height: 5px;
 }
 
 .close {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -375px -287px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -375px -287px;
   width: 18px;
   height: 18px;
 }
 
 .pre {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -29px -246px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -29px -246px;
   width: 7px;
   height: 12px;
 }
 
 .next {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -73px -246px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -73px -246px;
   width: 7px;
   height: 12px;
 }
 
 .more-vertical {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -383px -26px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -383px -26px;
   width: 3px;
   height: 13px;
 }
 
 .dropdown {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -158px -293px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -158px -293px;
   width: 11px;
   height: 7px;
 }
 
 .dropup {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -114px -293px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -114px -293px;
   width: 12px;
   height: 7px;
 }
 
 .license {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -110px -420px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -110px -420px;
   width: 20px;
   height: 15px;
 }
 
 .license-full {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -22px -421px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -22px -421px;
   width: 20px;
   height: 14px;
 }
 
 .arrow-down {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -158px -249px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -158px -249px;
   width: 11px;
   height: 7px;
 }
 
 /* header-icom */
 .header-icon .bell {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -332px -109px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -332px -109px;
   width: 16px;
   height: 20px;
 }
 
 .header-icon .question {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -67px -67px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -67px -67px;
   width: 18px;
   height: 18px;
 }
 
 .header-icon .option {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -199px -23px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -199px -23px;
   width: 18px;
   height: 18px;
 }
 
 .header-icon .user-logo {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -23px -23px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -23px -23px;
   width: 18px;
   height: 18px;
 }
 
 /* navbar-icon */
 .navbar-logo .home {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -21px -153px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -21px -153px;
   width: 22px;
   height: 22px;
 }
 
 .navbar-logo .home-active {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -22px -198px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -22px -198px;
   width: 20px;
   height: 21px;
 }
 
 .navbar-logo .asset {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -65px -153px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -65px -153px;
   width: 22px;
   height: 23px;
 }
 .router-link-exact-active .navbar-logo .asset-active {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -65px -197px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -65px -197px;
   width: 22px;
   height: 23px;
 }
 
 .navbar-logo .dashboard {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -329px -153px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -329px -153px;
   width: 22px;
   height: 22px;
 }
 .router-link-exact-active .navbar-logo .dashboard-active {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -330px -198px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -330px -198px;
   width: 20px;
   height: 20px;
 }
 
 .navbar-logo .line {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -110px -153px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -110px -153px;
   width: 21px;
   height: 23px;
 }
 .navbar-logo .line-active {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -110px -197px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -110px -197px;
   width: 21px;
   height: 22px;
 }
 
 .navbar-logo .tool {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -153px -153px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -153px -153px;
   width: 22px;
   height: 22px;
 }
 .navbar-logo .tool-active {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -153px -197px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -153px -197px;
   width: 22px;
   height: 22px;
 }
 
 .navbar-logo .category {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -197px -155px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -197px -155px;
   width: 22px;
   height: 18px;
 }
 .navbar-logo .category-active {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -198px -200px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -198px -200px;
   width: 20px;
   height: 17px;
 }
 
 .navbar-logo .search {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -241px -153px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -241px -153px;
   width: 22px;
   height: 22px;
 }
 .navbar-logo .search-active {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -241px -197px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -241px -197px;
   width: 22px;
   height: 22px;
 }
 
 .navbar-logo .report {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -329px -153px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -329px -153px;
   width: 22px;
   height: 22px;
 }
 .navbar-logo .report-active {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -330px -198px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -330px -198px;
   width: 20px;
   height: 20px;
 }
 
 .navbar-logo .setting {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -286px -153px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -286px -153px;
   width: 21px;
   height: 22px;
 }
 .router-link-exact-active .navbar-logo .setting-active {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -287px -198px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -287px -198px;
   width: 19px;
   height: 20px;
 }
 
 .close-navbar-icon {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -285px -417px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -285px -417px;
   width: 22px;
   height: 22px;
 }
 
 .open-navbar-icon {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -329px -417px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -329px -417px;
   width: 22px;
   height: 22px;
 }
 
 /* search */
 .search-icon .search {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -243px -23px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -243px -23px;
   width: 18px;
   height: 18px;
 }
 
 /* combobox */
 .filter {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -243px -68px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -243px -68px;
   width: 17px;
   height: 16px;
 }
 
 .plus {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -467px -423px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -467px -423px;
   width: 10px;
   height: 10px;
 }
 
 /* toolbar */
 .excel {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -287px -111px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -287px -111px;
   width: 18px;
   height: 17px;
 }
 
 .remove {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -463px -111px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -463px -111px;
   width: 18px;
   height: 18px;
 }
 
 .remove-red {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -463px -111px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -463px -111px;
   width: 18px;
   height: 18px;
 }
 
 /* table */
 .edit {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -156px -68px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -156px -68px;
   width: 16px;
   height: 16px;
 }
 
 .copy {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -244px -112px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -244px -112px;
   width: 16px;
   height: 16px;
 }
 
 /* ccb */
 .white-checked {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -71px -512px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -71px -512px;
   width: 11px;
   height: 8px;
 }
 
 .plus {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -375px -419px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -375px -419px;
   width: 18px;
   height: 18px;
 }
 
 .minus {
-  background: url('/src/assets/icon/qlts-icon.png') no-repeat -375px -463px;
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -375px -463px;
   width: 18px;
   height: 18px;
 }

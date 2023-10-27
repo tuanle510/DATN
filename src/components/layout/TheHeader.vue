@@ -12,7 +12,7 @@ export default {
 </script>
 
 <template>
-  <div class="m-header">
+  <div class="m-topnav">
     <div class="header-left"></div>
     <div class="header-right">
       <!-- <div class="header-right-title">Sở tài chính</div> -->
@@ -45,4 +45,6 @@ export default {
   </div>
 </template>
 
-<style lang="scss"></style>
+<style scoped>
+@import url(../../css/layout/header.css);
+</style>

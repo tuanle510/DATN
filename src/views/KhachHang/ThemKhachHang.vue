@@ -1,5 +1,5 @@
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from "vue";
 export default {
   props: {},
   setup() {
@@ -12,7 +12,6 @@ export default {
 <template>
   <DynamicModal ref="ThemHopDong" title="Thêm hợp đồng" position="right">
     <template #content>
-      <!-- Phần bên trên -->
       <div class="above-container"></div>
     </template>
     <template #footer>

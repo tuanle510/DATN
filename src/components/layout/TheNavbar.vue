@@ -70,4 +70,6 @@ export default {
   </div>
 </template>
 
-<style lang="scss"></style>
+<style scoped>
+@import url(../../css/layout/navbar.css);
+</style>

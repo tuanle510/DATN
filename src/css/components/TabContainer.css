@@ -3,7 +3,6 @@
   display: flex;
   flex-direction: column;
   border: 1px solid #afafaf;
-  min-height: 300px;
   margin-bottom: 5px;
   flex: 1;
 }
@@ -28,7 +27,7 @@
 
 .grids-tab-content {
   flex: 1;
-  padding: 16px;
+  padding: 10px;
   border-radius: 0 3px 3px;
   border-top: none;
 }

@@ -1,16 +1,7 @@
 @import url(./icon.css);
 
-/* main */
-@import url(./layout/header.css);
-@import url(./layout/navbar.css);
-@import url(./layout/content.css);
-/* @import url(./layout/license.css); */
-
-/* login */
-/* @import url(./page/login.css); */
-
 /* base */
-@import url(./components/GridViewer.css);
+/* @import url(./components/GridViewer.css); */
 @import url(./components/TheInput.css);
 @import url(./components/TheButton.css);
 @import url(./components/DynamicModal.css);
