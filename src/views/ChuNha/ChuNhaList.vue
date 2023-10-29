@@ -1,6 +1,6 @@
 <script>
-import { defineComponent, getCurrentInstance, ref } from 'vue';
-import baseList from '../baseList';
+import { defineComponent, getCurrentInstance, ref } from "vue";
+import baseList from "../baseList";
 export default defineComponent({
   extends: baseList,
   props: {},
@@ -9,83 +9,83 @@ export default defineComponent({
     const columns = ref([
       {
         width: 150,
-        name: 'Tên chủ nhà',
-        dataField: 'ten_chu_nha',
+        name: "Tên chủ nhà",
+        dataField: "ten_chu_nha",
       },
       {
         width: 150,
-        name: 'Ngày sinh',
-        dataField: 'ngay_sinh',
+        name: "Ngày sinh",
+        dataField: "ngay_sinh",
       },
       {
         width: 70,
-        name: 'Điện thoại',
-        dataField: 'so_dien_thoai',
+        name: "Điện thoại",
+        dataField: "so_dien_thoai",
       },
       {
         width: 150,
-        name: 'Email',
-        dataField: 'email',
+        name: "Email",
+        dataField: "email",
       },
       {
         width: 200,
-        name: 'Địa chỉ',
-        dataField: 'dia_chi',
+        name: "Địa chỉ",
+        dataField: "dia_chi",
       },
       {
         width: 150,
-        name: 'Ghi chú',
-        dataField: 'ghi_chu',
+        name: "Ghi chú",
+        dataField: "ghi_chu",
       },
     ]);
     const datas = ref([
       {
-        ten_chu_nha: 'Trần Thị Thu Hà',
+        ten_chu_nha: "Trần Thị Thu Hà",
       },
       {
-        ten_chu_nha: 'Lê Thiện Tuấn',
+        ten_chu_nha: "Lê Thiện Tuấn",
       },
       {
-        ten_chu_nha: 'Trần Thị Thu Hà',
+        ten_chu_nha: "Trần Thị Thu Hà",
       },
       {
-        ten_chu_nha: 'Lê Thiện Tuấn',
+        ten_chu_nha: "Lê Thiện Tuấn",
       },
       {
-        ten_chu_nha: 'Trần Thị Thu Hà',
+        ten_chu_nha: "Trần Thị Thu Hà",
       },
       {
-        ten_chu_nha: 'Lê Thiện Tuấn',
+        ten_chu_nha: "Lê Thiện Tuấn",
       },
       {
-        ten_chu_nha: 'Trần Thị Thu Hà',
+        ten_chu_nha: "Trần Thị Thu Hà",
       },
       {
-        ten_chu_nha: 'Lê Thiện Tuấn',
+        ten_chu_nha: "Lê Thiện Tuấn",
       },
       {
-        ten_chu_nha: 'Trần Thị Thu Hà',
+        ten_chu_nha: "Trần Thị Thu Hà",
       },
       {
-        ten_chu_nha: 'Lê Thiện Tuấn',
+        ten_chu_nha: "Lê Thiện Tuấn",
       },
       {
-        ten_chu_nha: 'Trần Thị Thu Hà',
+        ten_chu_nha: "Trần Thị Thu Hà",
       },
       {
-        ten_chu_nha: 'Lê Thiện Tuấn',
+        ten_chu_nha: "Lê Thiện Tuấn",
       },
       {
-        ten_chu_nha: 'Trần Thị Thu Hà',
+        ten_chu_nha: "Trần Thị Thu Hà",
       },
       {
-        ten_chu_nha: 'Lê Thiện Tuấn',
+        ten_chu_nha: "Lê Thiện Tuấn",
       },
       {
-        ten_chu_nha: 'Trần Thị Thu Hà 1111111',
+        ten_chu_nha: "Trần Thị Thu Hà 1111111",
       },
     ]);
-    const formDetailName = 'ThemChuNha';
+    const formDetailName = "ThemChuNha";
     return {
       columns,
       datas,

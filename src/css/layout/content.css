@@ -40,3 +40,6 @@
   justify-content: center;
   align-items: center;
 }
+.toolbar-btn:hover {
+  background-color: #eee;
+}

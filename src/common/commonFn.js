@@ -6,13 +6,13 @@ class commonFn {
   mask() {
     const el = this.findLoading();
     if (el) {
-      el.style.visibility = "visible";
+      el.style.display = "flex";
     }
   }
   unMask() {
     const el = this.findLoading();
     if (el) {
-      el.style.visibility = "hidden";
+      el.style.display = "none";
     }
   }
 }

@@ -1,11 +1,15 @@
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, getCurrentInstance, defineComponent } from "vue";
 import { $vfm } from "vue-final-modal";
 import popupUtil from "../../components/base/DynamicModal/popupUtil";
-export default {
+import baseDetail from "../baseDetail";
+export default defineComponent({
+  extends: baseDetail,
   name: "ThemChuNha",
   props: {},
   setup() {
+    const { proxy } = getCurrentInstance();
+
     // Mặd định vào tab đầu tiên
     const activeTab = ref(0);
     const columnTab = ref([]);
@@ -69,9 +73,7 @@ export default {
     const close = () => {
       popupUtil.hide($vfm.dynamicModals.pop().component);
     };
-    const openDetail = () => {
-      popupUtil.show("ThemHopDong");
-    };
+
     return {
       tabList,
       activeTab,
@@ -79,11 +81,10 @@ export default {
       dataTab,
       onTabClick,
       close,
-      openDetail,
     };
   },
   methods: {},
-};
+});
 </script>
 
 <template>
@@ -92,7 +93,8 @@ export default {
     title="Thêm chủ nhà"
     width="1000px"
     position="right"
-    @close="close"
+    @beforeOpen="beforeOpen($event, close)"
+    @beforeClose="beforeClose()"
   >
     <template #content>
       <!-- Phần bên trên -->
@@ -154,11 +156,11 @@ export default {
               </div>
             </div>
             <div class="m-toolbar-right">
-              <TheButton
+              <!-- <TheButton
                 @click="openDetail()"
                 style="box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16)"
                 >Thêm
-              </TheButton>
+              </TheButton> -->
             </div>
           </div>
           <!-- Nội dung chính -->

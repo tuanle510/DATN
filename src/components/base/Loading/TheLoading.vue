@@ -12,10 +12,9 @@
   left: 0;
   z-index: 99999;
   background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
-  visibility: hidden;
   .m-loader {
     border: 8px solid #f3f3f3;
     border-radius: 50%;

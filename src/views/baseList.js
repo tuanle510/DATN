@@ -1,18 +1,22 @@
-import { ref, onMounted } from 'vue';
-import popupUtil from '../components/base/DynamicModal/popupUtil';
-import commonFn from '../common/commonFn';
+import { ref, onMounted } from "vue";
+import popupUtil from "../components/base/DynamicModal/popupUtil";
+import commonFn from "../common/commonFn";
+import { formMode } from "../enum/formMode";
 export default {
   setup() {},
   methods: {
     /**
      * Mở form detail theo cấu hình formDetailName
      */
-    showDetailForm() {
+    showDetailForm(mode) {
       const me = this;
+      const param = {
+        mode: mode,
+      };
       if (me.formDetailName) {
-        popupUtil.show(me.formDetailName);
+        popupUtil.show(me.formDetailName, param);
       } else {
-        console.log('Chưa cấu hình form detail');
+        console.log("Chưa cấu hình form detail");
       }
     },
 
@@ -23,11 +27,9 @@ export default {
       const me = this;
       commonFn.mask();
       // Mở form detail
-      me.showDetailForm();
+      me.showDetailForm(formMode.Add);
       // Load Data
-      setTimeout(() => {
-        commonFn.unMask();
-      }, 1000);
+      commonFn.unMask();
     },
 
     /**
@@ -37,11 +39,9 @@ export default {
       const me = this;
       commonFn.mask();
       // Mở form detail
-      me.showDetailForm();
+      me.showDetailForm(formMode.Edit);
       // Load Data
-      setTimeout(() => {
-        commonFn.unMask();
-      }, 1000);
+      commonFn.unMask();
     },
 
     /**

@@ -1,7 +1,5 @@
-import { $vfm } from 'vue-final-modal';
-// const vfm = createVfm();
+import { $vfm } from "vue-final-modal";
 class popupUtil {
-  // const modalName =
   show(name, param) {
     const popup = $vfm.show({ component: name }, param);
     return popup;
