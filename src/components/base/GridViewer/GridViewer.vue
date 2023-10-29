@@ -1,5 +1,5 @@
 <script>
-import { onMounted, ref } from "vue";
+import { onMounted, ref } from 'vue';
 export default {
   props: {
     // Danh sách cột
@@ -17,25 +17,28 @@ export default {
       type: Boolean,
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
     const isCheckAll = ref(false);
     // Gen css cho table
     const genWidth = (item, index) => {
       // Nếu là cột cuối thì bỏ fix witdh đi
       if (props.columns && index == props.columns.length - 1) {
         return {
-          minWidth: item.width + "px",
+          minWidth: item.width + 'px',
         };
       }
       return {
-        width: item.width + "px",
-        minWidth: item.width + "px",
+        width: item.width + 'px',
+        minWidth: item.width + 'px',
       };
     };
-
+    const onDbClick = (row) => {
+      emit('onDbClick', row);
+    };
     return {
       genWidth,
       isCheckAll,
+      onDbClick,
     };
   },
 };
@@ -66,23 +69,23 @@ export default {
         <!-- Body -->
         <tbody>
           <tr
-            v-for="(item, index) in datas"
+            v-for="(row, index) in datas"
             :key="index"
-            :class="[{ 'm-tr-seleced': item.checked }, 'm-tr']"
+            :class="[{ 'm-tr-seleced': row.checked }, 'm-tr']"
           >
             <td class="m-tr-checkbox" v-if="isMulti">
               <div class="d-flex-center">
                 <TheCheckbox></TheCheckbox>
               </div>
             </td>
-            <!-- @dblclick="showEditDialog(item)"
-              @click="onRowClick(item, $event)" -->
+            <!-- @dblclick="onDbClick(row)" -->
             <td
+              @dblclick.prevent="onDbClick(row)"
               v-for="(column, indexC) in columns"
               :key="indexC"
               :style="genWidth(column, indexC)"
             >
-              {{ item[column.dataField] }}
+              {{ row[column.dataField] }}
             </td>
           </tr>
         </tbody>
