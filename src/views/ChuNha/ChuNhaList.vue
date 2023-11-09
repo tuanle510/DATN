@@ -8,87 +8,46 @@ export default defineComponent({
     const { proxy } = getCurrentInstance();
     const columns = ref([
       {
-        width: 150,
+        width: 100,
         name: "Tên chủ nhà",
-        dataField: "ten_chu_nha",
+        dataField: "name",
+        align: "left",
       },
       {
-        width: 150,
+        width: 80,
         name: "Ngày sinh",
-        dataField: "ngay_sinh",
+        dataField: "birthdate",
+        align: "center",
+        format: "date",
       },
       {
-        width: 70,
+        width: 100,
         name: "Điện thoại",
-        dataField: "so_dien_thoai",
+        dataField: "phone_number",
+        align: "right",
       },
       {
         width: 150,
         name: "Email",
         dataField: "email",
+        align: "left",
       },
       {
         width: 200,
         name: "Địa chỉ",
-        dataField: "dia_chi",
+        dataField: "location",
+        align: "left",
       },
       {
         width: 150,
         name: "Ghi chú",
-        dataField: "ghi_chu",
-      },
-    ]);
-    const datas = ref([
-      {
-        ten_chu_nha: "Trần Thị Thu Hà",
-      },
-      {
-        ten_chu_nha: "Lê Thiện Tuấn",
-      },
-      {
-        ten_chu_nha: "Trần Thị Thu Hà",
-      },
-      {
-        ten_chu_nha: "Lê Thiện Tuấn",
-      },
-      {
-        ten_chu_nha: "Trần Thị Thu Hà",
-      },
-      {
-        ten_chu_nha: "Lê Thiện Tuấn",
-      },
-      {
-        ten_chu_nha: "Trần Thị Thu Hà",
-      },
-      {
-        ten_chu_nha: "Lê Thiện Tuấn",
-      },
-      {
-        ten_chu_nha: "Trần Thị Thu Hà",
-      },
-      {
-        ten_chu_nha: "Lê Thiện Tuấn",
-      },
-      {
-        ten_chu_nha: "Trần Thị Thu Hà",
-      },
-      {
-        ten_chu_nha: "Lê Thiện Tuấn",
-      },
-      {
-        ten_chu_nha: "Trần Thị Thu Hà",
-      },
-      {
-        ten_chu_nha: "Lê Thiện Tuấn",
-      },
-      {
-        ten_chu_nha: "Trần Thị Thu Hà 1111111",
+        dataField: "location",
+        align: "left",
       },
     ]);
     const formDetailName = "ThemChuNha";
     return {
       columns,
-      datas,
       formDetailName,
     };
   },
@@ -106,7 +65,7 @@ export default defineComponent({
     <div class="m-container">
       <div class="m-container-toolbar">
         <div class="toolbar-field">
-          <TheInput placeholder="Tìm kiếm tài sản" />
+          <TheInput placeholder="Tìm kiếm chủ nhà" />
         </div>
         <div class="toolbar-right">
           <div class="toolbar-btn">
@@ -124,8 +83,9 @@ export default defineComponent({
         <GridViewer
           :isMulti="true"
           :columns="columns"
-          :datas="datas"
+          :data="data"
           @onDbClick="onDbClick"
+          :loading="tableLoading"
         >
         </GridViewer>
       </div>

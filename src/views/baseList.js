@@ -1,9 +1,21 @@
 import { ref, onMounted } from "vue";
+import axios from "axios";
 import popupUtil from "../components/base/DynamicModal/popupUtil";
 import commonFn from "../common/commonFn";
 import { formMode } from "../enum/formMode";
 export default {
   setup() {},
+  async beforeMount() {
+    // Load dữ liệu
+    try {
+      this.tableLoading = true;
+      const res = await axios.get("ChuNha");
+      this.data = res.data;
+      this.tableLoading = false;
+    } catch (error) {
+      console.log(error);
+    }
+  },
   methods: {
     /**
      * Mở form detail theo cấu hình formDetailName
@@ -50,7 +62,13 @@ export default {
      */
     onDbClick(row) {
       const me = this;
-      me.edit();
+      me.edit(row);
     },
+  },
+  data() {
+    return {
+      data: [], //Danh sách lấy về từ api
+      tableLoading: false,
+    };
   },
 };

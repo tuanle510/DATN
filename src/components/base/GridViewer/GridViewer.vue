@@ -1,11 +1,11 @@
 <script>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref } from "vue";
 export default {
   props: {
     // Danh sách cột
     columns: Array,
     // Danh sách dữ liệu
-    datas: Array,
+    data: Array,
     // Có tích chọn nhiều không
     isMulti: {
       default: false,
@@ -16,29 +16,51 @@ export default {
       default: false,
       type: Boolean,
     },
+    // Trạng thái loading
+    loading: {
+      default: false,
+      type: Boolean,
+    },
   },
   setup(props, { emit }) {
     const isCheckAll = ref(false);
     // Gen css cho table
-    const genWidth = (item, index) => {
+    const genCss = (item, index) => {
+      const css = {
+        maxWidth: item.width + "px",
+        minWidth: item.width + "px",
+        width: item.width + "px",
+        textAlign: item.align,
+      };
       // Nếu là cột cuối thì bỏ fix witdh đi
       if (props.columns && index == props.columns.length - 1) {
-        return {
-          minWidth: item.width + 'px',
-        };
+        delete css.maxWidth;
       }
-      return {
-        width: item.width + 'px',
-        minWidth: item.width + 'px',
-      };
+      return css;
     };
+
+    // Format theo kiểu dữ liệu
+    const colFormat = (value, type) => {
+      switch (type) {
+        case "date":
+          break;
+        case "currency":
+          break;
+        default:
+          break;
+      }
+      return value;
+    };
+
+    //
     const onDbClick = (row) => {
-      emit('onDbClick', row);
+      emit("onDbClick", row);
     };
     return {
-      genWidth,
+      genCss,
       isCheckAll,
       onDbClick,
+      colFormat,
     };
   },
 };
@@ -60,16 +82,25 @@ export default {
             <th
               v-for="(column, index) in columns"
               :key="index"
-              :style="genWidth(column, index)"
+              :style="genCss(column, index)"
             >
-              {{ column.name }}
+              <div class="th-content">
+                <div class="th-title">
+                  {{ column.name }}
+                </div>
+                <div class="th-resize"></div>
+              </div>
             </th>
           </tr>
         </thead>
+        <!-- Loading -->
+        <div v-if="loading" class="m-table-loading">
+          <div class="m-table-loading-icon"></div>
+        </div>
         <!-- Body -->
-        <tbody>
+        <tbody v-else>
           <tr
-            v-for="(row, index) in datas"
+            v-for="(row, index) in data"
             :key="index"
             :class="[{ 'm-tr-seleced': row.checked }, 'm-tr']"
           >
@@ -78,14 +109,18 @@ export default {
                 <TheCheckbox></TheCheckbox>
               </div>
             </td>
-            <!-- @dblclick="onDbClick(row)" -->
             <td
               @dblclick.prevent="onDbClick(row)"
               v-for="(column, indexC) in columns"
               :key="indexC"
-              :style="genWidth(column, indexC)"
+              :title="row[column.dataField]"
+              :style="genCss(column, indexC)"
             >
-              {{ row[column.dataField] }}
+              <div class="text-overflow">
+                <span class="td-normal-span">{{
+                  colFormat(row[column.dataField])
+                }}</span>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -106,4 +141,3 @@ export default {
   left: 13px;
 }
 </style>
->

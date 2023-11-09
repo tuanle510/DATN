@@ -14,6 +14,9 @@ import TheLoading from "./components/base/Loading/TheLoading.vue";
 
 import ThemChuNha from "./views/ChuNha/ThemChuNha.vue";
 import { vfmPlugin } from "vue-final-modal";
+import axios from "axios";
+
+axios.defaults.baseURL = "http://localhost:5002/api/";
 
 const app = createApp(App);
 // base component
@@ -24,7 +27,6 @@ app.component("DynamicModal", DynamicModal);
 app.component("GridViewer", GridViewer);
 app.component("TheCheckbox", TheCheckbox);
 app.component("TheLoading", TheLoading);
-
 // modal
 app.component("ThemChuNha", ThemChuNha);
 app.use(router);
