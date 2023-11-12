@@ -21,6 +21,7 @@ export default {
      */
     beforeClose() {
       //Chưa biết xư lí gì
+      console.log("beforeclose");
     },
 
     /**

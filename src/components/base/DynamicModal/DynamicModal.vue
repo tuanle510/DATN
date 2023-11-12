@@ -1,6 +1,5 @@
 <script>
 export default {
-  expose: ["close"],
   props: {
     // Tiêu đề popup
     title: String,
@@ -13,13 +12,11 @@ export default {
       default: "center",
     },
   },
-  emits: ["update:modelValue", "close"],
-  setup(props, { emit }) {},
 };
 </script>
 
 <template>
-  <VueFinalModal>
+  <VueFinalModal v-slot="{ close }">
     <div :class="[`m-modal-${position}`]" :style="{ width: width }">
       <div class="m-modal-header">
         <div class="m-modal-title">{{ title }}</div>
@@ -33,11 +30,11 @@ export default {
       </div>
 
       <div class="m-modal-content" autocomplete="off">
-        <slot name="content"></slot>
+        <slot name="content" :close="close"></slot>
       </div>
 
       <div class="m-modal-footer">
-        <slot name="footer"></slot>
+        <slot name="footer" :close="close"></slot>
       </div>
     </div>
   </VueFinalModal>

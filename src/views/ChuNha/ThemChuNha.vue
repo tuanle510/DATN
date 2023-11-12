@@ -1,7 +1,5 @@
 <script>
 import { ref, onMounted, getCurrentInstance, defineComponent } from "vue";
-import { $vfm } from "vue-final-modal";
-import popupUtil from "../../components/base/DynamicModal/popupUtil";
 import baseDetail from "../baseDetail";
 export default defineComponent({
   extends: baseDetail,
@@ -69,10 +67,6 @@ export default defineComponent({
       activeTab.value = index;
       columnTab.value = tabList[index]?.columns || [];
     };
-    // Đóng form
-    const close = () => {
-      popupUtil.hide($vfm.dynamicModals.pop().component);
-    };
 
     return {
       tabList,
@@ -80,7 +74,6 @@ export default defineComponent({
       columnTab,
       dataTab,
       onTabClick,
-      close,
     };
   },
   methods: {},
@@ -94,7 +87,7 @@ export default defineComponent({
     width="1000px"
     position="right"
     @beforeOpen="beforeOpen($event, close)"
-    @beforeClose="beforeClose()"
+    @beforeClose="beforeClose"
   >
     <template #content>
       <!-- Phần bên trên -->
@@ -173,8 +166,8 @@ export default defineComponent({
       </div>
     </template>
     <template #footer>
-      <TheButton class="outline-button" @click="close()">Đóng</TheButton>
-      <TheButton @click="() => {}">Cất</TheButton>
+      <TheButton class="outline-button" @click="close">Đóng</TheButton>
+      <TheButton @click="close">Cất</TheButton>
     </template>
   </DynamicModal>
 </template>
