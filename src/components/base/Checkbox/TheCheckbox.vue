@@ -4,7 +4,8 @@
     <input
       type="checkbox"
       :value="modelValue"
-      @input="$emit('update:modelValue', !modelValue)"
+      :checked="modelValue"
+      @change="$emit('update:modelValue', !modelValue)"
     />
     <span class="checkmark"></span>
   </label>

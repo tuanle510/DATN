@@ -11,9 +11,10 @@ export default {
       this.tableLoading = true;
       const res = await axios.get("ChuNha");
       this.data = res.data;
-      this.tableLoading = false;
     } catch (error) {
       console.log(error);
+    } finally {
+      this.tableLoading = false;
     }
   },
   methods: {

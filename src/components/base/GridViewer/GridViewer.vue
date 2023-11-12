@@ -1,5 +1,6 @@
 <script>
-import { onMounted, ref } from "vue";
+import { getCurrentInstance, ref } from "vue";
+import moment from "moment";
 export default {
   props: {
     // Danh sách cột
@@ -23,7 +24,8 @@ export default {
     },
   },
   setup(props, { emit }) {
-    const isCheckAll = ref(false);
+    const { proxy } = getCurrentInstance();
+    const checkedAll = ref(false);
     // Gen css cho table
     const genCss = (item, index) => {
       const css = {
@@ -43,6 +45,7 @@ export default {
     const colFormat = (value, type) => {
       switch (type) {
         case "date":
+          value = moment(new Date(value)).format("DD/MM/YYYY");
           break;
         case "currency":
           break;
@@ -52,15 +55,40 @@ export default {
       return value;
     };
 
-    //
+    // Sự kiện dbClick row
     const onDbClick = (row) => {
       emit("onDbClick", row);
     };
+
+    // Checkbox all
+    const onClickCheckAll = () => {
+      if (checkedAll.value) {
+        proxy.data.forEach((item) => {
+          item.checked = true;
+        });
+      } else {
+        proxy.data.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    };
+
+    // Checkbox từng dòng
+    const onClickCheck = () => {
+      // Kiểm tra xem checked list có bằng list data không
+      const checkedList = proxy.data.filter((x) => x.checked);
+
+      // Nếu có thì đổi checkall thành true
+      proxy.checkedAll = checkedList.length === proxy.data.length;
+    };
+
     return {
       genCss,
-      isCheckAll,
       onDbClick,
       colFormat,
+      onClickCheckAll,
+      onClickCheck,
+      checkedAll,
     };
   },
 };
@@ -76,7 +104,10 @@ export default {
           <tr>
             <th class="m-th-checkbox" v-if="isMulti">
               <div class="d-flex-center">
-                <TheCheckbox v-model="isCheckAll"></TheCheckbox>
+                <TheCheckbox
+                  v-model="checkedAll"
+                  @change="onClickCheckAll"
+                ></TheCheckbox>
               </div>
             </th>
             <th
@@ -106,7 +137,10 @@ export default {
           >
             <td class="m-tr-checkbox" v-if="isMulti">
               <div class="d-flex-center">
-                <TheCheckbox></TheCheckbox>
+                <TheCheckbox
+                  v-model="row.checked"
+                  @change="onClickCheck()"
+                ></TheCheckbox>
               </div>
             </td>
             <td
@@ -118,7 +152,7 @@ export default {
             >
               <div class="text-overflow">
                 <span class="td-normal-span">{{
-                  colFormat(row[column.dataField])
+                  colFormat(row[column.dataField], column.type)
                 }}</span>
               </div>
             </td>

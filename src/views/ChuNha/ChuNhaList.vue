@@ -18,13 +18,13 @@ export default defineComponent({
         name: "Ngày sinh",
         dataField: "birthdate",
         align: "center",
-        format: "date",
+        type: "date",
       },
       {
         width: 100,
         name: "Điện thoại",
         dataField: "phone_number",
-        align: "right",
+        align: "left",
       },
       {
         width: 150,
@@ -33,7 +33,7 @@ export default defineComponent({
         align: "left",
       },
       {
-        width: 200,
+        width: 150,
         name: "Địa chỉ",
         dataField: "location",
         align: "left",
