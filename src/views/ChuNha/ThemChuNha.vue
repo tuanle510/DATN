@@ -106,11 +106,15 @@ export default defineComponent({
           <TheInput class="flex1" label="Email" :required="true"></TheInput>
         </div>
         <div class="modal-row">
-          <TheInput
+          <!-- :required="true" -->
+          <TheComboBox
             class="flex1"
-            label="Thông tin khác"
-            :required="true"
-          ></TheInput>
+            label="Loại giấy tờ"
+            ref="DepartmentCode"
+            placeholder="Loại giấy tờ"
+            :data="departmentData"
+            filterby="DepartmentCode"
+          ></TheComboBox>
           <div class="flex1"></div>
           <div class="flex1"></div>
         </div>

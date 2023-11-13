@@ -16,7 +16,7 @@ export default {
 </script>
 
 <template>
-  <VueFinalModal v-slot="{ close }">
+  <VueFinalModal v-slot="{ close }" :resize="true">
     <div :class="[`m-modal-${position}`]" :style="{ width: width }">
       <div class="m-modal-header">
         <div class="m-modal-title">{{ title }}</div>
