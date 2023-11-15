@@ -460,7 +460,7 @@ export default {
 
 .icon-combobox {
   height: 100%;
-  width: 20px;
+  width: 30px;
   display: flex;
   align-items: center;
   justify-content: center;

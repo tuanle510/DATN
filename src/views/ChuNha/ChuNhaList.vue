@@ -84,7 +84,7 @@ export default defineComponent({
           :isMulti="true"
           :columns="columns"
           :data="data"
-          @onDbClick="onDbClick"
+          @onDbClick="edit"
           :loading="tableLoading"
         >
         </GridViewer>

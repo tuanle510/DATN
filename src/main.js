@@ -12,6 +12,7 @@ import GridViewer from "./components/base/GridViewer/GridViewer.vue";
 import TheCheckbox from "./components/base/Checkbox/TheCheckbox.vue";
 import TheLoading from "./components/base/Loading/TheLoading.vue";
 import TheComboBox from "./components/base/ComboBox/TheComboBox.vue";
+import TheDatepicker from "./components/base/Datepicker/TheDatepicker.vue";
 
 import ThemChuNha from "./views/ChuNha/ThemChuNha.vue";
 import { vfmPlugin } from "vue-final-modal";
@@ -29,6 +30,7 @@ app.component("GridViewer", GridViewer);
 app.component("TheCheckbox", TheCheckbox);
 app.component("TheLoading", TheLoading);
 app.component("TheComboBox", TheComboBox);
+app.component("TheDatepicker", TheDatepicker);
 // modal
 app.component("ThemChuNha", ThemChuNha);
 app.use(router);

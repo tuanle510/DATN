@@ -9,7 +9,12 @@ export default {
     // Load dữ liệu
     try {
       this.tableLoading = true;
-      const res = await axios.get("ChuNha");
+      const payload = {
+        column: this.columns.map((x) => x.dataField).join(","),
+        take: 20,
+        skip: 0,
+      };
+      const res = await axios.post("ChuNha/list", payload);
       this.data = res.data;
     } catch (error) {
       console.log(error);
@@ -21,11 +26,8 @@ export default {
     /**
      * Mở form detail theo cấu hình formDetailName
      */
-    showDetailForm(mode) {
+    showDetailForm(param) {
       const me = this;
-      const param = {
-        mode: mode,
-      };
       if (me.formDetailName) {
         popupUtil.show(me.formDetailName, param);
       } else {
@@ -34,36 +36,25 @@ export default {
     },
 
     /**
+     * Mở form sửa
+     * @param {*} row
+     */
+    edit(row) {
+      const param = {
+        mode: formMode.Edit,
+        id: row.id,
+      };
+      this.showDetailForm(param);
+    },
+
+    /**
      * Mở form thêm mới
      */
     add() {
-      const me = this;
-      commonFn.mask();
-      // Mở form detail
-      me.showDetailForm(formMode.Add);
-      // Load Data
-      commonFn.unMask();
-    },
-
-    /**
-     * Mở form sửa
-     */
-    edit() {
-      const me = this;
-      commonFn.mask();
-      // Mở form detail
-      me.showDetailForm(formMode.Edit);
-      // Load Data
-      commonFn.unMask();
-    },
-
-    /**
-     * Sự kiện db click row grid
-     * @param {*} row
-     */
-    onDbClick(row) {
-      const me = this;
-      me.edit(row);
+      const param = {
+        mode: formMode.Add,
+      };
+      this.showDetailForm(param);
     },
   },
   data() {

@@ -84,7 +84,7 @@ export default defineComponent({
   <DynamicModal
     ref="ThemChuNha"
     title="Thêm chủ nhà"
-    width="1000px"
+    width="600px"
     position="right"
     @beforeOpen="beforeOpen($event, close)"
     @beforeClose="beforeClose"
@@ -93,8 +93,19 @@ export default defineComponent({
       <!-- Phần bên trên -->
       <div class="above-container">
         <div class="modal-row">
-          <TheInput class="flex1" label="Họ và tên" :required="true"></TheInput>
-          <TheInput class="flex1" label="Ngày sinh" :required="true"></TheInput>
+          <TheInput
+            class="flex1"
+            label="Họ và tên"
+            :required="true"
+            v-model="model.name"
+          ></TheInput>
+          <!-- :required="true" -->
+          <TheDatepicker
+            class="flex1"
+            name="Ngày mua"
+            label="Ngày sinh"
+          ></TheDatepicker>
+          <!-- v-model="asset.PurchaseDate" -->
           <TheInput class="flex1" label="Địa chỉ" :required="true"></TheInput>
         </div>
         <div class="modal-row">
@@ -112,7 +123,6 @@ export default defineComponent({
             label="Loại giấy tờ"
             ref="DepartmentCode"
             placeholder="Loại giấy tờ"
-            :data="departmentData"
             filterby="DepartmentCode"
           ></TheComboBox>
           <div class="flex1"></div>
@@ -133,7 +143,7 @@ export default defineComponent({
         </div>
       </div>
       <!-- Phần bên dưới -->
-      <div class="tab-container">
+      <!-- <div class="tab-container">
         <div class="grids-tab-header">
           <div
             :class="['item-tabs', activeTab == index ? 'item-tabs-active' : '']"
@@ -145,33 +155,25 @@ export default defineComponent({
           </div>
         </div>
         <div class="grids-tab-content">
-          <!-- Tìm kiếm -->
           <div class="m-toolbar">
             <div class="m-toolbar-left">
               <div class="toolbar-field" style="width=179px">
                 <TheInput placeholder="Tìm kiếm" />
               </div>
             </div>
-            <div class="m-toolbar-right">
-              <!-- <TheButton
-                @click="openDetail()"
-                style="box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16)"
-                >Thêm
-              </TheButton> -->
-            </div>
+            <div class="m-toolbar-right"></div>
           </div>
-          <!-- Nội dung chính -->
           <div class="grids-tab-container" v-if="activeTab == 0">
             <GridViewer :columns="columnTab" :datas="[]"></GridViewer>
           </div>
           <div v-if="activeTab == 1">Tab2</div>
           <div v-if="activeTab == 2">Tab3</div>
         </div>
-      </div>
+      </div> -->
     </template>
     <template #footer>
-      <TheButton class="outline-button" @click="close">Đóng</TheButton>
-      <TheButton @click="close">Cất</TheButton>
+      <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
+      <TheButton @click="hide()">Cất</TheButton>
     </template>
   </DynamicModal>
 </template>
