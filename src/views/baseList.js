@@ -1,7 +1,6 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import popupUtil from "../components/base/DynamicModal/popupUtil";
-import commonFn from "../common/commonFn";
 import { formMode } from "../enum/formMode";
 export default {
   setup() {},

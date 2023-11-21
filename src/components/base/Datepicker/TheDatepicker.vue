@@ -4,7 +4,7 @@
     <Datepicker
       ref="datepicker"
       class="datepicker-content"
-      locale="vi"
+      locale="vi-VN"
       cancelText="Hủy"
       selectText="Chọn"
       format="dd/MM/yyyy"
@@ -17,10 +17,10 @@
       v-model="date"
       @update:modelValue="handleDate"
       :inputClassName="inputClassName"
-      :name="name"
-      :required="required"
+      :day-names="['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']"
     >
     </Datepicker>
+    <!-- :required="required" -->
   </div>
 </template>
 <script>
@@ -29,8 +29,8 @@ import Datepicker from "@vuepic/vue-datepicker";
 export default {
   components: { Datepicker },
 
-  props: ["modelValue", "name", "required", "label"],
-
+  props: ["modelValue", "required", "label"],
+  mounted() {},
   methods: {
     /**
      * Mô tả : câp nhât giá trị v-model

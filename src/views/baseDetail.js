@@ -1,6 +1,8 @@
 import { $vfm } from "vue-final-modal";
 import { formMode } from "../enum/formMode";
 import axios from "axios";
+import commonFn from "../common/commonFn";
+import { confirm } from "../common/dialogFn";
 
 export default {
   async mounted() {
@@ -26,9 +28,29 @@ export default {
     /**
      * Sự kiện trước khi đóng form
      */
-    beforeClose() {
-      //Chưa biết xư lí gì
-      console.log("beforeclose");
+    async beforeClose(e) {
+      const me = this;
+      if (!me._suddenClose) {
+        const isDiff = commonFn.checkDiff(me.model, me.oldData);
+        if (isDiff) {
+          e.stop();
+          // show thông báo
+          let answer = await confirm(
+            "Dữ liệu đã thay đổi",
+            "Bạn có muốn Cất không?"
+          );
+          if (answer) {
+            me.hide();
+          }
+        }
+      }
+    },
+
+    /**
+     * Hàm validate chung
+     */
+    async validateBeforeClose(isValid) {
+      const me = this;
     },
 
     /**
@@ -57,7 +79,7 @@ export default {
     async add() {
       //Load data mới
       try {
-        res = await axios.get("ChuNha/new");
+        var res = await axios.get("ChuNha/new");
         this.data = res.data;
       } catch (error) {
         console.log(error);
@@ -89,7 +111,7 @@ export default {
      */
     binđData(data) {
       this.model = data;
-      this.oldData = data;
+      this.oldData = Object.assign({}, this.model);
     },
     /**
      * Đóng form
@@ -97,6 +119,21 @@ export default {
     hide() {
       const me = this;
       me._popup.value = false;
+      me._suddenClose = true;
+    },
+
+    /**
+     * Sự kiện mở form
+     */
+    opened() {
+      const $el = this.$el;
+      this.$nextTick(() => {
+        // focus vào ô đầu tiên
+        const firstInput = $el.querySelector("input");
+        if (firstInput) {
+          firstInput.focus();
+        }
+      });
     },
   },
   data() {

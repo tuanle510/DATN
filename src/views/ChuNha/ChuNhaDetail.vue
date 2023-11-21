@@ -3,7 +3,7 @@ import { ref, onMounted, getCurrentInstance, defineComponent } from "vue";
 import baseDetail from "../baseDetail";
 export default defineComponent({
   extends: baseDetail,
-  name: "ThemChuNha",
+  name: "ChuNhaDetail",
   props: {},
   setup() {
     const { proxy } = getCurrentInstance();
@@ -82,12 +82,13 @@ export default defineComponent({
 
 <template>
   <DynamicModal
-    ref="ThemChuNha"
+    ref="ChuNhaDetail"
     title="Thêm chủ nhà"
-    width="600px"
+    width="900px"
     position="right"
     @beforeOpen="beforeOpen($event, close)"
-    @beforeClose="beforeClose"
+    @beforeClose="beforeClose($event)"
+    @opened="opened"
   >
     <template #content>
       <!-- Phần bên trên -->
@@ -100,24 +101,20 @@ export default defineComponent({
             v-model="model.name"
           ></TheInput>
           <!-- :required="true" -->
-          <TheDatepicker
-            class="flex1"
-            name="Ngày mua"
-            label="Ngày sinh"
-          ></TheDatepicker>
+          <TheDatepicker class="flex1" label="Ngày sinh"></TheDatepicker>
           <!-- v-model="asset.PurchaseDate" -->
-          <TheInput class="flex1" label="Địa chỉ" :required="true"></TheInput>
-        </div>
-        <div class="modal-row">
           <TheInput
             class="flex1"
             label="Số điện thoại"
             :required="true"
           ></TheInput>
-          <TheInput class="flex1" label="Email" :required="true"></TheInput>
         </div>
         <div class="modal-row">
-          <!-- :required="true" -->
+          <TheInput class="flex2" label="Địa chỉ" :required="true"></TheInput>
+          <TheInput class="flex1" label="Email" :required="true"></TheInput>
+        </div>
+        <!-- <div class="modal-row">
+          :required="true"
           <TheComboBox
             class="flex1"
             label="Loại giấy tờ"
@@ -127,23 +124,20 @@ export default defineComponent({
           ></TheComboBox>
           <div class="flex1"></div>
           <div class="flex1"></div>
-        </div>
+        </div> -->
         <div class="modal-row">
-          <TheInput class="flex1" label="Số CMT" :required="true"></TheInput>
           <TheInput
             class="flex1"
-            label="Ngày cấp CMT"
+            label="Số CMT/CCCD"
             :required="true"
           ></TheInput>
-          <TheInput
-            class="flex1"
-            label="Nơi cấp CMT"
-            :required="true"
-          ></TheInput>
+          <TheDatepicker class="flex1" label="Ngày cấp"></TheDatepicker>
+
+          <TheInput class="flex1" label="Nơi cấp" :required="true"></TheInput>
         </div>
       </div>
       <!-- Phần bên dưới -->
-      <!-- <div class="tab-container">
+      <div class="tab-container">
         <div class="grids-tab-header">
           <div
             :class="['item-tabs', activeTab == index ? 'item-tabs-active' : '']"
@@ -169,7 +163,7 @@ export default defineComponent({
           <div v-if="activeTab == 1">Tab2</div>
           <div v-if="activeTab == 2">Tab3</div>
         </div>
-      </div> -->
+      </div>
     </template>
     <template #footer>
       <TheButton class="outline-button" @click="hide()">Đóng</TheButton>

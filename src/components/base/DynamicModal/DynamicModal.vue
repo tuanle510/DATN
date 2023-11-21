@@ -20,11 +20,7 @@ export default {
     <div :class="[`m-modal-${position}`]" :style="{ width: width }">
       <div class="m-modal-header">
         <div class="m-modal-title">{{ title }}</div>
-        <div
-          class="m-modal-close icon-box-24 tooltip"
-          tooltip="Hủy bỏ"
-          @click="close"
-        >
+        <div class="m-modal-close icon-box-24" tooltip="Hủy bỏ" @click="close">
           <div class="close"></div>
         </div>
       </div>

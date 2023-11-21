@@ -45,7 +45,7 @@ export default defineComponent({
         align: "left",
       },
     ]);
-    const formDetailName = "ThemChuNha";
+    const formDetailName = "ChuNhaDetail";
     return {
       columns,
       formDetailName,
