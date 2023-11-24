@@ -1,12 +1,16 @@
 <template>
-  <div v-on:clickout="tab" class="m-combobox" ref="combobox">
+  <div
+    v-on:clickout="tab"
+    class="m-combobox"
+    ref="combobox"
+    :class="{ 'm-validate': isValidate }"
+  >
     <div v-if="label" class="m-label">{{ label }}</div>
     <div class="combobox-contaner" ref="container">
       <input
         type="text"
         ref="input"
-        :class="'input-no-icon'"
-        :title="title"
+        :class="['m-input', { 'm-input-error': errorMessage }]"
         :maxlength="maxlength"
         :placeholder="placeholder"
         @click="onClick"
@@ -19,7 +23,6 @@
         @keydown.enter="selectItem"
         :value="this.modelValue"
       />
-
       <div
         style="position: absolute; right: 0"
         @click="toggle()"
@@ -28,6 +31,9 @@
         <div v-if="isOptionShow" class="up"></div>
         <div v-else class="down"></div>
       </div>
+    </div>
+    <div class="m-error-text" v-if="errorMessage">
+      {{ errorMessage }}
     </div>
     <Teleport to="body">
       <div
@@ -86,22 +92,49 @@
 </template>
 <script>
 import "clickout-event";
-export default {
+import { defineComponent, getCurrentInstance } from "vue";
+import { useValidateControl } from "../../../common/validateControl";
+export default defineComponent({
   name: "the-combobox",
   emits: ["blur", "keydown", "update:modelValue", "selectItem"],
-
-  props: [
-    "placeholder",
-    "filterby",
-    "data",
-    "modelValue",
-    "title",
-    "maxlength",
-    "label",
-    "columns",
-    "dropdownWidth",
-  ],
-
+  props: {
+    modelValue: {
+      default: null,
+    },
+    data: {
+      default: null,
+    },
+    maxlength: {
+      default: null,
+    },
+    placeholder: {
+      default: null,
+    },
+    filterby: {
+      default: null,
+    },
+    label: {
+      default: null,
+    },
+    columns: {
+      default: null,
+    },
+    dropdownWidth: {
+      default: null,
+    },
+    rules: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  mounted() {
+    const me = this;
+    if (me.$el && !me.$el.getVueInstance) {
+      me.$el.getVueInstance = () => {
+        return this;
+      };
+    }
+  },
   watch: {
     /**
      * Mô tả : Khi nào đóng data thì validate
@@ -113,8 +146,7 @@ export default {
     isFocus: function (newValue) {
       if (newValue == false) {
         this.$refs.input.classList.remove("input-focus");
-
-        this.validateRequired();
+        this.validate();
       } else {
         this.$refs.input.classList.add("input-focus");
       }
@@ -202,42 +234,6 @@ export default {
       // Bôi đen tất cả text
       this.$refs.input.select();
     },
-
-    // outFocus() {
-    //   this.isFocus = false;
-    // },
-
-    /**
-     * Mô tả : Validate required
-     * @param
-     * @return
-     * Created by: Lê Thiện Tuấn - MF1118
-     * Created date: 16:54 06/05/2022
-     */
-    validateRequired() {
-      if (
-        this.required &&
-        (this.modelValue === undefined || this.modelValue.trim() === "")
-      ) {
-        this.$refs.input.classList.add("m-input-error");
-      } else {
-        this.$refs.input.classList.remove("m-input-error");
-      }
-    },
-
-    /**
-      //  * Mô tả : clear input
-      //  * @param
-      //  * @return
-      //  * Created by: Lê Thiện Tuấn - MF1118
-      //  * Created date: 14:52 28/04/2022
-      //  */
-    // clearInput() {
-    //   this.$emit("update:modelValue");
-    //   this.isOptionShow = false;
-    //   // this.validateRequired();
-    //   this.selecedIndex = 0;
-    // },
 
     /**
      * Mô tả : xử lí sự kiện onClick vào data
@@ -375,6 +371,18 @@ export default {
     },
   },
 
+  setup(props) {
+    const { proxy } = getCurrentInstance();
+    const { errorMessage, validate, isValidate } = useValidateControl({
+      props,
+    });
+
+    return {
+      errorMessage,
+      validate,
+      isValidate,
+    };
+  },
   data() {
     return {
       selecedIndex: 0,
@@ -385,7 +393,7 @@ export default {
       optionPos: {},
     };
   },
-};
+});
 </script>
 <style lang="scss" scoped>
 @import url(../../../css/components/TheCombobox.scss);

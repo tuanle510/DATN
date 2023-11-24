@@ -149,6 +149,7 @@ export default defineComponent({
             label="Họ và tên"
             :required="true"
             v-model="model.apartment_name"
+            :rule="[{ name: 'required' }]"
           ></TheInput>
           <TheDatepicker class="flex1" label="Ngày sinh"></TheDatepicker>
           <TheInput

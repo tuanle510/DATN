@@ -60,12 +60,27 @@ body {
   margin: 10px 0;
 }
 
+/* Mấy cái này dùng chung cho các input */
 .m-label {
   padding-bottom: 8px;
   font-size: 13px;
   font-weight: 700;
   line-height: 15px;
 }
+
+.m-error-text {
+  color: #f77;
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.m-input-error {
+  border-color: #f77 !important;
+}
+.m-input-error:focus {
+  border-color: #f77 !important;
+}
+/* Đến đây là hết */
 
 .d-flex-center {
   display: flex;

@@ -1,5 +1,5 @@
 <template>
-  <div class="datepicker-container">
+  <div class="datepicker-container" :class="{ 'm-validate': isValidate }">
     <div v-if="label" class="m-label">{{ label }}</div>
     <Datepicker
       ref="datepicker"
@@ -12,27 +12,65 @@
       :maxDate="new Date()"
       textInput
       autoApply
-      @blur="setBlur"
-      @focus="setFocus"
+      @blur="onBlur"
+      @closed="onClosePicker"
       v-model="date"
       @update:modelValue="handleDate"
-      :inputClassName="inputClassName"
+      @onInput="onInput"
+      :inputClassName="errorMessage ? 'm-input m-input-error' : 'm-input '"
       :day-names="['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']"
       :teleport="true"
     >
     </Datepicker>
-    <!-- :required="required" -->
+    <div class="m-error-text" v-if="errorMessage">
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 <script>
 import Datepicker from "@vuepic/vue-datepicker";
+import { defineComponent, getCurrentInstance } from "vue";
+import { useValidateControl } from "../../../common/validateControl";
 
-export default {
+export default defineComponent({
   components: { Datepicker },
 
-  props: ["modelValue", "required", "label"],
-  mounted() {},
+  props: {
+    modelValue: {
+      default: null,
+    },
+    label: {
+      default: null,
+    },
+    rules: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  mounted() {
+    const me = this;
+    if (me.$el && !me.$el.getVueInstance) {
+      me.$el.getVueInstance = () => {
+        return this;
+      };
+    }
+  },
+  setup(props) {
+    const { proxy } = getCurrentInstance();
+    const { errorMessage, validate, isValidate } = useValidateControl({
+      props,
+    });
+
+    return {
+      errorMessage,
+      validate,
+      isValidate,
+    };
+  },
   methods: {
+    onInput() {
+      this.validate();
+    },
     /**
      * Mô tả : câp nhât giá trị v-model
      * @param
@@ -45,15 +83,8 @@ export default {
       await this.$emit("update:modelValue", this.date);
     },
 
-    /**
-     * Mô tả : Xử lí sự kiện focus
-     * @param
-     * @return
-     * Created by: Lê Thiện Tuấn - MF1118
-     * Created date: 01:12 31/05/2022
-     */
-    setFocus() {
-      this.inputClassName = "m-input-focus";
+    onClosePicker() {
+      this.focus();
     },
 
     /**
@@ -63,21 +94,10 @@ export default {
      * Created by: Lê Thiện Tuấn - MF1118
      * Created date: 01:12 31/05/2022
      */
-    setBlur() {
-      this.inputClassName = "";
-      this.validateRequired();
-    },
-
-    /**
-     * Mô tả : Validate bắt buộc nhập
-     * @param
-     * @return
-     * Created by: Lê Thiện Tuấn - MF1118
-     * Created date: 01:12 31/05/2022
-     */
-    validateRequired() {
-      if (this.required == true && (this.date == null || this.date == "")) {
-        this.inputClassName = "m-input-error";
+    onBlur() {
+      var mess = this.validate();
+      if (mess) {
+        this.inputClassName = "m-input m-input-error";
       } else {
         this.inputClassName = "";
       }
@@ -87,16 +107,15 @@ export default {
      * sự kiện focus để component cha dùng
      */
     focus() {
-      // this.$refs.datepicker.openMenu();
       const $el = this.$el;
       $el.getElementsByClassName("dp__input")[0].focus();
     },
   },
 
   data() {
-    return { date: this.modelValue, inputClassName: null };
+    return { date: this.modelValue, inputClassName: "m-input" };
   },
-};
+});
 </script>
 <style lang="css">
 @import "@vuepic/vue-datepicker/dist/main.css";
@@ -110,6 +129,11 @@ export default {
 .dp__input {
   height: 30px;
   font-size: 13px !important;
+  transition: none;
+}
+
+input.m-input:focus {
+  border: 1px solid #22a7ca;
 }
 
 /* Trong trường hợp grid editor  */

@@ -14,15 +14,7 @@ input.m-input {
 }
 
 input.m-input:focus {
-  border: 1px solid #22a7ca !important;
-}
-
-.m-input-focus {
-  border: 1px solid #22a7ca !important;
-}
-
-input.m-input-error {
-  border: 1px solid #ec4b4b !important;
+  border: 1px solid #22a7ca;
 }
 
 input:placeholder-shown {

@@ -68,12 +68,127 @@ export default defineComponent({
       columnTab.value = tabList[index]?.columns || [];
     };
 
+    const purchaserData = [
+      {
+        name: "Lê Thiện Tuấn 1",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Trần Thu hà",
+        address:
+          "Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội ",
+      },
+      {
+        name: "Tít",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Hà Béo",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Lê Thiện Tuấn",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Trần Thu hà",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Tít",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Hà Béo",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Lê Thiện Tuấn",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Trần Thu hà",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Tít",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Hà Béo",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Lê Thiện Tuấn",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Trần Thu hà",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Tít",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Hà Béo",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Lê Thiện Tuấn",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Trần Thu hà",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Tít",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Hà Béo",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Lê Thiện Tuấn",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Trần Thu hà",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Tít",
+        address: "Duy Tân, Hà Nội",
+      },
+      {
+        name: "Hà Béo",
+        address: "Duy Tân, Hà Nội",
+      },
+    ];
+    const columns = [
+      {
+        width: 150,
+        name: "Tên chủ nhà",
+        dataField: "name",
+        align: "left",
+      },
+      {
+        name: "Địa chỉ",
+        dataField: "address",
+        align: "left",
+      },
+    ];
+
     return {
       tabList,
       activeTab,
       columnTab,
       dataTab,
       module,
+      purchaserData,
+      columns,
       onTabClick,
     };
   },
@@ -100,8 +215,13 @@ export default defineComponent({
             label="Họ và tên"
             :required="true"
             v-model="model.owner_name"
+            :rules="[{ name: 'required' }]"
           ></TheInput>
-          <TheDatepicker class="flex1" label="Ngày sinh"></TheDatepicker>
+          <TheDatepicker
+            class="flex1"
+            label="Ngày sinh"
+            v-model="model.birthdate"
+          ></TheDatepicker>
           <TheInput
             class="flex1"
             label="Số điện thoại"
@@ -121,18 +241,6 @@ export default defineComponent({
             v-model="model.email"
           ></TheInput>
         </div>
-        <!-- <div class="modal-row">
-          :required="true"
-          <TheComboBox
-            class="flex1"
-            label="Loại giấy tờ"
-            ref="DepartmentCode"
-            placeholder="Loại giấy tờ"
-            filterby="DepartmentCode"
-          ></TheComboBox>
-          <div class="flex1"></div>
-          <div class="flex1"></div>
-        </div> -->
         <div class="modal-row">
           <TheInput
             class="flex1"
@@ -153,7 +261,7 @@ export default defineComponent({
         </div>
       </div>
       <!-- Phần bên dưới -->
-      <div class="tab-container">
+      <!-- <div class="tab-container">
         <div class="grids-tab-header">
           <div
             :class="['item-tabs', activeTab == index ? 'item-tabs-active' : '']"
@@ -179,11 +287,11 @@ export default defineComponent({
           <div v-if="activeTab == 1">Tab2</div>
           <div v-if="activeTab == 2">Tab3</div>
         </div>
-      </div>
+      </div> -->
     </template>
     <template #footer>
       <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
-      <TheButton @click="hide()">Cất</TheButton>
+      <TheButton @click="validateBeforeSave()">Cất</TheButton>
     </template>
   </DynamicModal>
 </template>

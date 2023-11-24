@@ -37,22 +37,48 @@ export default {
         if (isDiff) {
           e.stop();
           // show thông báo
-          let answer = await confirm(
-            "Dữ liệu đã thay đổi",
-            "Bạn có muốn Cất không?"
-          );
-          console.log(answer);
-          if (answer) {
-            me.hide();
-          }
+          this.showQuestionChage();
+          return;
         }
       }
     },
 
     /**
+     * Hỏi khi đã thay đổi dữ liệu
+     */
+    showQuestionChage() {
+      const me = this;
+      confirm("Dữ liệu đã thay đổi", "Bạn có muốn Cất không?").then(
+        (answer) => {
+          switch (answer) {
+            case true:
+              //cất & đóng
+              // if (
+              //   me.validateBeforeSave &&
+              //   typeof me.validateBeforeSave == "function"
+              // ) {
+              //   me.validateBeforeSave();
+              // } else {
+              me.save();
+              // }
+              break;
+            case false:
+              //đóng không cất
+              this.hide();
+              break;
+          }
+        }
+      );
+    },
+
+    save() {
+      console.log(this.model);
+    },
+
+    /**
      * Hàm validate chung
      */
-    async validateBeforeClose(isValid) {
+    async validateBeforeSave() {
       const me = this;
     },
 
@@ -126,10 +152,29 @@ export default {
     },
 
     /**
+     * Lấy các control nhập liệu
+     */
+    addObserveControl() {
+      const $el = this.$el;
+      if (!this._observeControls) {
+        this._observeControls = [];
+        const $controls = $el.querySelectorAll(".m-validate");
+        if ($controls && $controls.length > 0) {
+          $controls.forEach((item) => {
+            if (typeof item.getVueInstance === "function") {
+              this._observeControls.push(item.getVueInstance());
+            }
+          });
+        }
+      }
+    },
+
+    /**
      * Sự kiện mở form
      */
     opened() {
       const $el = this.$el;
+      this.addObserveControl();
       this.$nextTick(() => {
         // focus vào ô đầu tiên
         const firstInput = $el.querySelector("input");
@@ -137,6 +182,59 @@ export default {
           firstInput.focus();
         }
       });
+    },
+
+    /**
+     * Xử lí trc khi save
+     * @returns
+     */
+    validateBeforeSave() {
+      const me = this;
+      // validate control
+      if (!me.validateComponents()) {
+        me.$nextTick(() => {
+          me.focusFirstError();
+        });
+        return;
+      }
+    },
+
+    /**
+     * Hàm validate các control input
+     */
+    validateComponents() {
+      const me = this;
+      if (me._observeControls && me._observeControls.length > 0) {
+        let controls = me._observeControls.filter(
+          (x) =>
+            x.$el.offsetWidth ||
+            x.$el.offsetHeight ||
+            x.$el.getClientRects().length ||
+            /** Xử lý validate control khi ẩn */
+            (Array.isArray(x?.rules) && x.rules?.some((x) => x.hide))
+        );
+        if (controls.length > 0) {
+          const errors = controls.map((x) => {
+            if (typeof x.validate === "function") {
+              return x.validate();
+            }
+            return "";
+          });
+          return !errors.some((x) => x);
+        }
+      }
+      return true;
+    },
+
+    /**
+     * Focus vào input lỗi đầu tiên
+     */
+    focusFirstError() {
+      const $el = this.$el;
+      const firstErrorEl = $el.querySelector(".m-input.m-input-error");
+      if (firstErrorEl) {
+        firstErrorEl.focus();
+      }
     },
   },
   data() {

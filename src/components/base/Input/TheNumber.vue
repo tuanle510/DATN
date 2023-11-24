@@ -1,27 +1,24 @@
-<template>
-  <div class="m-input-container">
-    <div v-if="label" class="m-label">{{ label }}</div>
-    <input
-      ref="TheInput"
-      class="m-input m-input-number"
-      :value="inputValue"
-      @input="handleInput"
-      @keydown="handleKeydown"
-      @focus="onFocus"
-      maxlength="18"
-    />
-  </div>
-</template>
 <script>
-export default {
+import { defineComponent, computed, getCurrentInstance } from "vue";
+import { useValidateControl } from "../../../common/validateControl";
+export default defineComponent({
   props: {
-    modelValue: {
-      type: Number,
-      required: true,
-    },
+    modelValue: { default: null },
     label: {
       type: String,
     },
+    rules: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  mounted() {
+    const me = this;
+    if (me.$el && !me.$el.getVueInstance) {
+      me.$el.getVueInstance = () => {
+        return this;
+      };
+    }
   },
   data() {
     return {
@@ -29,6 +26,9 @@ export default {
     };
   },
   methods: {
+    focus() {
+      this.$refs.TheInput.focus();
+    },
     /**
      * Mô tả : Chỉ nhận input
      * @param
@@ -36,7 +36,7 @@ export default {
      * Created by: Lê Thiện Tuấn - MF1118
      * Created date: 23:44 02/05/2022
      */
-    handleKeydown($event) {
+    handleKeydown(event) {
       // Lấy mã phím
       const keyCode = event.keyCode;
       const isCtrlPressed = event.ctrlKey || event.metaKey; // Kiểm tra xem Ctrl hoặc Command (Mac) đã được nhấn
@@ -59,21 +59,23 @@ export default {
      * @param {*} value
      */
     formatCurrency(value) {
-      return parseFloat(value)
-        .toLocaleString("vi-VN", {
-          style: "currency",
-          currency: "VND",
-          currencyDisplay: "narrowSymbol",
-        })
-        .replace("₫", "")
-        .trim();
+      if (!isNaN(value)) {
+        return parseFloat(value)
+          .toLocaleString("vi-VN", {
+            style: "currency",
+            currency: "VND",
+            currencyDisplay: "narrowSymbol",
+          })
+          .replace("₫", "")
+          .trim();
+      }
     },
 
     /**
      * xử lí sự kiện khi nhập input
      * @param {*} event
      */
-    handleInput($event) {
+    onChangeHandler($event) {
       let value = $event.target.value;
 
       // Loại bỏ các ký tự không phải là số hoặc dấu thập phân
@@ -89,14 +91,80 @@ export default {
       // Xử lý nếu giá trị không rỗng
       this.inputValue = this.formatCurrency(value);
       this.$emit("update:modelValue", value);
+      this.validate();
     },
 
     onFocus() {
       this.$refs.TheInput.select();
     },
   },
-};
+
+  setup(props) {
+    const { proxy } = getCurrentInstance();
+    const { errorMessage, validate, isValidate } = useValidateControl({
+      props,
+    });
+
+    /**
+     * Hủy lan rộng event
+     */
+    const cancelEvent = (e) => {
+      if (e) {
+        if (typeof e.preventDefault === "function") {
+          e.preventDefault();
+        }
+
+        if (typeof e.stopPropagation === "function") {
+          e.stopPropagation();
+        }
+
+        if (typeof e.stopImmediatePropagation === "function") {
+          e.stopImmediatePropagation();
+        }
+      }
+    };
+
+    const listeners = computed(() => {
+      return {
+        blur: (e) => {
+          cancelEvent(e);
+          onBlur(e);
+        },
+      };
+    });
+
+    //Sự kiên blur ra ngoài ô input
+    const onBlur = (e) => {
+      validate();
+    };
+
+    return {
+      errorMessage,
+      validate,
+      isValidate,
+      listeners,
+    };
+  },
+});
 </script>
+<template>
+  <div class="m-input-container" :class="{ 'm-validate': isValidate }">
+    <div v-if="label" class="m-label">{{ label }}</div>
+    <input
+      ref="TheInput"
+      :class="['m-input', 'm-input-number', { 'm-input-error': errorMessage }]"
+      :value="inputValue"
+      @input="onChangeHandler"
+      @keydown="handleKeydown"
+      @focus="onFocus"
+      v-on="listeners"
+      maxlength="18"
+    />
+    <div class="m-error-text" v-if="errorMessage">
+      {{ errorMessage }}
+    </div>
+  </div>
+</template>
 <style scoped>
 @import url(../../../css/components/TheInput.css);
 .m-input-number {
