@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import DashBoard from "../views/DashBoard/DashBoardView.vue";
 import ChuNhaList from "../views/ChuNha/ChuNhaList.vue";
-import CanHoView from "../views/CanHo/CanHoView.vue";
+import CanHoList from "../views/CanHo/CanHoList.vue";
 import KhachHangView from "../views/KhachHang/KhachHangView.vue";
 
 const router = createRouter({
@@ -24,7 +24,7 @@ const router = createRouter({
     {
       path: "/canho",
       name: "canho",
-      component: CanHoView,
+      component: CanHoList,
     },
     {
       path: "/khachhang",

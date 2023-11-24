@@ -1,15 +1,11 @@
 <template>
   <div v-on:clickout="tab" class="m-combobox" ref="combobox">
     <div v-if="label" class="m-label">{{ label }}</div>
-    <div class="combobox-contaner">
-      <div v-if="hasIcon" class="combobox-icon">
-        <div class="filter"></div>
-      </div>
+    <div class="combobox-contaner" ref="container">
       <input
         type="text"
         ref="input"
-        :required="required"
-        :class="!hasIcon ? 'input-no-icon' : 'input-icon'"
+        :class="'input-no-icon'"
         :title="title"
         :maxlength="maxlength"
         :placeholder="placeholder"
@@ -33,19 +29,59 @@
         <div v-else class="down"></div>
       </div>
     </div>
-    <ul class="m-option-list" v-if="isOptionShow" ref="data">
-      <li
-        v-for="(option, index) in matches"
-        :key="index"
-        class="m-option-item"
-        @click="choseOption(index, option)"
-        :class="{ 'm-item-selected': this.selecedIndex == index }"
+    <Teleport to="body">
+      <div
+        class="m-option-list"
+        :style="optionPos"
+        v-if="isOptionShow"
+        ref="optionList"
       >
-        <div class="item-text-limit">
-          {{ option[this.filterby] }}
+        <!-- Dạng bảng -->
+        <table v-if="columns" class="m-option-table">
+          <thead>
+            <tr class="m-option-table-header">
+              <th
+                v-for="(col, colindex) in columns"
+                :key="colindex"
+                :style="{ width: col.width + 'px', textAlign: col.align }"
+              >
+                {{ col.name }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(row, rowIndex) in matches"
+              :key="rowIndex"
+              class="m-option-table-item"
+              :class="{ 'm-item-selected': this.selecedIndex == rowIndex }"
+              @click="choseOption(rowIndex, row)"
+            >
+              <td v-for="(column, colindex) in columns" :key="colindex">
+                <div class="text-overflow">
+                  <span class="td-normal-span" :title="row[column.dataField]">
+                    {{ row[column.dataField] }}
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Dạng dropdown bình thường -->
+        <div
+          v-else
+          v-for="(option, index) in matches"
+          :key="index"
+          class="m-option-item"
+          @click="choseOption(index, option)"
+          :class="{ 'm-item-selected': this.selecedIndex == index }"
+        >
+          <div class="item-text-limit">
+            {{ option[this.filterby] }}
+          </div>
         </div>
-      </li>
-    </ul>
+      </div>
+    </Teleport>
   </div>
 </template>
 <script>
@@ -55,15 +91,15 @@ export default {
   emits: ["blur", "keydown", "update:modelValue", "selectItem"],
 
   props: [
-    "hasIcon",
     "placeholder",
     "filterby",
     "data",
     "modelValue",
-    "required",
     "title",
     "maxlength",
     "label",
+    "columns",
+    "dropdownWidth",
   ],
 
   watch: {
@@ -90,21 +126,13 @@ export default {
       }
     },
 
-    // Theo dõi giá trị mới của input để hiển thị data
-    modelValue: function (newValue) {
-      // Hiển thị option list:
-      this.isOptionShow = true;
-      // Gán index về 0:
-      this.selecedIndex = 0;
-
-      if (newValue == undefined || newValue == "") {
-        this.matches = this.data;
-      } else {
-        this.matches = this.data.filter((item) =>
-          item[this.filterby]
-            .toLowerCase()
-            .includes(this.modelValue.toLowerCase())
-        );
+    /**
+     * Hiển thị Option list thì gán lại css
+     * @param {*} newValue
+     */
+    isOptionShow: function (newValue) {
+      if (newValue == true) {
+        this.setOptionListPosition();
       }
     },
   },
@@ -118,7 +146,6 @@ export default {
      * Created date: 20:59 30/05/2022
      */
     onClick() {
-      this.isToggle = false;
       this.setFocus();
     },
     /**
@@ -129,9 +156,23 @@ export default {
      * Created date: 00:00 02/05/2022
      */
     onChangeHandler(e) {
+      this.isOptionShow = true;
       e.preventDefault();
+      let newValue = e.target.value;
       //gán lại giá trị
-      this.$emit("update:modelValue", e.target.value);
+      this.$emit("update:modelValue", newValue);
+      // Gán index về 0:
+      this.selecedIndex = 0;
+
+      if (newValue == undefined || newValue == "") {
+        this.matches = this.data;
+      } else {
+        this.matches = this.data.filter((item) =>
+          item[this.filterby]
+            .toLowerCase()
+            .includes(this.modelValue.toLowerCase())
+        );
+      }
     },
 
     /**
@@ -148,15 +189,15 @@ export default {
         this.matches = this.data;
       }
 
-      if (this.isToggle == true) {
-        // Hiển thị option List:
-        this.isOptionShow = !this.isOptionShow;
-      } else {
-        this.isOptionShow = true;
-      }
+      // if (this.isToggle == true) {
+      //   // Hiển thị option List:
+      //   this.isOptionShow = !this.isOptionShow;
+      // } else {
+      //   this.isOptionShow = true;
+      // }
 
       // Hiển thị theo vị trí của index được chọn:
-      this.scrollToItem();
+      // this.scrollToItem();
 
       // Bôi đen tất cả text
       this.$refs.input.select();
@@ -268,10 +309,17 @@ export default {
      * Created date: 22:48 28/05/2022
      */
     down() {
+      // Nếu chưa hiện Option list thì hiển thị
+      if (this.isOptionShow == false) {
+        this.toggle();
+        return;
+      }
+      // Hiển thị đến cuối thì quay lại đầu
       if (this.selecedIndex >= this.matches.length - 1) {
         this.selecedIndex = 0;
         return;
       }
+      // Xuống dòng dưới
       this.selecedIndex += 1;
     },
 
@@ -295,9 +343,20 @@ export default {
      * Created date: 10:21 08/05/2022
      */
     toggle() {
-      this.isToggle = true;
-      // this.isOptionShow = false;
+      this.isOptionShow = !this.isOptionShow;
       this.$refs.input.focus();
+    },
+
+    /**
+     * Lấy vị trí hiển thị
+     */
+    setOptionListPosition() {
+      let container = this.$refs.container.getBoundingClientRect();
+      this.optionPos = {
+        top: container.top + container.height + "px",
+        left: container.left + "px",
+        width: (this.dropdownWidth || container.width) + "px",
+      };
     },
 
     /**
@@ -310,7 +369,7 @@ export default {
     scrollToItem() {
       this.$nextTick(() => {
         if (this.isOptionShow == true) {
-          this.$refs.data.scrollTop = this.selecedIndex * 36;
+          this.$refs.optionList.scrollTop = this.selecedIndex * 30;
         }
       });
     },
@@ -323,164 +382,11 @@ export default {
       selecedItem: null,
       isFocus: false,
       isOptionShow: false,
-      isToggle: false,
+      optionPos: {},
     };
   },
 };
 </script>
-<style scoped>
-.m-combobox {
-  position: relative;
-  border-radius: 2.5px;
-  border: none;
-  outline: none;
-}
-
-.m-combobox .m-label {
-  padding-bottom: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 15px;
-}
-
-.m-combobox .combobox-contaner {
-  z-index: 2;
-  border-radius: 2.5px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  background-color: #fff;
-  position: relative;
-  width: 100%;
-}
-
-.m-combobox .combobox-contaner input {
-  border: 1px solid #afafaf;
-  border-radius: 2.5px;
-  font-size: 13px;
-  width: 100%;
-  height: 100%;
-  outline: none;
-}
-
-.m-combobox .combobox-contaner input:focus {
-  border: 1px solid #22a7ca !important;
-}
-
-.m-combobox .combobox-contaner .input-focus {
-  border: 1px solid #22a7ca !important;
-}
-
-.combobox-icon {
-  position: absolute;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 36px;
-  width: 36px;
-}
-
-.m-combobox .combobox-no-icon {
-  display: none;
-}
-
-.m-combobox .input-no-icon {
-  width: 100%;
-  padding-left: 14px !important;
-  padding-right: 20px;
-}
-
-.m-combobox .input-icon {
-  width: 100%;
-  padding-left: 36px !important;
-  padding-right: 20px;
-}
-
-.m-option-list {
-  position: absolute;
-  top: 36px;
-  border-radius: 2.5px;
-  background-color: #fff;
-  width: 100%;
-  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
-  z-index: 5;
-  max-height: 152px;
-  overflow: auto;
-}
-
-.m-option-list .m-option-item {
-  cursor: pointer;
-  border-radius: 2.5px;
-  padding-left: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  margin: 0px 4px;
-}
-
-.m-option-list .m-option-item .item-text-limit {
-  max-width: 300px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.m-option-list .combobox-selected {
-  width: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.m-option-list .m-option-item:first-child {
-  margin-top: 4px;
-}
-.m-option-list .m-option-item:last-child {
-  margin-bottom: 4px;
-}
-
-.m-option-list .m-option-item:hover,
-.m-option-list .m-option-item-hover {
-  background-color: #c7e0f5;
-}
-
-.m-option-list .m-option-item.m-item-selected {
-  background-color: #c7e0f5;
-}
-
-.m-option-list .m-option-item .option-item-box {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  visibility: hidden;
-}
-
-.icon-combobox {
-  height: 100%;
-  width: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.m-option-list::-webkit-scrollbar {
-  width: 5px;
-  height: 2px;
-}
-
-.m-option-list::-webkit-scrollbar-track {
-  background: rgb(217, 217, 217);
-}
-
-.m-option-list::-webkit-scrollbar-thumb {
-  background: #afafaf;
-  border-radius: 10000px;
-}
-
-.m-option-list::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
+<style lang="scss" scoped>
+@import url(../../../css/components/TheCombobox.scss);
 </style>

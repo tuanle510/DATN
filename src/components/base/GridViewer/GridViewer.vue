@@ -27,11 +27,23 @@ export default {
     const { proxy } = getCurrentInstance();
     const checkedAll = ref(false);
     // Gen css cho table
-    const genCss = (item, index) => {
+    const genHeaderCss = (item, index) => {
       const css = {
-        maxWidth: item.width + "px",
+        // maxWidth: item.width + "px",
         minWidth: item.width + "px",
         width: item.width + "px",
+        textAlign: item.align,
+      };
+      // Nếu là cột cuối thì bỏ fix witdh đi
+      if (props.columns && index == props.columns.length - 1) {
+        delete css.width;
+      }
+      return css;
+    };
+
+    const genRowCss = (item, index) => {
+      const css = {
+        maxWidth: item.width + "px",
         textAlign: item.align,
       };
       // Nếu là cột cuối thì bỏ fix witdh đi
@@ -83,7 +95,8 @@ export default {
     };
 
     return {
-      genCss,
+      genHeaderCss,
+      genRowCss,
       onDbClick,
       colFormat,
       onClickCheckAll,
@@ -113,7 +126,7 @@ export default {
             <th
               v-for="(column, index) in columns"
               :key="index"
-              :style="genCss(column, index)"
+              :style="genHeaderCss(column, index)"
             >
               <div class="th-content">
                 <div class="th-title">
@@ -148,7 +161,7 @@ export default {
               v-for="(column, indexC) in columns"
               :key="indexC"
               :title="row[column.dataField]"
-              :style="genCss(column, indexC)"
+              :style="genRowCss(column, indexC)"
             >
               <div class="text-overflow">
                 <span class="td-normal-span">{{

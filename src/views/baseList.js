@@ -2,6 +2,7 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 import popupUtil from "../components/base/DynamicModal/popupUtil";
 import { formMode } from "../enum/formMode";
+import commonFn from "../common/commonFn";
 export default {
   setup() {},
   async beforeMount() {
@@ -13,7 +14,7 @@ export default {
         take: 20,
         skip: 0,
       };
-      const res = await axios.post("ChuNha/list", payload);
+      const res = await axios.post(`${this.module}/list`, payload);
       this.data = res.data;
     } catch (error) {
       console.log(error);
@@ -26,9 +27,12 @@ export default {
      * Mở form detail theo cấu hình formDetailName
      */
     showDetailForm(param) {
+      // Mở mask để bind xong data vào detal thì mới unmask
+      commonFn.mask();
       const me = this;
       if (me.formDetailName) {
         popupUtil.show(me.formDetailName, param);
+        console.log(me.formDetailName);
       } else {
         console.log("Chưa cấu hình form detail");
       }
@@ -41,7 +45,7 @@ export default {
     edit(row) {
       const param = {
         mode: formMode.Edit,
-        id: row.id,
+        id: row[this.primaryKey],
       };
       this.showDetailForm(param);
     },
@@ -58,7 +62,7 @@ export default {
   },
   data() {
     return {
-      data: [], //Danh sách lấy về từ api
+      data: [], // Danh sách lấy về từ api
       tableLoading: false,
     };
   },

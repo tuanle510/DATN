@@ -31,6 +31,9 @@
 .m-navbar .m-navbar-list {
   padding: 15px 11px 0 11px;
 }
+.m-navbar .m-navbar-list .m-navbar-item {
+  padding: 4px 0;
+}
 
 .m-navbar .navbar-logo {
   width: 44px;
@@ -64,6 +67,7 @@
   border-radius: 6px;
   color: #fff;
   text-decoration: none;
+  margin: 4px 0px;
 }
 .m-navbar ul li:hover,
 .m-navbar .router-link-active,

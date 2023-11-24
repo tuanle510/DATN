@@ -93,6 +93,7 @@ $background-color_5: #b8bcc3;
         position: relative;
         .th-content {
           .th-resize {
+            // background-color: red;
             cursor: col-resize;
             height: 100%;
             width: 5px;
@@ -119,9 +120,7 @@ $background-color_5: #b8bcc3;
       height: 30px;
       td {
         height: 30px;
-        padding: 0 10px;
         border: 1px solid #e0e0e0;
-        background: #fff;
         .text-overflow {
           white-space: normal;
           overflow: hidden;
@@ -140,15 +139,16 @@ $background-color_5: #b8bcc3;
           background-color: $background-color_3 !important;
         }
       }
+      &:focus {
+        td {
+          background-color: $background-color_3 !important;
+        }
+      }
     }
-    .m-tr-checkbox {
-      width: 40px !important;
-      max-width: 40px !important;
-      min-width: 40px !important;
-      text-align: center;
-      position: sticky;
-      left: 0;
-      z-index: 2;
+    .m-tr-seleced {
+      td {
+        background-color: $background-color_3 !important;
+      }
     }
   }
 }

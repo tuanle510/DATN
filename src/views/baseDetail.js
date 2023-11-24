@@ -12,6 +12,8 @@ export default {
     // Gán thêm dữ liệu trc khi binddata nếu cần
     this.beforeBinđData(this.data);
     this.binđData(this.data);
+    // Xóa mask
+    commonFn.unMask();
   },
   methods: {
     /**
@@ -39,6 +41,7 @@ export default {
             "Dữ liệu đã thay đổi",
             "Bạn có muốn Cất không?"
           );
+          console.log(answer);
           if (answer) {
             me.hide();
           }
@@ -79,7 +82,7 @@ export default {
     async add() {
       //Load data mới
       try {
-        var res = await axios.get("ChuNha/new");
+        var res = await axios.get(`${this.module}/new`);
         this.data = res.data;
       } catch (error) {
         console.log(error);
@@ -92,7 +95,7 @@ export default {
     async edit(param) {
       // Load Data
       try {
-        const res = await axios.get(`ChuNha/${param.id}`);
+        const res = await axios.get(`${this.module}/${param.id}`);
         this.data = res.data;
       } catch (error) {
         console.log(error);

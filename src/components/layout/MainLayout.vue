@@ -6,13 +6,13 @@ export default {
   components: { TheNavbar, TheHeader },
   props: {},
   setup() {
-    const navBarWidth = ref(266);
+    const navBarWidth = ref(226);
     const isNavBarClose = ref(false);
 
     // Đóng mở navbar
     const onCloseNavBar = () => {
       if (navBarWidth.value == 66) {
-        navBarWidth.value = 266;
+        navBarWidth.value = 226;
         isNavBarClose.value = false;
       } else {
         navBarWidth.value = 66;
@@ -42,7 +42,7 @@ export default {
       >
         <the-header />
         <!-- <div class="m-content"> -->
-          <RouterView></RouterView>
+        <RouterView></RouterView>
         <!-- </div> -->
       </div>
     </div>

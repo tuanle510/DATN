@@ -18,6 +18,7 @@
       @update:modelValue="handleDate"
       :inputClassName="inputClassName"
       :day-names="['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']"
+      :teleport="true"
     >
     </Datepicker>
     <!-- :required="required" -->
@@ -81,6 +82,15 @@ export default {
         this.inputClassName = "";
       }
     },
+
+    /**
+     * sự kiện focus để component cha dùng
+     */
+    focus() {
+      // this.$refs.datepicker.openMenu();
+      const $el = this.$el;
+      $el.getElementsByClassName("dp__input")[0].focus();
+    },
   },
 
   data() {
@@ -94,11 +104,26 @@ export default {
   --dp-border-radius: 2.5px;
   --dp-border-color: #afafaf;
   --dp-font-family: MISA Font;
+  --dp-button-icon-height: 0px;
 }
 
 .dp__input {
   height: 30px;
   font-size: 13px !important;
+}
+
+/* Trong trường hợp grid editor  */
+tr td .dp__input {
+  --dp-input-icon-padding: 0px;
+  --dp-input-padding: 0;
+  border-color: transparent !important;
+  text-align: center;
+}
+tr td .dp__icon {
+  display: none;
+}
+tr td .dp__input:focus {
+  border-color: #22a7ca !important;
 }
 /* .calendar-next-enter-active,
 .calendar-next-leave-active,

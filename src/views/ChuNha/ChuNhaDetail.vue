@@ -7,7 +7,7 @@ export default defineComponent({
   props: {},
   setup() {
     const { proxy } = getCurrentInstance();
-
+    const module = "ChuNha";
     // Mặd định vào tab đầu tiên
     const activeTab = ref(0);
     const columnTab = ref([]);
@@ -73,6 +73,7 @@ export default defineComponent({
       activeTab,
       columnTab,
       dataTab,
+      module,
       onTabClick,
     };
   },
@@ -85,7 +86,7 @@ export default defineComponent({
     ref="ChuNhaDetail"
     title="Thêm chủ nhà"
     width="900px"
-    position="right"
+    position="center"
     @beforeOpen="beforeOpen($event, close)"
     @beforeClose="beforeClose($event)"
     @opened="opened"
@@ -98,20 +99,27 @@ export default defineComponent({
             class="flex1"
             label="Họ và tên"
             :required="true"
-            v-model="model.name"
+            v-model="model.owner_name"
           ></TheInput>
-          <!-- :required="true" -->
           <TheDatepicker class="flex1" label="Ngày sinh"></TheDatepicker>
-          <!-- v-model="asset.PurchaseDate" -->
           <TheInput
             class="flex1"
             label="Số điện thoại"
             :required="true"
+            v-model="model.phone_number"
           ></TheInput>
         </div>
         <div class="modal-row">
-          <TheInput class="flex2" label="Địa chỉ" :required="true"></TheInput>
-          <TheInput class="flex1" label="Email" :required="true"></TheInput>
+          <TheInput
+            class="flex2"
+            label="Địa chỉ"
+            v-model="model.address"
+          ></TheInput>
+          <TheInput
+            class="flex1"
+            label="Email"
+            v-model="model.email"
+          ></TheInput>
         </div>
         <!-- <div class="modal-row">
           :required="true"
@@ -129,11 +137,19 @@ export default defineComponent({
           <TheInput
             class="flex1"
             label="Số CMT/CCCD"
-            :required="true"
+            v-model="model.paper_date"
           ></TheInput>
-          <TheDatepicker class="flex1" label="Ngày cấp"></TheDatepicker>
+          <TheDatepicker
+            class="flex1"
+            label="Ngày cấp"
+            v-model="model.paper_number"
+          ></TheDatepicker>
 
-          <TheInput class="flex1" label="Nơi cấp" :required="true"></TheInput>
+          <TheInput
+            class="flex1"
+            label="Nơi cấp"
+            v-model="model.paper_place"
+          ></TheInput>
         </div>
       </div>
       <!-- Phần bên dưới -->

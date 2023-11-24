@@ -8,46 +8,33 @@ export default defineComponent({
     const { proxy } = getCurrentInstance();
     const columns = ref([
       {
+        width: 100,
+        name: "Tên căn hộ",
+        dataField: "apartment_name",
+        align: "left",
+      },
+      {
         width: 150,
-        name: "Tên chủ nhà",
-        dataField: "owner_name",
+        name: "Tòa nhà",
+        dataField: "building_name",
         align: "left",
       },
       {
-        width: 100,
-        name: "Ngày sinh",
-        dataField: "birthdate",
-        align: "center",
-        type: "date",
-      },
-      {
-        width: 100,
-        name: "Điện thoại",
-        dataField: "phone_number",
-        align: "left",
-      },
-      {
-        width: 200,
-        name: "Email",
-        dataField: "email",
-        align: "left",
-      },
-      {
-        width: 250,
+        width: 150,
         name: "Địa chỉ",
         dataField: "address",
         align: "left",
       },
       {
         width: 150,
-        name: "Ghi chú",
-        dataField: "note",
+        name: "Mô tả",
+        dataField: "description",
         align: "left",
       },
     ]);
-    const formDetailName = "ChuNhaDetail";
-    const module = "ChuNha";
-    const primaryKey = "owner_id";
+    const formDetailName = "CanHoDetail";
+    const module = "CanHo";
+    const primaryKey = "apartment_id";
     return {
       columns,
       formDetailName,
@@ -62,14 +49,14 @@ export default defineComponent({
   <div class="chu-nha-view m-view">
     <!-- Phần tiêu đề-->
     <div class="m-header">
-      <span class="m-header-title">Danh sách chủ nhà</span>
+      <span class="m-header-title">Danh sách căn hộ</span>
       <TheButton @click="add()">Thêm </TheButton>
     </div>
     <!-- Phần nội dung -->
     <div class="m-container">
       <div class="m-container-toolbar">
         <div class="toolbar-field">
-          <TheInput placeholder="Tìm kiếm chủ nhà" />
+          <TheInput placeholder="Tìm kiếm căn hộ" />
         </div>
         <div class="toolbar-right">
           <div class="toolbar-btn">

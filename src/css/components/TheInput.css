@@ -29,32 +29,7 @@ input:placeholder-shown {
   font-family: MISA Font Italic;
 }
 
-input.number-input {
-  text-align: right;
-  padding-right: 14px;
-}
-
-.number-input-icon {
-  text-align: right;
-  padding-right: 25px !important;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.m-input-msg {
-  position: absolute;
-  bottom: -16px;
-  color: #ec4b4b;
-  font-size: 12px;
-}
-
-.m-label {
-  padding-bottom: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 15px;
+/* Trong trường hợp grid editor  */
+tr td input.m-input {
+  border: none !important;
 }
