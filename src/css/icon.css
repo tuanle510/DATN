@@ -62,8 +62,14 @@
   height: 20px;
 }
 
-.toast {
+.toast-success {
   background: url("/src/assets/icon/qlts-icon.png") no-repeat -111px -594px;
+  width: 18px;
+  height: 20px;
+}
+
+.toast-error {
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -67px -594px;
   width: 18px;
   height: 20px;
 }

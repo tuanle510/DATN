@@ -1,6 +1,6 @@
 $background-color_1: #fff;
 $background-color_2: #f5f5f5;
-$background-color_3: rgba(26, 164, 200, 0.2);
+$background-color_3: #d1edf4;
 $background-color_4: transparent;
 $background-color_5: #b8bcc3;
 
@@ -110,6 +110,7 @@ $background-color_5: #b8bcc3;
       text-align: center;
       position: sticky;
       left: 0;
+      z-index: 5;
     }
   }
 
@@ -120,7 +121,7 @@ $background-color_5: #b8bcc3;
       td {
         height: 30px;
         padding: 0 10px;
-        border: 1px solid #e0e0e0;
+        border-right: 1px solid #e0e0e0;
         background: #fff;
         .text-overflow {
           white-space: normal;

@@ -29,6 +29,11 @@ export default {
         icon: "setting",
         name: "Khách hàng",
       },
+      {
+        path: "/demo",
+        icon: "setting",
+        name: "Demo",
+      },
     ]);
 
     // Icon đóng mở navbar

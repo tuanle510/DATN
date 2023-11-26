@@ -225,22 +225,24 @@ export default {
      * @returns
      */
     async saveAction() {
+      commonFn.mask();
       if (!this.validateBeforeSave()) {
+        commonFn.unMask();
         return;
       }
-
       await this.save();
+      commonFn.unMask();
     },
 
     /**
      * Gửi API lên để thêm mới
      */
     async save() {
-      console.log(this.model);
       const res = await axios.post(`${this.module}`, this.model);
       if (res.statusText == "Created") {
         //Hiển thị toast thành công
-        
+        this.hide();
+        commonFn.toastSuccess();
         // Cập nhật lại List bên ngoài
       }
     },

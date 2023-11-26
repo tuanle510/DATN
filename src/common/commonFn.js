@@ -1,3 +1,6 @@
+import { useToast } from "vue-toastification";
+import iconSuccess from "../components/icons/IconSuccess.vue";
+import iconError from "../components/icons/IconError.vue";
 class commonFn {
   findLoading() {
     const el = document.getElementById("mloading");
@@ -21,6 +24,22 @@ class commonFn {
     const json2 = JSON.stringify(obj2).replace(/:null,/g, ":'',");
 
     return json1 !== json2;
+  }
+
+  toastSuccess(mess) {
+    const toast = useToast();
+    let toastMess = mess || "Thao tác thành công";
+    toast(toastMess, {
+      icon: iconSuccess,
+    });
+  }
+
+  toastError(mess) {
+    const toast = useToast();
+    let toastMess = mess || "Thao tác không thành công";
+    toast(toastMess, {
+      icon: iconError,
+    });
   }
 }
 export default new commonFn();

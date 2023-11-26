@@ -3,6 +3,7 @@ import DashBoard from "../views/DashBoard/DashBoardView.vue";
 import ChuNhaList from "../views/ChuNha/ChuNhaList.vue";
 import CanHoList from "../views/CanHo/CanHoList.vue";
 import KhachHangView from "../views/KhachHang/KhachHangView.vue";
+import DemoCompoent from "../views/DemoCompoent.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +31,11 @@ const router = createRouter({
       path: "/khachhang",
       name: "khachhang",
       component: KhachHangView,
+    },
+    {
+      path: "/demo",
+      name: "demo",
+      component: DemoCompoent,
     },
     // {
     //   path: '/about',

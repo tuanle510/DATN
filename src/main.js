@@ -23,6 +23,9 @@ import { PromiseDialog } from "vue3-promise-dialog";
 import router from "./router";
 import i18n from "./i18ns/i18n";
 import axios from "axios";
+import Toast from "vue-toastification";
+// Import the CSS or use your own!
+import "vue-toastification/dist/index.css";
 
 axios.defaults.baseURL = "http://localhost:5002/api/";
 
@@ -46,5 +49,18 @@ app.use(router);
 app.use(i18n);
 app.use(vfmPlugin);
 app.use(PromiseDialog);
+app.use(Toast, {
+  transition: "Vue-Toastification__bounce",
+  maxToasts: 10,
+  newestOnTop: true,
+  timeout: 5000,
+  position: "top-center",
+  hideProgressBar: true,
+  toastClassName: "m-toast",
+  showCloseButtonOnHover: false,
+  closeButton: false,
+  closeOnClick: false,
+  transition: "fade",
+});
 
 app.mount("#app");

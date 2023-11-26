@@ -1,0 +1,16 @@
+.Vue-Toastification__toast--default.m-toast {
+  background-color: #fff;
+  padding: unset;
+  height: 50px;
+  min-height: 50px;
+  min-width: 250px;
+  border-radius: 3px;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 35%);
+}
+.Vue-Toastification__toast--default.m-toast .Vue-Toastification__toast-body {
+  color: black;
+  font-family: MISA Font;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
