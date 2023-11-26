@@ -160,7 +160,7 @@ export default {
               @dblclick.prevent="onDbClick(row)"
               v-for="(column, indexC) in columns"
               :key="indexC"
-              :title="row[column.dataField]"
+              :title="colFormat(row[column.dataField], column.type)"
               :style="genRowCss(column, indexC)"
             >
               <div class="text-overflow">

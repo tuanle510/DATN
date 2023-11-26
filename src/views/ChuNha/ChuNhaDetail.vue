@@ -245,12 +245,12 @@ export default defineComponent({
           <TheInput
             class="flex1"
             label="Số CMT/CCCD"
-            v-model="model.paper_date"
+            v-model="model.paper_number"
           ></TheInput>
           <TheDatepicker
             class="flex1"
             label="Ngày cấp"
-            v-model="model.paper_number"
+            v-model="model.paper_date"
           ></TheDatepicker>
 
           <TheInput
@@ -291,7 +291,7 @@ export default defineComponent({
     </template>
     <template #footer>
       <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
-      <TheButton @click="validateBeforeSave()">Cất</TheButton>
+      <TheButton @click="saveAction()">Cất</TheButton>
     </template>
   </DynamicModal>
 </template>

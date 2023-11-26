@@ -53,14 +53,7 @@ export default {
           switch (answer) {
             case true:
               //cất & đóng
-              // if (
-              //   me.validateBeforeSave &&
-              //   typeof me.validateBeforeSave == "function"
-              // ) {
-              //   me.validateBeforeSave();
-              // } else {
-              me.save();
-              // }
+              me.saveAction();
               break;
             case false:
               //đóng không cất
@@ -69,17 +62,6 @@ export default {
           }
         }
       );
-    },
-
-    save() {
-      console.log(this.model);
-    },
-
-    /**
-     * Hàm validate chung
-     */
-    async validateBeforeSave() {
-      const me = this;
     },
 
     /**
@@ -195,8 +177,9 @@ export default {
         me.$nextTick(() => {
           me.focusFirstError();
         });
-        return;
+        return false;
       }
+      return true;
     },
 
     /**
@@ -234,6 +217,31 @@ export default {
       const firstErrorEl = $el.querySelector(".m-input.m-input-error");
       if (firstErrorEl) {
         firstErrorEl.focus();
+      }
+    },
+
+    /**
+     * Hành động ấn vào nút Cất
+     * @returns
+     */
+    async saveAction() {
+      if (!this.validateBeforeSave()) {
+        return;
+      }
+
+      await this.save();
+    },
+
+    /**
+     * Gửi API lên để thêm mới
+     */
+    async save() {
+      console.log(this.model);
+      const res = await axios.post(`${this.module}`, this.model);
+      if (res.statusText == "Created") {
+        //Hiển thị toast thành công
+        
+        // Cập nhật lại List bên ngoài
       }
     },
   },

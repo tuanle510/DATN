@@ -17,6 +17,10 @@ input.m-input:focus {
   border: 1px solid #22a7ca;
 }
 
+input.m-input:hover {
+  border: 1px solid #22a7ca;
+}
+
 input:placeholder-shown {
   font-family: MISA Font Italic;
 }

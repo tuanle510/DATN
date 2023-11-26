@@ -135,6 +135,9 @@ export default defineComponent({
 input.m-input:focus {
   border: 1px solid #22a7ca;
 }
+input.m-input:hover {
+  border: 1px solid #22a7ca;
+}
 
 /* Trong trường hợp grid editor  */
 tr td .dp__input {

@@ -17,10 +17,8 @@ class commonFn {
   }
 
   checkDiff(obj1, obj2) {
-    const replacer = (key, value) => (value === null ? "" : value);
-
-    const json1 = JSON.stringify(obj1, replacer);
-    const json2 = JSON.stringify(obj2, replacer);
+    const json1 = JSON.stringify(obj1).replace(/:null,/g, ":'',");
+    const json2 = JSON.stringify(obj2).replace(/:null,/g, ":'',");
 
     return json1 !== json2;
   }
