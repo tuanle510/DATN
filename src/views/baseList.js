@@ -7,22 +7,50 @@ export default {
   setup() {},
   async beforeMount() {
     // Load dữ liệu
-    try {
-      this.tableLoading = true;
-      const payload = {
-        column: this.columns.map((x) => x.dataField).join(","),
-        take: 20,
-        skip: 0,
-      };
-      const res = await axios.post(`${this.module}/list`, payload);
-      this.data = res.data;
-    } catch (error) {
-      console.log(error);
-    } finally {
-      this.tableLoading = false;
-    }
+    await this.loadData();
   },
   methods: {
+    /**
+     * Load data
+     * @param {*} payload
+     */
+    async loadData(payload) {
+      try {
+        this.tableLoading = true;
+        if (!payload) {
+          var payload = {
+            take: 20,
+            skip: 0,
+          };
+        }
+        this.processColumns(payload);
+        console.log(payload);
+        const res = await axios.post(`${this.module}/list`, payload);
+        this.data = res.data.Data;
+        this.total = res.data.Sum;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.tableLoading = false;
+      }
+    },
+
+    processColumns(payload) {
+      // Các cột config trong bảng
+      var columns = this.columns.map((x) => x.dataField);
+      if (this.primaryKey && !columns.includes(this.primaryKey)) {
+        columns.push(this.primaryKey);
+      }
+      payload.columns = columns.join(",");
+    },
+
+    /**
+     * Sự kiện phân trang
+     * @param {*} payload
+     */
+    async onPaginate(payload) {
+      await this.loadData(payload);
+    },
     /**
      * Mở form detail theo cấu hình formDetailName
      */
@@ -63,6 +91,7 @@ export default {
   data() {
     return {
       data: [], // Danh sách lấy về từ api
+      total: null, // Tổng số bảng ghi
       tableLoading: false,
     };
   },

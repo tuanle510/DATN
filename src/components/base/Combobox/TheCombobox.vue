@@ -13,6 +13,7 @@
         :class="['m-input', { 'm-input-error': errorMessage }]"
         :maxlength="maxlength"
         :placeholder="placeholder"
+        :disabled="isOnlyChoose"
         @click="onClick"
         @keydown.tab="tab"
         @focus="setFocus"
@@ -21,7 +22,7 @@
         @keydown.down="down"
         @input="onChangeHandler"
         @keydown.enter="selectItem"
-        :value="this.modelValue"
+        :value="this.displayValue"
       />
       <div
         style="position: absolute; right: 0"
@@ -83,7 +84,7 @@
           :class="{ 'm-item-selected': this.selecedIndex == index }"
         >
           <div class="item-text-limit">
-            {{ option[this.filterby] }}
+            {{ option[this.displayField] }}
           </div>
         </div>
       </div>
@@ -110,7 +111,16 @@ export default defineComponent({
     placeholder: {
       default: null,
     },
-    filterby: {
+    /**
+     * trường lấy giá trị value
+     */
+    valueField: {
+      default: null,
+    },
+    /**
+     * trường lấy giá trị hiển thị
+     */
+    displayField: {
       default: null,
     },
     label: {
@@ -122,6 +132,16 @@ export default defineComponent({
     dropdownWidth: {
       default: null,
     },
+    // Vị trí của dropdown: Trên = top, Dưới = bottom
+    position: {
+      type: String,
+      default: "bottom",
+    },
+    // Chỉ cho chọn
+    isOnlyChoose: {
+      type: Boolean,
+      default: false,
+    },
     rules: {
       type: Array,
       default: () => [],
@@ -129,6 +149,12 @@ export default defineComponent({
   },
   mounted() {
     const me = this;
+    // Nếu có giá trị thì tìm lại displayValue để hiển thị
+    if (me.data && this.modelValue) {
+      me.displayValue = me.data.find(
+        (x) => x[me.valueField] == this.modelValue
+      )[this.displayField];
+    }
     if (me.$el && !me.$el.getVueInstance) {
       me.$el.getVueInstance = () => {
         return this;
@@ -165,6 +191,7 @@ export default defineComponent({
     isOptionShow: function (newValue) {
       if (newValue == true) {
         this.setOptionListPosition();
+        this.scrollToItem();
       }
     },
   },
@@ -178,7 +205,11 @@ export default defineComponent({
      * Created date: 20:59 30/05/2022
      */
     onClick() {
-      this.setFocus();
+      if (this.isOnlyChoose) {
+        this.isOptionShow = true;
+      } else {
+        this.setFocus();
+      }
     },
     /**
      * Mô tả : Lấy giá trị từ v-model bên cha
@@ -192,17 +223,24 @@ export default defineComponent({
       e.preventDefault();
       let newValue = e.target.value;
       //gán lại giá trị
-      this.$emit("update:modelValue", newValue);
+      this.displayValue = newValue;
       // Gán index về 0:
       this.selecedIndex = 0;
+      this.setMatches(newValue);
+    },
 
-      if (newValue == undefined || newValue == "") {
+    /**
+     * Lọc dữ liệu theo input
+     */
+    setMatches(value) {
+      if (value == undefined || value == "") {
         this.matches = this.data;
       } else {
         this.matches = this.data.filter((item) =>
-          item[this.filterby]
+          item[this.displayField]
+            .toString()
             .toLowerCase()
-            .includes(this.modelValue.toLowerCase())
+            .includes(value.toString().toLowerCase())
         );
       }
     },
@@ -220,19 +258,7 @@ export default defineComponent({
       if (this.$refs.input.value == null || this.$refs.input.value == "") {
         this.matches = this.data;
       }
-
-      // if (this.isToggle == true) {
-      //   // Hiển thị option List:
-      //   this.isOptionShow = !this.isOptionShow;
-      // } else {
-      //   this.isOptionShow = true;
-      // }
-
-      // Hiển thị theo vị trí của index được chọn:
-      // this.scrollToItem();
-
-      // Bôi đen tất cả text
-      this.$refs.input.select();
+      // this.$refs.input.select();
     },
 
     /**
@@ -256,29 +282,27 @@ export default defineComponent({
      * Created date: 12:32 22/05/2022
      */
     async selectItem() {
-      // 1. Chọn theo index của matches list:
-      // 1.1 Lấy obj đã ch gán vào selectedItem
+      // Chọn theo index của matches list:
+      // Lấy obj đã ch gán vào selectedItem
       this.selecedItem = this.matches[this.selecedIndex];
-      // 1.2 Cập nhật giá trị vào input
-      await this.$emit(
-        "update:modelValue",
-        this.matches[this.selecedIndex][this.filterby]
-      );
+      // Cập nhật giá trị vào input
+      await this.$emit("update:modelValue", this.selecedItem[this.valueField]);
 
-      // 2. Tìm lại index của giá trị đã chọn theo List đầy đủ:
-      // 2.1 Tìm index của selectItem trong mảng ban đầu ( không phải mảng matches):
-      this.selecedIndex = this.data.findIndex((object) => {
-        return object === this.selecedItem;
-      });
-      // 2.2 Gán lại matches list thành data:
+      this.displayValue = this.selecedItem[this.displayField];
+
+      // Gán lại matches list thành data:
       this.matches = [...this.data];
 
+      var param = {
+        value: this.modelValue, // giá trị của model
+        obj: this.selecedItem, // cả obj nếu cần gán cho trường khác
+      };
       //  truyền cả obj lên cho component cha:
-      this.$emit("selectItem", this.selecedItem);
+      this.$emit("selectItem", param);
       // Validate lại dữ liệu:
       this.isOptionShow = false;
       // Bôi đen chữ
-      this.$refs.input.select();
+      // this.$refs.input.select();
     },
 
     /**
@@ -340,6 +364,14 @@ export default defineComponent({
      */
     toggle() {
       this.isOptionShow = !this.isOptionShow;
+      if (this.isOptionShow == true) {
+        this.matches = [...this.data];
+        // Nếu có giá trị trùng với giá trị trong combo
+        var listValue = this.matches.map((x) => x[this.valueField]);
+        if (this.modelValue && listValue.includes(this.modelValue)) {
+          this.selecedIndex = listValue.findIndex((x) => x == this.modelValue);
+        }
+      }
       this.$refs.input.focus();
     },
 
@@ -347,12 +379,20 @@ export default defineComponent({
      * Lấy vị trí hiển thị
      */
     setOptionListPosition() {
+      // Chiều dài 1 item
+      const item = 30;
+      // Tính chiều dài của dropdown (cộng 8 là padding 2 đầu)
+      var height = item * this.matches.length + 8;
       let container = this.$refs.container.getBoundingClientRect();
       this.optionPos = {
-        top: container.top + container.height + "px",
         left: container.left + "px",
         width: (this.dropdownWidth || container.width) + "px",
       };
+      if (this.position == "bottom") {
+        this.optionPos.top = container.top + container.height + "px";
+      } else if (this.position == "top") {
+        this.optionPos.top = container.top - height + "px";
+      }
     },
 
     /**
@@ -387,10 +427,11 @@ export default defineComponent({
     return {
       selecedIndex: 0,
       matches: [],
-      selecedItem: null,
+      selecedItem: {},
       isFocus: false,
       isOptionShow: false,
       optionPos: {},
+      displayValue: null,
     };
   },
 });

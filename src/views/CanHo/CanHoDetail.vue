@@ -7,106 +7,20 @@ export default defineComponent({
   setup() {
     const { proxy } = getCurrentInstance();
     const module = "CanHo";
-
-    const purchaserData = [
-      {
-        name: "Lê Thiện Tuấn 1",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address:
-          "Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội ",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Lê Thiện Tuấn",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Lê Thiện Tuấn",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Lê Thiện Tuấn",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Lê Thiện Tuấn",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Lê Thiện Tuấn",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-    ];
+    onMounted(() => {
+      proxy.getData();
+    });
+    const purchaserData = ref([]);
+    function getData() {
+      purchaserData.value = [];
+      for (let i = 0; i < 35; i++) {
+        purchaserData.value.push({
+          id: i,
+          name: "Tuan_" + i,
+          address: i % 2 === 0 ? "Cầu Giấy, Hà Nội" : "Thành phố Hồ Chí Minh",
+        });
+      }
+    }
     const columns = [
       {
         width: 150,
@@ -121,6 +35,7 @@ export default defineComponent({
       },
     ];
     return {
+      getData,
       module,
       purchaserData,
       columns,
@@ -170,7 +85,8 @@ export default defineComponent({
             :columns="columns"
             :dropdownWidth="350"
             placeholder="Chủ sở hữu"
-            filterby="name"
+            valueField="id"
+            displayField="name"
             v-model="model.purchaser_name"
             :data="purchaserData"
           ></TheComboBox>
@@ -179,7 +95,8 @@ export default defineComponent({
             class="flex1"
             label="Chủ sở hữu"
             placeholder="Chủ sở hữu"
-            filterby="name"
+            valueField="id"
+            displayField="name"
             v-model="model.purchaser_name"
             :data="purchaserData"
           ></TheComboBox>

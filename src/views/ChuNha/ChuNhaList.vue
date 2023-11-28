@@ -89,7 +89,9 @@ export default defineComponent({
           :columns="columns"
           :data="data"
           @onDbClick="edit"
+          @onPaginate="onPaginate"
           :loading="tableLoading"
+          :total="total"
         >
         </GridViewer>
       </div>

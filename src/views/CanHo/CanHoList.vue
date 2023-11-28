@@ -22,7 +22,7 @@ export default defineComponent({
       {
         width: 150,
         name: "Địa chỉ",
-        dataField: "address",
+        dataField: "apartment_address",
         align: "left",
       },
       {
@@ -76,7 +76,9 @@ export default defineComponent({
           :columns="columns"
           :data="data"
           @onDbClick="edit"
+          @onPaginate="onPaginate"
           :loading="tableLoading"
+          :total="total"
         >
         </GridViewer>
       </div>

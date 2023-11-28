@@ -1,7 +1,9 @@
 <script>
-import { getCurrentInstance, ref } from "vue";
+import { getCurrentInstance, ref, computed } from "vue";
 import moment from "moment";
+import ThePaginate from "../Paginate/ThePaginate.vue";
 export default {
+  components: { ThePaginate },
   props: {
     // Danh sách cột
     columns: Array,
@@ -22,10 +24,16 @@ export default {
       default: false,
       type: Boolean,
     },
+    // Tổng sô bản ghi
+    total: {
+      default: null,
+      type: Number,
+    },
   },
   setup(props, { emit }) {
     const { proxy } = getCurrentInstance();
     const checkedAll = ref(false);
+
     // Gen css cho table
     const genHeaderCss = (item, index) => {
       const css = {
@@ -94,6 +102,11 @@ export default {
       proxy.checkedAll = checkedList.length === proxy.data.length;
     };
 
+    // sự kiện thay đổi phân trang
+    const onPaginate = (payload) => {
+      emit("onPaginate", payload);
+    };
+
     return {
       genHeaderCss,
       genRowCss,
@@ -101,6 +114,7 @@ export default {
       colFormat,
       onClickCheckAll,
       onClickCheck,
+      onPaginate,
       checkedAll,
     };
   },
@@ -175,7 +189,10 @@ export default {
     </div>
     <div class="m-footer-container">
       <div class="m-footer-total">
-        Tổng số: &nbsp; <strong>200</strong> &nbsp;bản ghi
+        Tổng số: &nbsp;<strong>{{ total }}</strong> &nbsp;bản ghi
+      </div>
+      <div class="m-footer-paginate">
+        <ThePaginate @clickHandler="onPaginate" :total="total"></ThePaginate>
       </div>
     </div>
   </div>
