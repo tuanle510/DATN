@@ -76,8 +76,9 @@ $background-color_5: #b8bcc3;
 .m-table {
   background-color: $background-color_1;
   border-radius: 3px;
-  border-collapse: collapse;
+  border-collapse: separate;
   width: 100%;
+  border-spacing: 0;
   thead {
     cursor: pointer;
     z-index: 4;
@@ -86,12 +87,14 @@ $background-color_5: #b8bcc3;
     right: 0;
     width: 100%;
     tr {
+      th:nth-last-child(n + 3) {
+        border-right: 1px solid #e0e0e0;
+      }
       th {
         height: 38px;
         background-color: $background-color_2;
         padding: 0 10px;
-        border-right: 1px solid #e0e0e0;
-        position: relative;
+        border-left: none;
         .th-content {
           .th-resize {
             cursor: col-resize;
@@ -113,19 +116,30 @@ $background-color_5: #b8bcc3;
       left: 0;
       z-index: 5;
     }
+    .m-th-action {
+      width: 100px !important;
+      max-width: 100px !important;
+      min-width: 100px !important;
+      text-align: center;
+      position: sticky;
+      right: 0;
+      z-index: 5;
+      border-left: 1px solid #e0e0e0 !important;
+    }
   }
 
   tbody {
     tr {
       border-bottom: 1px solid #e0e0e0;
       height: 30px;
-      td:not(:last-child) {
+      td:nth-last-child(n + 3) {
         border-right: 1px solid #e0e0e0;
       }
       td {
         height: 30px;
         padding: 0 10px;
         background: #fff;
+        border-left: none;
         .text-overflow {
           white-space: normal;
           overflow: hidden;
@@ -153,6 +167,21 @@ $background-color_5: #b8bcc3;
       position: sticky;
       left: 0;
       z-index: 2;
+    }
+    .m-tr-action {
+      width: 40px !important;
+      max-width: 40px !important;
+      min-width: 40px !important;
+      text-align: center;
+      position: sticky;
+      right: 0;
+      z-index: 2;
+      border-left: 1px solid #e0e0e0;
+      .action-link {
+        color: #0078d7;
+        font-weight: 600;
+        padding: 0 10px;
+      }
     }
   }
 }

@@ -90,6 +90,7 @@ export default defineComponent({
           :data="data"
           @onDbClick="edit"
           @onPaginate="onPaginate"
+          @onClickAciton="onClickAciton"
           :loading="tableLoading"
           :total="total"
         >

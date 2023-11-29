@@ -26,6 +26,9 @@ export default {
         this.processColumns(payload);
         console.log(payload);
         const res = await axios.post(`${this.module}/list`, payload);
+        // Lưu vào sau còn dùng
+        // Dùng thế nào thì chưa biết
+        this.lastPayload = Object.assign({}, payload);
         this.data = res.data.Data;
         this.total = res.data.Sum;
       } catch (error) {
@@ -35,6 +38,10 @@ export default {
       }
     },
 
+    /**
+     * Xử lí columns
+     * @param {*} payload
+     */
     processColumns(payload) {
       // Các cột config trong bảng
       var columns = this.columns.map((x) => x.dataField);
@@ -51,6 +58,22 @@ export default {
     async onPaginate(payload) {
       await this.loadData(payload);
     },
+
+    /**
+     * Action click => mặc định đang dùng để xóa
+     */
+    async onClickAciton(row) {
+      var param = [];
+      param.push(row[this.primaryKey]);
+      const res = await axios.delete(`${this.module}`, { data: param });
+      // && res?.data > 0
+      if (res.statusText == "OK") {
+        //Hiển thị toast thành công
+        commonFn.toastSuccess("Xóa dữ liệu thành công");
+        // Cập nhật lại List bên ngoài
+      }
+    },
+
     /**
      * Mở form detail theo cấu hình formDetailName
      */
@@ -93,6 +116,7 @@ export default {
       data: [], // Danh sách lấy về từ api
       total: null, // Tổng số bảng ghi
       tableLoading: false,
+      lastPayload: null,
     };
   },
 };

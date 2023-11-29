@@ -1,5 +1,5 @@
 <script>
-import { getCurrentInstance, ref, computed } from "vue";
+import { getCurrentInstance, ref } from "vue";
 import moment from "moment";
 import ThePaginate from "../Paginate/ThePaginate.vue";
 export default {
@@ -107,6 +107,11 @@ export default {
       emit("onPaginate", payload);
     };
 
+    // Sự kiện xóa
+    const onClickAciton = (row) => {
+      emit("onClickAciton", row);
+    };
+
     return {
       genHeaderCss,
       genRowCss,
@@ -115,6 +120,7 @@ export default {
       onClickCheckAll,
       onClickCheck,
       onPaginate,
+      onClickAciton,
       checkedAll,
     };
   },
@@ -146,6 +152,12 @@ export default {
                 <div class="th-title">
                   {{ column.name }}
                 </div>
+                <div class="th-resize"></div>
+              </div>
+            </th>
+            <th class="m-th-action" v-if="isMulti">
+              <div class="th-content">
+                <div class="th-title">Chức năng</div>
                 <div class="th-resize"></div>
               </div>
             </th>
@@ -181,6 +193,11 @@ export default {
                 <span class="td-normal-span">{{
                   colFormat(row[column.dataField], column.type)
                 }}</span>
+              </div>
+            </td>
+            <td class="m-tr-action" v-if="isMulti">
+              <div class="d-flex-center">
+                <span class="action-link" @click="onClickAciton(row)">Xóa</span>
               </div>
             </td>
           </tr>

@@ -5,7 +5,7 @@
 </template>
 <style scoped>
 .m-toast-icon {
-  height: 50px;
+  height: 40px;
   width: 60px;
   display: flex;
   align-items: center;

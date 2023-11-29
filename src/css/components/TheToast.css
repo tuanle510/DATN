@@ -1,8 +1,8 @@
 .Vue-Toastification__toast--default.m-toast {
   background-color: #fff;
   padding: unset;
-  height: 50px;
-  min-height: 50px;
+  height: 40px;
+  min-height: 40px;
   min-width: 250px;
   border-radius: 3px;
   box-shadow: 0 3px 10px rgb(0 0 0 / 35%);
