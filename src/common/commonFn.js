@@ -41,5 +41,36 @@ class commonFn {
       icon: iconError,
     });
   }
+
+  /**
+   * Hàm gán text và các biến
+   * @param {*} text
+   * @param  {...any} array
+   * @returns
+   */
+  replaceTextWithHTML(text, ...array) {
+    // Thực hiện replace cho mỗi vị trí {0}, {1}, ...
+    let replacedText = text;
+    for (let i = 0; i < array.length; i++) {
+      const html = this.sanitizeHTML(array[i]);
+      const placeholderRegex = new RegExp(`\\{${i}\\}`, "g");
+      replacedText = replacedText.replace(placeholderRegex, html);
+    }
+
+    return replacedText;
+  }
+
+  /**
+   * Hàm để xử lý và loại bỏ các ký tự đặc biệt từ chuỗi HTML
+   * @param {*} input
+   * @returns
+   */
+  sanitizeHTML(input) {
+    return input
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
 }
 export default new commonFn();

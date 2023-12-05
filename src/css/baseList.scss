@@ -40,3 +40,15 @@
     }
   }
 }
+
+.action-link {
+  color: #0078d7;
+  font-weight: 600;
+}
+.m-menu-wrapper.active {
+  .dropdown {
+    background: url("/src/assets/icon/sprites-dd2ff8cd.svg") no-repeat -391px -81px;
+    width: 10px;
+    height: 6px;
+  }
+}

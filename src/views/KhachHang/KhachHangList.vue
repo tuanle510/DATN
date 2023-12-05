@@ -1,7 +1,6 @@
 <script>
 import { defineComponent, getCurrentInstance, ref } from "vue";
 import baseList from "../baseList";
-
 export default defineComponent({
   extends: baseList,
   props: {},
@@ -10,16 +9,15 @@ export default defineComponent({
     const columns = ref([
       {
         width: 150,
-        name: "Tên chủ nhà",
-        dataField: "owner_name",
+        name: "Tên khách hàng",
+        dataField: "client_name",
         align: "left",
       },
       {
-        width: 100,
-        name: "Ngày sinh",
-        dataField: "birthdate",
-        align: "center",
-        type: "date",
+        width: 150,
+        name: "Công ty",
+        dataField: "company_name",
+        align: "left",
       },
       {
         width: 100,
@@ -28,36 +26,31 @@ export default defineComponent({
         align: "left",
       },
       {
-        width: 200,
+        width: 150,
         name: "Email",
         dataField: "email",
         align: "left",
       },
       {
-        width: 250,
-        name: "Địa chỉ",
-        dataField: "address",
+        width: 100,
+        name: "Ngày sinh",
+        dataField: "birthdate",
         align: "left",
       },
       {
-        width: 150,
         name: "Ghi chú",
         dataField: "note",
         align: "left",
       },
     ]);
-    const formDetailName = "ChuNhaDetail";
-    const module = "ChuNha";
-    // Khóa chính
-    const primaryKey = "owner_id";
-    // trường tên/mã
-    const nameKey = "owner_name";
+    const formDetailName = "KhachHangDetail";
+    const module = "KhachHang";
+    const primaryKey = "client_id";
     return {
       columns,
       formDetailName,
       module,
       primaryKey,
-      nameKey,
     };
   },
 });
@@ -67,14 +60,14 @@ export default defineComponent({
   <div class="chu-nha-view m-view">
     <!-- Phần tiêu đề-->
     <div class="m-header">
-      <span class="m-header-title">Danh sách chủ nhà</span>
+      <span class="m-header-title">Danh sách khách hàng</span>
       <TheButton @click="add()">Thêm </TheButton>
     </div>
     <!-- Phần nội dung -->
     <div class="m-container">
       <div class="m-container-toolbar">
         <div class="toolbar-field">
-          <TheInput placeholder="Tìm kiếm chủ nhà" />
+          <TheInput placeholder="Tìm kiếm căn hộ" />
         </div>
         <div class="toolbar-right">
           <div class="toolbar-btn">
@@ -98,26 +91,6 @@ export default defineComponent({
           :loading="tableLoading"
           :total="total"
         >
-          <template #action="{ row }">
-            <span class="action-link" @click="onClickAciton(row, 'View')"
-              >Xem/Sửa</span
-            >
-            <TheMenuWrapper>
-              <template #toggle-button="{ toggle }">
-                <div class="icon-box-24" @click="toggle">
-                  <div class="dropdown"></div>
-                </div>
-              </template>
-              <template #default>
-                <TheMenuItem @click="onClickAciton(row, 'Delete')"
-                  >Xóa</TheMenuItem
-                >
-                <TheMenuItem @click="onClickAciton(row)"
-                  >Thêm căn hộ</TheMenuItem
-                >
-              </template>
-            </TheMenuWrapper>
-          </template>
         </GridViewer>
       </div>
     </div>

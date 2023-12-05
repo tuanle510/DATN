@@ -1,6 +1,5 @@
 <template>
   <label class="m-checkbox">
-    <!-- :style="{ border: modelValue ? 'none' : '1px solid #090f39' }" -->
     <input
       type="checkbox"
       :value="modelValue"

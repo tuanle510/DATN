@@ -3,13 +3,11 @@
     <div class="m-dialog-container">
       <div class="m-dialog-header">
         {{ title }}
-        <div class="m-dialog-close icon-box-24">
+        <div class="m-dialog-close icon-box-24" @click="closeDialog(false)">
           <div class="close"></div>
         </div>
       </div>
-      <div class="m-dialog-content">
-        {{ content }}
-      </div>
+      <div v-html="content" class="m-dialog-content"></div>
       <div class="m-dialog-footer">
         <TheButton class="outline-button" @click="closeDialog(false)"
           >Không</TheButton

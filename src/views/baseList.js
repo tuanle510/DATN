@@ -3,6 +3,7 @@ import axios from "axios";
 import popupUtil from "../components/base/DynamicModal/popupUtil";
 import { formMode } from "../enum/formMode";
 import commonFn from "../common/commonFn";
+import { confirm } from "../common/dialogFn";
 export default {
   setup() {},
   async beforeMount() {
@@ -24,7 +25,6 @@ export default {
           };
         }
         this.processColumns(payload);
-        console.log(payload);
         const res = await axios.post(`${this.module}/list`, payload);
         // Lưu vào sau còn dùng
         // Dùng thế nào thì chưa biết
@@ -35,6 +35,24 @@ export default {
         console.log(error);
       } finally {
         this.tableLoading = false;
+      }
+    },
+
+    /**
+     * Load lại danh sách theo payload cũ
+     */
+    async reload() {
+      // nếu có lastPayload thì gọi theo cái đấy không thì load mới
+      if (this.lastPayload) {
+        try {
+          const res = await axios.post(`${this.module}/list`, this.lastPayload);
+          this.data = res.data.Data;
+          this.total = res.data.Sum;
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        this.loadData();
       }
     },
 
@@ -62,15 +80,17 @@ export default {
     /**
      * Action click => mặc định đang dùng để xóa
      */
-    async onClickAciton(row) {
-      var param = [];
-      param.push(row[this.primaryKey]);
-      const res = await axios.delete(`${this.module}`, { data: param });
-      // && res?.data > 0
-      if (res.statusText == "OK") {
-        //Hiển thị toast thành công
-        commonFn.toastSuccess("Xóa dữ liệu thành công");
-        // Cập nhật lại List bên ngoài
+    async onClickAciton(row, action) {
+      switch (action) {
+        case "View":
+          this.edit(row);
+          break;
+        case "Delete":
+          this.deleteAction(row);
+          break;
+        default:
+          console.log("Thiếu config action");
+          break;
       }
     },
 
@@ -109,6 +129,47 @@ export default {
         mode: formMode.Add,
       };
       this.showDetailForm(param);
+    },
+
+    /**
+     * Xóa 1 dòng
+     * @param {*} row
+     */
+    deleteAction(row) {
+      var title = "Xóa Chủ nhà";
+      const text =
+        'Bạn có muốn xóa Chủ nhà <span class="strong-text">{0}</span> không?';
+      var message = commonFn.replaceTextWithHTML(text, row[this.nameKey]);
+      confirm(title, message).then((answer) => {
+        if (answer) {
+          commonFn.mask();
+          //xóa & đóng
+          var param = [row[this.primaryKey]];
+          this.delete(param);
+        }
+      });
+    },
+
+    /**
+     * Hành động xóa
+     */
+    async delete(param) {
+      try {
+        const res = await axios.delete(`${this.module}`, { data: param });
+        if (res.data.length == 0) {
+          // Cập nhật lại List bên ngoài
+          await this.reload();
+          //Hiển thị toast thành công
+          commonFn.toastSuccess("Xóa dữ liệu thành công");
+        } else {
+          // Có lỗi nghiệp vụ
+          console.log(res.data);
+        }
+      } catch (error) {
+        commonFn.toastError("Xóa dữ liệu không thành công");
+      } finally {
+        commonFn.unMask();
+      }
     },
   },
   data() {

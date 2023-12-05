@@ -3,11 +3,11 @@ import { ref, onMounted, getCurrentInstance, defineComponent } from "vue";
 import baseDetail from "../baseDetail";
 export default defineComponent({
   extends: baseDetail,
-  name: "CanHoDetail",
+  name: "KhachHangDetail",
   props: {},
   setup() {
     const { proxy } = getCurrentInstance();
-    const module = "CanHo";
+    const module = "KhachHang";
     // Mặd định vào tab đầu tiên
     const activeTab = ref(0);
 
@@ -16,7 +16,7 @@ export default defineComponent({
         tabTitle: "Thông tin chung",
       },
       {
-        tabTitle: "Bộ hợp đồng",
+        tabTitle: "Hợp đồng thuê",
         columns: [
           {
             width: 100,
@@ -44,9 +44,6 @@ export default defineComponent({
             dataField: "Giấy chứng nhận",
           },
         ],
-      },
-      {
-        tabTitle: "Hợp đồng",
       },
     ];
     const columnTab = ref(tabList[1].columns);
@@ -199,7 +196,7 @@ export default defineComponent({
 <template>
   <DynamicModal
     ref="CanHoDetail"
-    :title="`Căn hộ ${model.apartment_name || ''}`"
+    :title="`Khách hàng ${model.apartment_name || ''}`"
     width="900px"
     height="620px"
     position="center"
@@ -225,79 +222,117 @@ export default defineComponent({
               <div class="modal-row">
                 <TheInput
                   class="flex1"
-                  label="Tên căn hộ"
+                  label="Họ và tên"
                   :required="true"
-                  v-model="model.owner_name"
+                  v-model="model.client_name"
+                  :rules="[{ name: 'required' }]"
+                ></TheInput>
+                <TheDatepicker
+                  class="flex1"
+                  label="Ngày sinh"
+                  :required="true"
+                  v-model="model.birthdate"
+                  :rules="[{ name: 'required' }]"
+                ></TheDatepicker>
+                <TheInput
+                  class="flex1"
+                  label="Số điện thoại"
+                  :required="true"
+                  v-model="model.phone_number"
                   :rules="[{ name: 'required' }]"
                 ></TheInput>
                 <TheInput
                   class="flex1"
+                  label="Email"
+                  :required="true"
+                  v-model="model.email"
+                  :rules="[{ name: 'required' }]"
+                ></TheInput>
+              </div>
+
+              <div class="modal-row">
+                <TheInput
+                  class="flex1"
+                  label="Tên trợ lý"
+                  :required="true"
+                  v-model="model.assistant_name"
+                  :rules="[{ name: 'required' }]"
+                ></TheInput>
+                <TheInput
+                  class="flex1"
+                  label="Số điện thoại"
+                  :required="true"
+                  v-model="model.assistant_phone"
+                  :rules="[{ name: 'required' }]"
+                ></TheInput>
+                <TheInput
+                  class="flex1"
+                  label="Email"
+                  :required="true"
+                  v-model="model.assistant_email"
+                  :rules="[{ name: 'required' }]"
+                ></TheInput>
+                <div class="flex1"></div>
+              </div>
+
+              <div class="modal-row">
+                <TheInput
+                  class="flex1"
+                  label="Công ty/Đơn vị"
+                  v-model="model.company_name"
+                ></TheInput>
+                <TheInput
+                  class="flex1"
+                  label="Mẫ số thuế"
+                  v-model="model.company_tax_code"
+                ></TheInput>
+                <TheInput
+                  class="flex1"
+                  label="Đại diện công ty"
+                  v-model="model.company_ref"
+                ></TheInput>
+                <TheInput
+                  class="flex1"
+                  label="Chức vụ"
+                  v-model="model.company_ref_role"
+                ></TheInput>
+              </div>
+
+              <div class="modal-row">
+                <TheInput
+                  class="flex2"
                   label="Địa chỉ"
-                  :required="true"
-                  v-model="model.owner_name"
-                  :rules="[{ name: 'required' }]"
+                  v-model="model.company_address"
                 ></TheInput>
-                <TheComboBox
+                <TheInput
                   class="flex1"
-                  label="Tòa nhà (Nếu có)"
-                  valueField="id"
-                  displayField="name"
-                  v-model="model.purchaser_name"
-                  :data="purchaserData"
-                ></TheComboBox>
-              </div>
-              <div class="modal-row">
-                <TheComboBox
+                  label="Điện thoại"
+                  v-model="model.company_phone"
+                ></TheInput>
+                <TheInput
                   class="flex1"
-                  label="Chủ sở hữu"
-                  valueField="id"
-                  displayField="name"
-                  v-model="model.purchaser_name"
-                  :data="purchaserData"
-                ></TheComboBox>
-                <div class="flex1"></div>
-                <div class="flex1"></div>
+                  label="Fax"
+                  v-model="model.company_fax"
+                ></TheInput>
               </div>
+
               <div class="modal-row">
                 <TheInput
                   class="flex1"
-                  label="Mẫ KH điện lực"
-                  v-model="model.paper_number"
-                ></TheInput>
-                <TheInput
-                  class="flex1"
-                  label="Mẫ KH internet"
-                  v-model="model.paper_number"
-                ></TheInput>
-                <TheInput
-                  class="flex1"
-                  label="Mật khẩu"
-                  v-model="model.paper_place"
-                ></TheInput>
-              </div>
-              <div class="modal-row">
-                <TheInput
-                  class="flex1"
-                  label="Giấy chứng nhận quyền sở hữu đất"
-                  v-model="model.paper_number"
-                ></TheInput>
-                <TheInput
-                  class="flex1"
-                  label="Nơi cấp"
+                  label="Số CMT/CCCD"
                   v-model="model.paper_number"
                 ></TheInput>
                 <TheDatepicker
                   class="flex1"
                   label="Ngày cấp"
-                  v-model="model.birthdate"
+                  v-model="model.paper_date"
                 ></TheDatepicker>
-              </div>
-              <div class="modal-row">
-                <TheTextArea
+                <TheInput
                   class="flex1"
-                  label="Mô tả căn hộ"
-                  v-model="model.note"
-                ></TheTextArea>
+                  label="Nơi cấp"
+                  v-model="model.paper_place"
+                ></TheInput>
+                <div class="flex1"></div>
               </div>
               <div class="modal-row">
                 <TheTextArea

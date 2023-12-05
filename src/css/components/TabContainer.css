@@ -2,13 +2,13 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  border: 1px solid #afafaf;
-  margin-bottom: 5px;
+  /* border: 1px solid #afafaf; */
+  /* margin-bottom: 5px; */
   flex: 1;
 }
 .grids-tab-header {
   display: flex;
-  background-color: #f4f5f8;
+  /* background-color: #f4f5f8; */
   border-bottom: 1px solid #c1c4cc;
   width: 100%;
   align-items: center;
@@ -27,7 +27,7 @@
 
 .grids-tab-content {
   flex: 1;
-  padding: 10px;
+  padding: 10px 0;
   border-radius: 0 3px 3px;
   border-top: none;
 }

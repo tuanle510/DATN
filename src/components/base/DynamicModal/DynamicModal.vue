@@ -7,6 +7,10 @@ export default {
       type: String,
       default: "850px",
     },
+    height: {
+      type: String,
+      default: "70vh",
+    },
     position: {
       type: String,
       default: "center",
@@ -17,7 +21,10 @@ export default {
 
 <template>
   <VueFinalModal v-slot="{ close }" :clickToClose="false">
-    <div :class="[`m-modal-${position}`]" :style="{ width: width }">
+    <div
+      :class="[`m-modal-${position}`]"
+      :style="{ width: width, height: height }"
+    >
       <div class="m-modal-header">
         <div class="m-modal-title">{{ title }}</div>
         <div class="m-modal-close icon-box-24" tooltip="Hủy bỏ" @click="close">

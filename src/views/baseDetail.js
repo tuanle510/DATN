@@ -156,8 +156,8 @@ export default {
      */
     opened() {
       const $el = this.$el;
-      this.addObserveControl();
       this.$nextTick(() => {
+        this.addObserveControl();
         // focus vào ô đầu tiên
         const firstInput = $el.querySelector("input");
         if (firstInput) {
@@ -238,12 +238,18 @@ export default {
      * Gửi API lên để thêm mới
      */
     async save() {
-      const res = await axios.post(`${this.module}`, this.model);
-      if (res.statusText == "Created") {
-        //Hiển thị toast thành công
-        this.hide();
-        commonFn.toastSuccess();
-        // Cập nhật lại List bên ngoài
+      try {
+        const res = await axios.post(`${this.module}`, this.model);
+        if (res.statusText == "Created") {
+          //Hiển thị toast thành công
+          this.hide();
+          commonFn.toastSuccess();
+          // Cập nhật lại List bên ngoài
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        commonFn.unMask();
       }
     },
   },

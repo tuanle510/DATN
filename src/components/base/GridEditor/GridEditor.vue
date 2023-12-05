@@ -109,10 +109,9 @@ export default {
               :style="genCss(column, index)"
             >
               <div class="th-content">
-                <div class="th-title">
+                <span class="th-title">
                   {{ column.name }}
-                </div>
-                <div class="th-resize"></div>
+                </span>
               </div>
             </th>
           </tr>

@@ -29,3 +29,30 @@ input:placeholder-shown {
 tr td input.m-input {
   border: none !important;
 }
+
+textarea:disabled {
+  background: #f5f5f5;
+  color: black;
+}
+
+textarea.m-input {
+  position: relative;
+  width: 100%;
+  border: 1px solid #afafaf;
+  outline: none;
+  border-radius: 2.5px;
+  padding: 10px;
+  resize: none;
+}
+
+textarea.m-input:focus {
+  border: 1px solid #22a7ca;
+}
+
+textarea.m-input:hover {
+  border: 1px solid #22a7ca;
+}
+
+textarea:placeholder-shown {
+  font-family: MISA Font Italic;
+}

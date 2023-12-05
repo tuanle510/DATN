@@ -30,39 +30,93 @@ export default {
       type: Number,
     },
   },
-  setup(props, { emit }) {
-    const { proxy } = getCurrentInstance();
-    const checkedAll = ref(false);
+  watch: {
+    columns(newValue) {
+      this.initColumns(newValue);
+    },
+  },
+  created() {
+    const me = this;
+    me.initColumns();
+  },
 
-    // Gen css cho table
-    const genHeaderCss = (item, index) => {
+  methods: {
+    initColumns(columns = this.columns) {
+      const me = this;
+      if (columns) {
+        me.columnx = [];
+        me.$nextTick(() => {
+          columns.forEach((x) => {
+            me.columnx.push(x);
+          });
+        });
+      }
+    },
+
+    // sự kiện thay đổi phân trang
+    onPaginate(payload) {
+      this.$emit("onPaginate", payload);
+    },
+
+    onClickAciton(row) {
+      this.$emit("onClickAciton", row);
+    },
+
+    // Sự kiện dbClick row
+    onDbClick(row) {
+      this.$emit("onDbClick", row);
+    },
+
+    // Checkbox all
+    onClickCheckAll() {
+      if (checkedAll.value) {
+        proxy.data.forEach((item) => {
+          item.checked = true;
+        });
+      } else {
+        proxy.data.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    },
+
+    // Checkbox từng dòng
+    onClickCheck() {
+      // Kiểm tra xem checked list có bằng list data không
+      const checkedList = proxy.data.filter((x) => x.checked);
+      // Nếu có thì đổi checkall thành true
+      proxy.checkedAll = checkedList.length === proxy.data.length;
+    },
+
+    // Gen css cho header table
+    genHeaderCss(item, index) {
       const css = {
-        // maxWidth: item.width + "px",
         minWidth: item.width + "px",
         width: item.width + "px",
         textAlign: item.align,
       };
       // Nếu là cột cuối thì bỏ fix witdh đi
-      if (props.columns && index == props.columns.length - 1) {
+      if (this.columnx && index == this.columnx.length - 1) {
         delete css.width;
       }
       return css;
-    };
+    },
 
-    const genRowCss = (item, index) => {
+    // Gen css cho row table
+    genRowCss(item, index) {
       const css = {
         maxWidth: item.width + "px",
         textAlign: item.align,
       };
       // Nếu là cột cuối thì bỏ fix witdh đi
-      if (props.columns && index == props.columns.length - 1) {
+      if (this.columnx && index == this.columnx.length - 1) {
         delete css.maxWidth;
       }
       return css;
-    };
+    },
 
     // Format theo kiểu dữ liệu
-    const colFormat = (value, type) => {
+    colFormat(value, type) {
       switch (type) {
         case "date":
           value = moment(new Date(value)).format("DD/MM/YYYY");
@@ -73,56 +127,19 @@ export default {
           break;
       }
       return value;
-    };
-
-    // Sự kiện dbClick row
-    const onDbClick = (row) => {
-      emit("onDbClick", row);
-    };
-
-    // Checkbox all
-    const onClickCheckAll = () => {
-      if (checkedAll.value) {
-        proxy.data.forEach((item) => {
-          item.checked = true;
-        });
-      } else {
-        proxy.data.forEach((item) => {
-          item.checked = false;
-        });
-      }
-    };
-
-    // Checkbox từng dòng
-    const onClickCheck = () => {
-      // Kiểm tra xem checked list có bằng list data không
-      const checkedList = proxy.data.filter((x) => x.checked);
-
-      // Nếu có thì đổi checkall thành true
-      proxy.checkedAll = checkedList.length === proxy.data.length;
-    };
-
-    // sự kiện thay đổi phân trang
-    const onPaginate = (payload) => {
-      emit("onPaginate", payload);
-    };
-
-    // Sự kiện xóa
-    const onClickAciton = (row) => {
-      emit("onClickAciton", row);
-    };
-
+    },
+  },
+  data() {
     return {
-      genHeaderCss,
-      genRowCss,
-      onDbClick,
-      colFormat,
-      onClickCheckAll,
-      onClickCheck,
-      onPaginate,
-      onClickAciton,
-      checkedAll,
+      checkedAll: false,
+      columnx: [],
     };
+  },
+
+  setup(props, { emit }) {
+    const { proxy } = getCurrentInstance();
+
+    return {};
   },
 };
 </script>
@@ -144,21 +161,19 @@ export default {
               </div>
             </th>
             <th
-              v-for="(column, index) in columns"
+              v-for="(column, index) in columnx"
               :key="index"
               :style="genHeaderCss(column, index)"
             >
               <div class="th-content">
-                <div class="th-title">
+                <span class="th-title">
                   {{ column.name }}
-                </div>
-                <div class="th-resize"></div>
+                </span>
               </div>
             </th>
             <th class="m-th-action" v-if="isMulti">
               <div class="th-content">
                 <div class="th-title">Chức năng</div>
-                <div class="th-resize"></div>
               </div>
             </th>
           </tr>
@@ -184,7 +199,7 @@ export default {
             </td>
             <td
               @dblclick.prevent="onDbClick(row)"
-              v-for="(column, indexC) in columns"
+              v-for="(column, indexC) in columnx"
               :key="indexC"
               :title="colFormat(row[column.dataField], column.type)"
               :style="genRowCss(column, indexC)"
@@ -195,10 +210,8 @@ export default {
                 }}</span>
               </div>
             </td>
-            <td class="m-tr-action" v-if="isMulti">
-              <div class="d-flex-center">
-                <span class="action-link" @click="onClickAciton(row)">Xóa</span>
-              </div>
+            <td class="m-tr-action d-flex-center" v-if="isMulti">
+              <slot name="action" :row="row"></slot>
             </td>
           </tr>
         </tbody>

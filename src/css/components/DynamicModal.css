@@ -13,7 +13,7 @@
 .m-modal-right {
   position: absolute;
   width: 850px;
-  height: 100vh;
+  height: 100vh !important;
   background-color: #fff;
   margin: 0;
   right: 0px;
@@ -50,7 +50,7 @@
 .m-modal-content {
   display: flex;
   flex-direction: column;
-  height: calc(100% - 62px - 52px);
+  height: calc(100% - 62px - 46px);
   overflow: auto;
   padding: 0 16px 0px 16px;
   border-radius: 0 0 3px 3px;
