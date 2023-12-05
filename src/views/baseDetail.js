@@ -12,6 +12,7 @@ export default {
     // Gán thêm dữ liệu trc khi binddata nếu cần
     this.beforeBinđData(this.data);
     this.binđData(this.data);
+    window._listDetail = this,
     // Xóa mask
     commonFn.unMask();
   },
@@ -159,7 +160,7 @@ export default {
       this.$nextTick(() => {
         this.addObserveControl();
         // focus vào ô đầu tiên
-        const firstInput = $el.querySelector("input");
+        const firstInput = $el.querySelector("input:not([disabled])");
         if (firstInput) {
           firstInput.focus();
         }

@@ -21,6 +21,14 @@ input.m-input:hover {
   border: 1px solid #22a7ca;
 }
 
+input.m-input:disabled {
+  background-color: #f4f5f8;
+}
+
+input.m-input:disabled:hover {
+  border: 1px solid #afafaf;
+}
+
 input:placeholder-shown {
   font-family: MISA Font Italic;
 }

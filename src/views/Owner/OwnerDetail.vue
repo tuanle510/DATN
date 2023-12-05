@@ -238,7 +238,6 @@ export default defineComponent({
                 <TheInput
                   class="flex1"
                   label="Họ và tên"
-                  :required="true"
                   v-model="model.owner_name"
                   :rules="[{ name: 'required' }]"
                 ></TheInput>
@@ -250,7 +249,6 @@ export default defineComponent({
                 <TheInput
                   class="flex1"
                   label="Số điện thoại"
-                  :required="true"
                   v-model="model.phone_number"
                 ></TheInput>
               </div>

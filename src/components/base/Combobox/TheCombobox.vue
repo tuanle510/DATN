@@ -364,7 +364,7 @@ export default defineComponent({
      */
     toggle() {
       this.isOptionShow = !this.isOptionShow;
-      if (this.isOptionShow == true) {
+      if (this.isOptionShow == true && this.data) {
         this.matches = [...this.data];
         // Nếu có giá trị trùng với giá trị trong combo
         var listValue = this.matches.map((x) => x[this.valueField]);
@@ -380,9 +380,12 @@ export default defineComponent({
      */
     setOptionListPosition() {
       // Chiều dài 1 item
-      const item = 30;
+      var item = 30;
+      var height = item;
       // Tính chiều dài của dropdown (cộng 8 là padding 2 đầu)
-      var height = item * this.matches.length + 8;
+      if (this.matches && this.matches.length > 0) {
+        height = item * this.matches.length + 8;
+      }
       let container = this.$refs.container.getBoundingClientRect();
       this.optionPos = {
         left: container.left + "px",

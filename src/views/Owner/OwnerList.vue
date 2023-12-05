@@ -40,14 +40,13 @@ export default defineComponent({
         align: "left",
       },
       {
-        width: 150,
         name: "Ghi chú",
         dataField: "note",
         align: "left",
       },
     ]);
-    const formDetailName = "ChuNhaDetail";
-    const module = "ChuNha";
+    const formDetailName = "OwnerDetail";
+    const module = "Owner";
     // Khóa chính
     const primaryKey = "owner_id";
     // trường tên/mã
@@ -91,6 +90,7 @@ export default defineComponent({
       <div class="m-container-content">
         <GridViewer
           :isMulti="true"
+          :isPaging="true"
           :columns="columns"
           :data="data"
           @onDbClick="edit"

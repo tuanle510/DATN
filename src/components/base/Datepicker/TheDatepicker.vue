@@ -21,6 +21,7 @@
       :day-names="['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']"
       :teleport="true"
     >
+      <template #clear-icon="{}"></template>
     </Datepicker>
     <div class="m-error-text" v-if="errorMessage">
       {{ errorMessage }}
@@ -124,6 +125,7 @@ export default defineComponent({
   --dp-border-color: #afafaf;
   --dp-font-family: MISA Font;
   --dp-button-icon-height: 0px;
+  --dp-input-padding: 6px 10px 6px 12px;
 }
 
 .dp__input {

@@ -15,19 +15,24 @@ export default {
         name: "Tổng quát",
       },
       {
-        path: "/chunha",
+        path: "/owner",
         icon: "setting",
         name: "Chủ nhà",
       },
       {
-        path: "/canho",
+        path: "/apartment",
         icon: "setting",
         name: "Căn hộ",
       },
       {
-        path: "/khachhang",
+        path: "/client",
         icon: "setting",
         name: "Khách hàng",
+      },
+      {
+        path: "/contract",
+        icon: "setting",
+        name: "Hợp đồng",
       },
       {
         path: "/demo",

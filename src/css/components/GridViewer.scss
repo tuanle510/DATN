@@ -58,6 +58,9 @@ $background-color_5: #b8bcc3;
     height: calc(100% - 40px);
     overflow: auto;
   }
+  .m-table-container-full {
+    height: 100%;
+  }
   .m-footer-container {
     position: absolute;
     bottom: 0px;
@@ -93,6 +96,7 @@ $background-color_5: #b8bcc3;
       th {
         height: 38px;
         background-color: $background-color_2;
+        border-bottom: 1px solid #e0e0e0;
         padding: 0 10px;
         border-left: none;
         .th-content {
@@ -129,7 +133,6 @@ $background-color_5: #b8bcc3;
 
   tbody {
     tr {
-      border-bottom: 1px solid #e0e0e0;
       height: 30px;
       td:nth-last-child(n + 3) {
         border-right: 1px solid #e0e0e0;
@@ -139,6 +142,7 @@ $background-color_5: #b8bcc3;
         padding: 0 10px;
         background: #fff;
         border-left: none;
+        border-bottom: 1px solid #e0e0e0 !important;
         .text-overflow {
           white-space: normal;
           overflow: hidden;

@@ -10,6 +10,16 @@
   border-radius: 3px;
 }
 
+.m-modal-full {
+  position: absolute;
+  height: 100vh !important;
+  width: 100% !important;
+  background-color: #fff;
+  margin: 0;
+  top: 0;
+  left: 0;
+}
+
 .m-modal-right {
   position: absolute;
   width: 850px;
@@ -52,7 +62,7 @@
   flex-direction: column;
   height: calc(100% - 62px - 46px);
   overflow: auto;
-  padding: 0 16px 0px 16px;
+  padding: 0 16px;
   border-radius: 0 0 3px 3px;
 }
 

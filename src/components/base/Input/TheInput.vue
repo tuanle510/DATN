@@ -12,6 +12,9 @@ export default defineComponent({
     label: {
       default: null,
     },
+    disabled: {
+      default: false,
+    },
     rules: {
       type: Array,
       default: () => [],
@@ -93,6 +96,7 @@ export default defineComponent({
       ref="TheInput"
       :class="['m-input', { 'm-input-error': errorMessage }]"
       :value="modelValue"
+      :disabled="disabled"
       :placeholder="placeholder"
       @input="onChangeHandler"
       v-on="listeners"

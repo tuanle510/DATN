@@ -1,5 +1,6 @@
 <script>
 import { defineComponent, computed, getCurrentInstance } from "vue";
+import commonFn from "../../../common/commonFn";
 import { useValidateControl } from "../../../common/validateControl";
 export default defineComponent({
   props: {
@@ -22,7 +23,7 @@ export default defineComponent({
   },
   data() {
     return {
-      inputValue: this.formatCurrency(this.modelValue),
+      inputValue: commonFn.formatCurrency(this.modelValue),
     };
   },
   methods: {
@@ -55,23 +56,6 @@ export default defineComponent({
     },
 
     /**
-     * Hàm format tiền
-     * @param {*} value
-     */
-    formatCurrency(value) {
-      if (!isNaN(value)) {
-        return parseFloat(value)
-          .toLocaleString("vi-VN", {
-            style: "currency",
-            currency: "VND",
-            currencyDisplay: "narrowSymbol",
-          })
-          .replace("₫", "")
-          .trim();
-      }
-    },
-
-    /**
      * xử lí sự kiện khi nhập input
      * @param {*} event
      */
@@ -89,8 +73,8 @@ export default defineComponent({
       }
 
       // Xử lý nếu giá trị không rỗng
-      this.inputValue = this.formatCurrency(value);
-      this.$emit("update:modelValue", value);
+      this.inputValue = commonFn.formatCurrency(value);
+      this.$emit("update:modelValue", Number(value));
       this.validate();
     },
 

@@ -18,9 +18,12 @@ import TheDatepicker from "./components/base/Datepicker/TheDatepicker.vue";
 import TheMenuWrapper from "./components/base/MenuWrapper/TheMenuWrapper.vue";
 import TheMenuItem from "./components/base/MenuWrapper/TheMenuItem.vue";
 // View
-import ChuNhaDetail from "./views/ChuNha/ChuNhaDetail.vue";
-import CanHoDetail from "./views/CanHo/CanHoDetail.vue";
-import KhachHangDetail from "./views/KhachHang/KhachHangDetail.vue";
+import OwnerDetail from "./views/Owner/OwnerDetail.vue";
+import ApartmentDetail from "./views/Apartment/ApartmentDetail.vue";
+import ClientDetail from "./views/Client/ClientDetail.vue";
+import ContractDetail from "./views/Contract/ContractDetail.vue";
+// Param
+import DesiredQuestion from "./views/Contract/DesiredQuestion.vue";
 // Lib
 import { vfmPlugin } from "vue-final-modal";
 import { PromiseDialog } from "vue3-promise-dialog";
@@ -50,9 +53,12 @@ app.component("TheDatepicker", TheDatepicker);
 app.component("TheMenuWrapper", TheMenuWrapper);
 app.component("TheMenuItem", TheMenuItem);
 // modal
-app.component("ChuNhaDetail", ChuNhaDetail);
-app.component("CanHoDetail", CanHoDetail);
-app.component("KhachHangDetail", KhachHangDetail);
+app.component("OwnerDetail", OwnerDetail);
+app.component("ApartmentDetail", ApartmentDetail);
+app.component("ClientDetail", ClientDetail);
+app.component("ContractDetail", ContractDetail);
+// Param
+app.component("DesiredQuestion", DesiredQuestion);
 app.use(router);
 app.use(i18n);
 app.use(vfmPlugin);

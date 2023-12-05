@@ -8,33 +8,45 @@ export default defineComponent({
     const { proxy } = getCurrentInstance();
     const columns = ref([
       {
+        width: 150,
+        name: "Tên khách hàng",
+        dataField: "client_name",
+        align: "left",
+      },
+      {
+        width: 150,
+        name: "Công ty",
+        dataField: "company_name",
+        align: "left",
+      },
+      {
         width: 100,
-        name: "Tên căn hộ",
-        dataField: "apartment_name",
+        name: "Điện thoại",
+        dataField: "phone_number",
         align: "left",
       },
       {
         width: 150,
-        name: "Tòa nhà",
-        dataField: "building_name",
+        name: "Email",
+        dataField: "email",
         align: "left",
       },
       {
-        width: 150,
-        name: "Địa chỉ",
-        dataField: "apartment_address",
-        align: "left",
+        width: 100,
+        name: "Ngày sinh",
+        dataField: "birthdate",
+        align: "center",
+        type: "date",
       },
       {
-        width: 150,
-        name: "Mô tả",
-        dataField: "description",
+        name: "Ghi chú",
+        dataField: "note",
         align: "left",
       },
     ]);
-    const formDetailName = "CanHoDetail";
-    const module = "CanHo";
-    const primaryKey = "apartment_id";
+    const formDetailName = "ClientDetail";
+    const module = "Client";
+    const primaryKey = "client_id";
     return {
       columns,
       formDetailName,
@@ -49,7 +61,7 @@ export default defineComponent({
   <div class="chu-nha-view m-view">
     <!-- Phần tiêu đề-->
     <div class="m-header">
-      <span class="m-header-title">Danh sách căn hộ</span>
+      <span class="m-header-title">Danh sách khách hàng</span>
       <TheButton @click="add()">Thêm </TheButton>
     </div>
     <!-- Phần nội dung -->
@@ -73,6 +85,7 @@ export default defineComponent({
       <div class="m-container-content">
         <GridViewer
           :isMulti="true"
+          :isPaging="true"
           :columns="columns"
           :data="data"
           @onDbClick="edit"

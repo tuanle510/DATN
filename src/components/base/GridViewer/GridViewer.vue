@@ -1,6 +1,7 @@
 <script>
 import { getCurrentInstance, ref } from "vue";
 import moment from "moment";
+import commonFn from "../../../common/commonFn";
 import ThePaginate from "../Paginate/ThePaginate.vue";
 export default {
   components: { ThePaginate },
@@ -95,9 +96,16 @@ export default {
         width: item.width + "px",
         textAlign: item.align,
       };
-      // Nếu là cột cuối thì bỏ fix witdh đi
-      if (this.columnx && index == this.columnx.length - 1) {
-        delete css.width;
+      let colIndex = this.columnx.findIndex((x) => x.autoRezie == true);
+      if (colIndex) {
+        if (colIndex == index) {
+          delete css.width;
+        }
+      } else {
+        // Nếu là cột cuối thì bỏ fix witdh đi
+        if (this.columnx && index == this.columnx.length - 1) {
+          delete css.width;
+        }
       }
       return css;
     },
@@ -108,9 +116,16 @@ export default {
         maxWidth: item.width + "px",
         textAlign: item.align,
       };
-      // Nếu là cột cuối thì bỏ fix witdh đi
-      if (this.columnx && index == this.columnx.length - 1) {
-        delete css.maxWidth;
+      let autoResizeCol = this.columnx.filter((x) => x.autoRezie == true);
+      if (autoResizeCol) {
+        if (autoResizeCol.dataField == item.dataField) {
+          delete css.maxWidth;
+        }
+      } else {
+        // Nếu là cột cuối thì bỏ fix witdh đi
+        if (this.columnx && index == this.columnx.length - 1) {
+          delete css.maxWidth;
+        }
       }
       return css;
     },
@@ -122,6 +137,7 @@ export default {
           value = moment(new Date(value)).format("DD/MM/YYYY");
           break;
         case "currency":
+          value = commonFn.formatCurrency(value);
           break;
         default:
           break;
@@ -147,7 +163,10 @@ export default {
 <template>
   <div class="m-grid">
     <!-- Table -->
-    <div class="m-table-container" ref="MainTable">
+    <div
+      :class="['m-table-container', { 'm-table-container-full': !isPaging }]"
+      ref="MainTable"
+    >
       <table class="m-table">
         <!-- Header -->
         <thead>
@@ -217,7 +236,7 @@ export default {
         </tbody>
       </table>
     </div>
-    <div class="m-footer-container">
+    <div class="m-footer-container" v-if="isPaging">
       <div class="m-footer-total">
         Tổng số: &nbsp;<strong>{{ total }}</strong> &nbsp;bản ghi
       </div>

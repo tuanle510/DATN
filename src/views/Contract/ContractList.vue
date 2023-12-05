@@ -1,6 +1,7 @@
 <script>
 import { defineComponent, getCurrentInstance, ref } from "vue";
 import baseList from "../baseList";
+
 export default defineComponent({
   extends: baseList,
   props: {},
@@ -43,9 +44,9 @@ export default defineComponent({
         align: "left",
       },
     ]);
-    const formDetailName = "KhachHangDetail";
-    const module = "KhachHang";
-    const primaryKey = "client_id";
+    const formDetailName = "ContractDetail";
+    const module = "Contract";
+    const primaryKey = "contract_id";
     return {
       columns,
       formDetailName,
@@ -60,7 +61,7 @@ export default defineComponent({
   <div class="chu-nha-view m-view">
     <!-- Phần tiêu đề-->
     <div class="m-header">
-      <span class="m-header-title">Danh sách khách hàng</span>
+      <span class="m-header-title">Danh sách hợp đồng</span>
       <TheButton @click="add()">Thêm </TheButton>
     </div>
     <!-- Phần nội dung -->
@@ -84,6 +85,7 @@ export default defineComponent({
       <div class="m-container-content">
         <GridViewer
           :isMulti="true"
+          :isPaging="true"
           :columns="columns"
           :data="data"
           @onDbClick="edit"

@@ -223,28 +223,24 @@ export default defineComponent({
                 <TheInput
                   class="flex1"
                   label="Họ và tên"
-                  :required="true"
                   v-model="model.client_name"
                   :rules="[{ name: 'required' }]"
                 ></TheInput>
                 <TheDatepicker
                   class="flex1"
                   label="Ngày sinh"
-                  :required="true"
                   v-model="model.birthdate"
                   :rules="[{ name: 'required' }]"
                 ></TheDatepicker>
                 <TheInput
                   class="flex1"
                   label="Số điện thoại"
-                  :required="true"
                   v-model="model.phone_number"
                   :rules="[{ name: 'required' }]"
                 ></TheInput>
                 <TheInput
                   class="flex1"
                   label="Email"
-                  :required="true"
                   v-model="model.email"
                   :rules="[{ name: 'required' }]"
                 ></TheInput>
@@ -254,21 +250,18 @@ export default defineComponent({
                 <TheInput
                   class="flex1"
                   label="Tên trợ lý"
-                  :required="true"
                   v-model="model.assistant_name"
                   :rules="[{ name: 'required' }]"
                 ></TheInput>
                 <TheInput
                   class="flex1"
                   label="Số điện thoại"
-                  :required="true"
                   v-model="model.assistant_phone"
                   :rules="[{ name: 'required' }]"
                 ></TheInput>
                 <TheInput
                   class="flex1"
                   label="Email"
-                  :required="true"
                   v-model="model.assistant_email"
                   :rules="[{ name: 'required' }]"
                 ></TheInput>

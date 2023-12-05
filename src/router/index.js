@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import DashBoard from "../views/DashBoard/DashBoardView.vue";
-import ChuNhaList from "../views/ChuNha/ChuNhaList.vue";
-import CanHoList from "../views/CanHo/CanHoList.vue";
-import KhachHangList from "../views/KhachHang/KhachHangList.vue";
+import OwnerList from "../views/Owner/OwnerList.vue";
+import ApartmentList from "../views/Apartment/ApartmentList.vue";
+import ClientList from "../views/Client/ClientList.vue";
+import ContractList from "../views/Contract/ContractList.vue";
 import DemoCompoent from "../views/DemoCompoent.vue";
 
 const router = createRouter({
@@ -18,19 +19,24 @@ const router = createRouter({
       component: DashBoard,
     },
     {
-      path: "/chunha",
+      path: "/owner",
       name: "chunha",
-      component: ChuNhaList,
+      component: OwnerList,
     },
     {
-      path: "/canho",
-      name: "canho",
-      component: CanHoList,
+      path: "/apartment",
+      name: "apartment",
+      component: ApartmentList,
     },
     {
-      path: "/khachhang",
-      name: "khachhang",
-      component: KhachHangList,
+      path: "/client",
+      name: "client",
+      component: ClientList,
+    },
+    {
+      path: "/contract",
+      name: "contract",
+      component: ContractList,
     },
     {
       path: "/demo",

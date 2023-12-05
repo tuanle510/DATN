@@ -7,7 +7,7 @@ export default defineComponent({
   props: {},
   setup() {
     const { proxy } = getCurrentInstance();
-    const module = "CanHo";
+    const module = "Apartment";
     // Mặd định vào tab đầu tiên
     const activeTab = ref(0);
 
@@ -226,14 +226,12 @@ export default defineComponent({
                 <TheInput
                   class="flex1"
                   label="Tên căn hộ"
-                  :required="true"
                   v-model="model.owner_name"
                   :rules="[{ name: 'required' }]"
                 ></TheInput>
                 <TheInput
                   class="flex1"
                   label="Địa chỉ"
-                  :required="true"
                   v-model="model.owner_name"
                   :rules="[{ name: 'required' }]"
                 ></TheInput>
