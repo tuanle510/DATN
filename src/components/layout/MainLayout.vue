@@ -11,13 +11,7 @@ export default {
 
     // Đóng mở navbar
     const onCloseNavBar = () => {
-      if (navBarWidth.value == 66) {
-        navBarWidth.value = 226;
-        isNavBarClose.value = false;
-      } else {
-        navBarWidth.value = 66;
-        isNavBarClose.value = true;
-      }
+      isNavBarClose.value = !isNavBarClose.value;
     };
     return {
       navBarWidth,
@@ -34,16 +28,11 @@ export default {
       <the-navbar
         @onCloseNavBar="onCloseNavBar"
         :isNavBarClose="isNavBarClose"
-        :style="{ width: navBarWidth + 'px' }"
+        :style="{ width: (isNavBarClose ? 66 : 226) + 'px' }"
       ></the-navbar>
-      <div
-        class="m-main"
-        :style="{ width: 'calc(100% - ' + navBarWidth + 'px)' }"
-      >
+      <div class="m-main">
         <the-header />
-        <!-- <div class="m-content"> -->
         <RouterView></RouterView>
-        <!-- </div> -->
       </div>
     </div>
   </main>

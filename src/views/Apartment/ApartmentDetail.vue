@@ -69,127 +69,12 @@ export default defineComponent({
       dataTab.value = tabList[index]?.data || [];
     };
 
-    const purchaserData = [
-      {
-        name: "Lê Thiện Tuấn 1",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address:
-          "Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội ",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Lê Thiện Tuấn",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Lê Thiện Tuấn",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Lê Thiện Tuấn",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Lê Thiện Tuấn",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Lê Thiện Tuấn",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-    ];
-    const columns = [
-      {
-        width: 150,
-        name: "Tên chủ nhà",
-        dataField: "name",
-        align: "left",
-      },
-      {
-        name: "Địa chỉ",
-        dataField: "address",
-        align: "left",
-      },
-    ];
-
     return {
       tabList,
       activeTab,
       columnTab,
       dataTab,
       module,
-      purchaserData,
-      columns,
       onTabClick,
     };
   },
@@ -225,22 +110,21 @@ export default defineComponent({
                 <TheInput
                   class="flex1"
                   label="Tên căn hộ"
-                  v-model="model.owner_name"
+                  v-model="model.apartment_name"
                   :rules="[{ name: 'required' }]"
                 ></TheInput>
                 <TheInput
                   class="flex1"
                   label="Địa chỉ"
-                  v-model="model.owner_name"
+                  v-model="model.apartment_address"
                   :rules="[{ name: 'required' }]"
                 ></TheInput>
                 <TheComboBox
                   class="flex1"
                   label="Tòa nhà (Nếu có)"
-                  valueField="id"
-                  displayField="name"
-                  v-model="model.purchaser_name"
-                  :data="purchaserData"
+                  valueField="building_id"
+                  displayField="building_name"
+                  v-model="model.building_id"
                 ></TheComboBox>
               </div>
               <div class="modal-row">
@@ -250,7 +134,6 @@ export default defineComponent({
                   valueField="id"
                   displayField="name"
                   v-model="model.purchaser_name"
-                  :data="purchaserData"
                 ></TheComboBox>
                 <div class="flex1"></div>
                 <div class="flex1"></div>

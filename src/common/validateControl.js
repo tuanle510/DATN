@@ -58,7 +58,6 @@ export const useValidateControl = ({ props }) => {
    * @returns
    */
   const getValueControl = () => {
-    debugger;
     return proxy.modelValue;
   };
 

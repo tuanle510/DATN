@@ -327,6 +327,7 @@ export default defineComponent({
       this.selecedItem = this.matches[this.selecedIndex];
       // Cập nhật giá trị vào input
       await this.$emit("update:modelValue", this.selecedItem[this.valueField]);
+      this.validate();
       this.displayValue = this.selecedItem[this.displayField];
       // Cập nhật giá trị display
       await this.$emit("update:display", this.displayValue);
@@ -392,6 +393,10 @@ export default defineComponent({
      * Created date: 22:48 28/05/2022
      */
     tab() {
+      // Nếu ô input có giá trị và đang mở dropdown tab là chọn luôn dòng đầu tiên
+      if (this.displayValue && this.isOptionShow) {
+        this.selectItem();
+      }
       this.isOptionShow = false;
       this.isFocus = false;
     },

@@ -12,16 +12,23 @@ export default defineComponent({
   props: {},
   setup() {
     const { proxy } = getCurrentInstance();
-    const module = "KhachHang";
+    const module = "Contract";
     const { columns } = ContractDetailData();
     const { clientColumns, contractGroupColumns } = comboboxColumns();
+    /**
+     * Hiển thị form nhập ngày thanh toán
+     */
     const choseDesired = () => {
       popupUtil.show("DesiredQuestion", {
         submit: proxy.genPayment,
       });
     };
 
+    /**
+     * Auto Gen các dòng thanh toán
+     */
     const genPayment = (desired) => {
+      //TODO: Chỗ này cần sửa không fix
       const paymentDates = generatePaymentDates(
         new Date("2021-12-14"),
         new Date("2023-12-25"),
@@ -304,7 +311,6 @@ export default defineComponent({
     }
   }
   .container-above {
-    height: 250px;
     padding: 0 16px;
     background-color: #f4f5f8;
     display: flex;
@@ -339,13 +345,16 @@ export default defineComponent({
     }
   }
   .container-under {
-    height: calc(100% - 250px);
+    overflow: hidden;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
     padding: 0 16px;
     .grids-tab-header {
       border: none;
       justify-content: space-between;
       .header-right {
-        padding: 5px 0;
+        padding: 10px 0;
       }
       .header-left {
         display: flex;
@@ -358,9 +367,11 @@ export default defineComponent({
       }
     }
     .grids-tab-content {
-      height: calc(100% - 40px);
+      overflow: hidden;
+      flex: 1;
       padding-top: unset;
       .grids-tab-container {
+        overflow: auto;
         height: 100%;
       }
     }

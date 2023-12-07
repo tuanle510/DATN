@@ -8,6 +8,7 @@ export default {
     const me = this;
     // Gọi dữ liệu
     await me.getData(me._formParam);
+    this.mode = me._formParam.mode;
     // Gán thêm dữ liệu trc khi binddata nếu cần
     this.beforeBinđData(this.data);
     this.binđData(this.data);
@@ -40,6 +41,14 @@ export default {
           this.showQuestionChage();
           return;
         }
+      }
+      // load lại danh sách
+      if (
+        me._formParam &&
+        me._formParam.reload &&
+        typeof me._formParam.reload === "function"
+      ) {
+        me._formParam.reload();
       }
     },
 
@@ -233,8 +242,13 @@ export default {
         return;
       }
       await this.save();
+      this.afterSave();
+      // Nếu thành công và có config đóng form thì sẽ đóng form
       commonFn.unMask();
     },
+
+    // Để đấy màn nào cần làm gì thì làm
+    afterSave() {},
 
     /**
      * Gửi API lên để thêm mới
@@ -243,23 +257,29 @@ export default {
       try {
         const res = await this.$axios.post(`${this.module}`, this.model);
         if (res.statusText == "Created") {
-          //Hiển thị toast thành công
-          this.hide();
-          commonFn.toastSuccess();
+          commonFn.toastSuccess("Cất pthành công");
           // Cập nhật lại List bên ngoài
+          this.afterSaveSuccess();
         }
       } catch (error) {
         console.log(error);
-      } finally {
-        commonFn.unMask();
       }
     },
+
+    /**
+     * Thực hiện sau khi save thành công
+     */
+    afterSaveSuccess() {
+      this.hide();
+    },
   },
+
   data() {
     return {
       data: {}, //Chi tiết gọi từ API
       model: {},
       oldData: {}, // Dữ liệu ban đầu khi bind vào form
+      mode: null,
     };
   },
 };

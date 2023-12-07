@@ -9,10 +9,7 @@
       </div>
       <div v-html="content" class="m-dialog-content"></div>
       <div class="m-dialog-footer">
-        <TheButton class="outline-button" @click="closeDialog(false)"
-          >Không</TheButton
-        >
-        <TheButton ref="button" @click="closeDialog()">Có</TheButton>
+        <TheButton ref="button" @click="closeDialog()">Đồng ý</TheButton>
       </div>
     </div>
   </div>

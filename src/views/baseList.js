@@ -103,6 +103,8 @@ export default {
       // Mở mask để bind xong data vào detal thì mới unmask
       commonFn.mask();
       const me = this;
+      // Truyền hàm reload vào cho detial load lại trước khi đóng
+      param.reload = me.reload;
       if (me.formDetailName) {
         popupUtil.show(me.formDetailName, param);
         console.log(me.formDetailName);
@@ -148,12 +150,12 @@ export default {
         this.headerText,
         row[this.nameKey]
       );
-      confirm(title, message).then((answer) => {
+      confirm(title, message).then(async (answer) => {
         if (answer) {
           commonFn.mask();
           //xóa & đóng
           var param = [row[this.primaryKey]];
-          this.delete(param);
+          await this.delete(param);
         }
       });
     },

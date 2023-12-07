@@ -1,9 +1,13 @@
 <script>
 import { ref, onMounted, getCurrentInstance, defineComponent } from "vue";
 import baseDetail from "../baseDetail";
+import { formMode } from "../../enum/formMode";
 import { ContractGroupDetailData } from "./ContractGroupDetailData";
 import { comboboxColumns } from "../../common/comboboxColumns";
 import { comboboxLoadData } from "../../common/comboboxLoadData";
+import popupUtil from "../../components/base/DynamicModal/popupUtil";
+import { confirmYes } from "../../common/dialogFn";
+import commonFn from "../../common/commonFn";
 
 export default defineComponent({
   extends: baseDetail,
@@ -15,17 +19,104 @@ export default defineComponent({
     const { columns } = ContractGroupDetailData();
     const { apartmentColumns } = comboboxColumns();
     const { loadApartmentComboboxData } = comboboxLoadData();
+    // Ấn từ các button thêm hợp đồng
+    const isAddContract = ref(false);
+    // Loại hợp đồng
+    const contractType = ref(0);
+    /**
+     * Gán thông tin chủ nhà
+     * @param {*} param
+     */
     const selectApartment = (param) => {
-      proxy.model.apartment_name = param.obj.apartment_name;
       proxy.model.owner_name = param.obj.owner_name;
       proxy.model.owner_id = param.obj.owner_id;
+    };
+    /**
+     * Thêm hợp đồng chi tiết
+     * @param {*} value
+     */
+    const addContract = (value) => {
+      isAddContract.value = true;
+      contractType.value = value;
+      if (proxy.mode == formMode.Add) {
+        // Cất master trước khi mở form thêm hợp đồng
+        proxy.saveAction();
+      }
+    };
+
+    // Overide hàm validate trc khi save
+    const validateBeforeSave = () => {
+      const me = proxy;
+      // validate control
+      if (!me.validateComponents()) {
+        // Hiển thị Alert
+        let title = "Cất không thành công";
+        let message = me.buildMes();
+        confirmYes(title, message).then((answer) => {
+          if (answer) {
+            // Tắt alert thì focus sau
+            me.$nextTick(() => {
+              me.focusFirstError();
+            });
+          }
+        });
+        return false;
+      }
+      return true;
+    };
+
+    // Build câu thông báo
+    const buildMes = () => {
+      let mes =
+        'Bạn cần nhập các thông tin <span class="strong-text">{0}</span> của Bộ hồ sơ';
+      let input = [];
+      if (!proxy.model.contract_group_name) {
+        input.push("Tên bộ hồ sơ");
+      }
+      if (!proxy.model.apartment_id) {
+        input.push("Căn hộ");
+      }
+      mes = commonFn.replaceTextWithHTML(mes, input.join(", "));
+      return mes;
+    };
+
+    // Sau khi thêm thành công thì chuyển sang mode sửa
+    const afterSaveSuccess = () => {
+      if (isAddContract.value) {
+        // Cất thành công thì mở form
+        let param = {
+          data: proxy.model,
+          mode: formMode.Add,
+        };
+        switch (contractType.value) {
+          case 0:
+            popupUtil.show("ContractDetail", param);
+            break;
+          case 1:
+            break;
+          case 2:
+            break;
+        }
+      }
+    };
+
+    // Thực hiện sau khi save cho dù thành công hay không
+    const afterSave = () => {
+      isAddContract.value = false;
     };
     return {
       module,
       columns,
       apartmentColumns,
+      isAddContract,
+      contractType,
       selectApartment,
       loadApartmentComboboxData,
+      addContract,
+      validateBeforeSave,
+      buildMes,
+      afterSaveSuccess,
+      afterSave,
     };
   },
 });
@@ -56,6 +147,7 @@ export default defineComponent({
                   class="flex1"
                   disabled
                   v-model="model.contract_group_name"
+                  :rules="[{ name: 'required' }]"
                 ></TheTextArea>
               </div>
             </div>
@@ -81,6 +173,7 @@ export default defineComponent({
                   :columns="apartmentColumns"
                   :loadComboboxData="loadApartmentComboboxData"
                   @selectItem="selectApartment"
+                  :rules="[{ name: 'required' }]"
                 ></TheComboBox>
               </div>
               <div class="modal-row">
@@ -104,9 +197,15 @@ export default defineComponent({
             <div class="item-tabs item-tabs-active">Chi tiết</div>
           </div>
           <div class="header-right">
-            <TheButton class="mr-10">+ HĐ thuê chủ - khách</TheButton>
-            <TheButton class="mr-10">+ HĐ thuê chủ - công ty</TheButton>
-            <TheButton>+ HĐ thuê công ty - khách</TheButton>
+            <TheButton class="mr-10" @click="addContract(0)"
+              >+ HĐ thuê chủ - khách</TheButton
+            >
+            <TheButton class="mr-10" @click="addContract(1)"
+              >+ HĐ thuê chủ - công ty</TheButton
+            >
+            <TheButton @click="addContract(2)"
+              >+ HĐ thuê công ty - khách</TheButton
+            >
           </div>
         </div>
         <div class="grids-tab-content">
@@ -137,7 +236,6 @@ export default defineComponent({
     }
   }
   .container-above {
-    height: 125px;
     padding: 0 16px;
     background-color: #f4f5f8;
     display: flex;
@@ -172,7 +270,10 @@ export default defineComponent({
     }
   }
   .container-under {
-    height: calc(100% - 125px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
     padding: 0 16px;
     .mb10 {
       margin-top: 10px;
@@ -184,7 +285,7 @@ export default defineComponent({
         margin-right: 10px;
       }
       .header-right {
-        padding: 5px 0;
+        padding: 10px 0;
       }
       .header-left {
         display: flex;
@@ -197,7 +298,8 @@ export default defineComponent({
       }
     }
     .grids-tab-content {
-      height: calc(100% - 40px);
+      overflow: hidden;
+      flex: 1;
       padding-top: unset;
       .grids-tab-container {
         height: 100%;

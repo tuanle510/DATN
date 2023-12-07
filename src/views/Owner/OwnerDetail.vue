@@ -7,7 +7,7 @@ export default defineComponent({
   props: {},
   setup() {
     const { proxy } = getCurrentInstance();
-    const module = "ChuNha";
+    const module = "Owner";
     // Mặd định vào tab đầu tiên
     const activeTab = ref(0);
     const tabList = [
@@ -81,127 +81,12 @@ export default defineComponent({
       dataTab.value = tabList[index]?.data || [];
     };
 
-    const purchaserData = [
-      {
-        name: "Lê Thiện Tuấn 1",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address:
-          "Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội Duy Tân, Hà Nội ",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Lê Thiện Tuấn",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Lê Thiện Tuấn",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Lê Thiện Tuấn",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Lê Thiện Tuấn",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Lê Thiện Tuấn",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Trần Thu hà",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Tít",
-        address: "Duy Tân, Hà Nội",
-      },
-      {
-        name: "Hà Béo",
-        address: "Duy Tân, Hà Nội",
-      },
-    ];
-    const columns = [
-      {
-        width: 150,
-        name: "Tên chủ nhà",
-        dataField: "name",
-        align: "left",
-      },
-      {
-        name: "Địa chỉ",
-        dataField: "address",
-        align: "left",
-      },
-    ];
-
     return {
       tabList,
       activeTab,
       columnTab,
       dataTab,
       module,
-      purchaserData,
-      columns,
       onTabClick,
     };
   },

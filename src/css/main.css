@@ -55,7 +55,8 @@ textarea {
 }
 
 .m-main {
-  width: calc(100% - 225px);
+  flex: 1;
+  overflow: hidden;
 }
 
 .m-row {
