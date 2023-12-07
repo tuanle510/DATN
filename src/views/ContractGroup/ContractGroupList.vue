@@ -1,6 +1,7 @@
 <script>
 import { defineComponent, getCurrentInstance, ref } from "vue";
 import baseList from "../baseList";
+
 export default defineComponent({
   extends: baseList,
   props: {},
@@ -8,35 +9,28 @@ export default defineComponent({
     const { proxy } = getCurrentInstance();
     const columns = ref([
       {
+        name: "Tên bộ hồ sơ",
+        dataField: "contract_group_name",
+        align: "left",
+      },
+      {
         width: 250,
-        name: "Tên căn hộ",
+        name: "Căn hộ",
         dataField: "apartment_name",
         align: "left",
       },
       {
         width: 250,
-        name: "Tòa nhà",
-        dataField: "building_name",
-        align: "left",
-      },
-      {
-        width: 350,
-        name: "Địa chỉ",
-        dataField: "apartment_address",
-        align: "left",
-      },
-      {
-        name: "Mô tả",
-        dataField: "description",
+        name: "Chủ nhà",
+        dataField: "owner_name",
         align: "left",
       },
     ]);
-    const formDetailName = "ApartmentDetail";
-    const module = "Apartment";
-    const primaryKey = "apartment_id";
-    const nameKey = "apartment_name";
-    const headerText = "Căn hộ";
-
+    const formDetailName = "ContractGroupDetail";
+    const module = "ContractGroup";
+    const primaryKey = "contract_group_id";
+    const nameKey = "contract_group_name";
+    const headerText = "Bộ hồ sơ";
     return {
       columns,
       formDetailName,
@@ -50,7 +44,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="chu-nha-view m-view">
+  <div class="m-view">
     <!-- Phần tiêu đề-->
     <div class="m-header">
       <span class="m-header-title">Danh sách {{ headerText }}</span>

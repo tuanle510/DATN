@@ -22,6 +22,7 @@ import OwnerDetail from "./views/Owner/OwnerDetail.vue";
 import ApartmentDetail from "./views/Apartment/ApartmentDetail.vue";
 import ClientDetail from "./views/Client/ClientDetail.vue";
 import ContractDetail from "./views/Contract/ContractDetail.vue";
+import ContractGroupDetail from "./views/ContractGroup/ContractGroupDetail.vue";
 // Param
 import DesiredQuestion from "./views/Contract/DesiredQuestion.vue";
 // Lib
@@ -37,6 +38,7 @@ import "vue-toastification/dist/index.css";
 axios.defaults.baseURL = "http://localhost:5002/api/";
 
 const app = createApp(App);
+app.config.globalProperties.$axios = axios;
 // base component
 app.component("MainLayout", MainLayout);
 app.component("TheInput", TheInput);
@@ -57,6 +59,7 @@ app.component("OwnerDetail", OwnerDetail);
 app.component("ApartmentDetail", ApartmentDetail);
 app.component("ClientDetail", ClientDetail);
 app.component("ContractDetail", ContractDetail);
+app.component("ContractGroupDetail", ContractGroupDetail);
 // Param
 app.component("DesiredQuestion", DesiredQuestion);
 app.use(router);

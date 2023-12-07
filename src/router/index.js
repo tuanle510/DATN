@@ -4,6 +4,7 @@ import OwnerList from "../views/Owner/OwnerList.vue";
 import ApartmentList from "../views/Apartment/ApartmentList.vue";
 import ClientList from "../views/Client/ClientList.vue";
 import ContractList from "../views/Contract/ContractList.vue";
+import ContractGroupList from "../views/ContractGroup/ContractGroupList.vue";
 import DemoCompoent from "../views/DemoCompoent.vue";
 
 const router = createRouter({
@@ -37,6 +38,11 @@ const router = createRouter({
       path: "/contract",
       name: "contract",
       component: ContractList,
+    },
+    {
+      path: "/contractgroup",
+      name: "contractgroup",
+      component: ContractGroupList,
     },
     {
       path: "/demo",

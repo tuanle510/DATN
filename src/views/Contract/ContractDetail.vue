@@ -130,7 +130,7 @@ export default defineComponent({
                   class="flex1"
                   valueField="id"
                   displayField="name"
-                  dropdownWidth="300"
+                  dropdownWidth="400"
                   v-model="model.client_name"
                   :columns="clientColumns"
                 ></TheComboBox>

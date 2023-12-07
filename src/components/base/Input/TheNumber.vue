@@ -41,14 +41,13 @@ export default defineComponent({
       // Lấy mã phím
       const keyCode = event.keyCode;
       const isCtrlPressed = event.ctrlKey || event.metaKey; // Kiểm tra xem Ctrl hoặc Command (Mac) đã được nhấn
-
-      // Chặn các phím không phải số nhưng vẫn cho phép các phím tắt Ctrl + A, Ctrl + C, Ctrl + V
       if (
         !(
           (keyCode >= 48 && keyCode <= 57) ||
           (keyCode >= 96 && keyCode <= 105) ||
-          [8, 9, 37, 39, 46].includes(keyCode) ||
-          (isCtrlPressed && [65, 67, 86].includes(keyCode))
+          keyCode === 189 || // Dấu -
+          [8, 9, 37, 39, 46].includes(keyCode) || // Phím Backspace, Tab, Left/Right Arrow, Delete
+          (isCtrlPressed && [65, 67, 86].includes(keyCode)) // Phím tắt Ctrl + A, Ctrl + C, Ctrl + V
         )
       ) {
         event.preventDefault();
@@ -59,7 +58,7 @@ export default defineComponent({
      * xử lí sự kiện khi nhập input
      * @param {*} event
      */
-    onChangeHandler($event) {
+    async onChangeHandler($event) {
       let value = $event.target.value;
 
       // Loại bỏ các ký tự không phải là số hoặc dấu thập phân
@@ -74,7 +73,7 @@ export default defineComponent({
 
       // Xử lý nếu giá trị không rỗng
       this.inputValue = commonFn.formatCurrency(value);
-      this.$emit("update:modelValue", Number(value));
+      await this.$emit("update:modelValue", Number(value));
       this.validate();
     },
 

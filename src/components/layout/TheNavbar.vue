@@ -35,6 +35,11 @@ export default {
         name: "Hợp đồng",
       },
       {
+        path: "/contractgroup",
+        icon: "setting",
+        name: "Bộ hồ sơ",
+      },
+      {
         path: "/demo",
         icon: "setting",
         name: "Demo",

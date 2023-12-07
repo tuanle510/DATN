@@ -47,11 +47,15 @@ export default defineComponent({
     const formDetailName = "ClientDetail";
     const module = "Client";
     const primaryKey = "client_id";
+    const nameKey = "client_name";
+    const headerText = "Khách thuê";
     return {
       columns,
       formDetailName,
       module,
       primaryKey,
+      nameKey,
+      headerText,
     };
   },
 });
@@ -61,7 +65,7 @@ export default defineComponent({
   <div class="chu-nha-view m-view">
     <!-- Phần tiêu đề-->
     <div class="m-header">
-      <span class="m-header-title">Danh sách khách hàng</span>
+      <span class="m-header-title">Danh sách {{ headerText }}</span>
       <TheButton @click="add()">Thêm </TheButton>
     </div>
     <!-- Phần nội dung -->
@@ -93,6 +97,23 @@ export default defineComponent({
           :loading="tableLoading"
           :total="total"
         >
+          <template #action="{ row }">
+            <span class="action-link" @click="onClickAciton(row, 'View')"
+              >Xem/Sửa</span
+            >
+            <TheMenuWrapper>
+              <template #toggle-button="{ toggle }">
+                <div class="icon-box-24" @click="toggle">
+                  <div class="dropdown"></div>
+                </div>
+              </template>
+              <template #default>
+                <TheMenuItem @click="onClickAciton(row, 'Delete')"
+                  >Xóa</TheMenuItem
+                >
+              </template>
+            </TheMenuWrapper>
+          </template>
         </GridViewer>
       </div>
     </div>

@@ -4,6 +4,7 @@ export const ContractDetailData = () => {
       width: 100,
       name: "Đợt",
       dataField: "payment_batch",
+      align: "left",
     },
     {
       width: 150,

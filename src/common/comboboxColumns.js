@@ -38,8 +38,23 @@ export const comboboxColumns = () => {
     },
   ];
 
+  const apartmentColumns = [
+    {
+      width: 200,
+      name: "Tên Căn hộ",
+      dataField: "apartment_name",
+      align: "left",
+    },
+    {
+      name: "Tên Chủ nhà",
+      dataField: "owner_name",
+      align: "left",
+    },
+  ];
+
   return {
     clientColumns,
     contractGroupColumns,
+    apartmentColumns,
   };
 };

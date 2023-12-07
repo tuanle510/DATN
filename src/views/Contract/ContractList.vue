@@ -47,11 +47,15 @@ export default defineComponent({
     const formDetailName = "ContractDetail";
     const module = "Contract";
     const primaryKey = "contract_id";
+    const nameKey = "contract_name";
+    const headerText = "Hợp đồng";
     return {
       columns,
       formDetailName,
       module,
       primaryKey,
+      nameKey,
+      headerText,
     };
   },
 });
@@ -61,7 +65,7 @@ export default defineComponent({
   <div class="chu-nha-view m-view">
     <!-- Phần tiêu đề-->
     <div class="m-header">
-      <span class="m-header-title">Danh sách hợp đồng</span>
+      <span class="m-header-title">Danh sách {{ headerText }}</span>
       <TheButton @click="add()">Thêm </TheButton>
     </div>
     <!-- Phần nội dung -->

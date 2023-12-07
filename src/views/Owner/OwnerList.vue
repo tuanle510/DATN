@@ -47,16 +47,16 @@ export default defineComponent({
     ]);
     const formDetailName = "OwnerDetail";
     const module = "Owner";
-    // Khóa chính
     const primaryKey = "owner_id";
-    // trường tên/mã
     const nameKey = "owner_name";
+    const headerText = "Chủ nhà";
     return {
       columns,
       formDetailName,
       module,
       primaryKey,
       nameKey,
+      headerText,
     };
   },
 });
@@ -66,7 +66,7 @@ export default defineComponent({
   <div class="chu-nha-view m-view">
     <!-- Phần tiêu đề-->
     <div class="m-header">
-      <span class="m-header-title">Danh sách chủ nhà</span>
+      <span class="m-header-title">Danh sách {{ headerText }}</span>
       <TheButton @click="add()">Thêm </TheButton>
     </div>
     <!-- Phần nội dung -->

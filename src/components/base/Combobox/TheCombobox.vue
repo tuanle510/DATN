@@ -97,7 +97,14 @@ import { defineComponent, getCurrentInstance } from "vue";
 import { useValidateControl } from "../../../common/validateControl";
 export default defineComponent({
   name: "the-combobox",
-  emits: ["blur", "keydown", "update:modelValue", "selectItem"],
+  emits: [
+    "blur",
+    "keydown",
+    "update:modelValue",
+    "update:display",
+    "selectItem",
+    "loadComboboxData",
+  ],
   props: {
     modelValue: {
       default: null,
@@ -142,19 +149,34 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    // Chỉ cho chọn
+    queryMode: {
+      type: String,
+      default: "local",
+    },
     rules: {
       type: Array,
       default: () => [],
     },
+    // Chỉ cho chọn
+    initValue: {
+      default: null,
+    },
+    loadComboboxData: {
+      type: Function,
+    },
   },
   mounted() {
     const me = this;
-    // Nếu có giá trị thì tìm lại displayValue để hiển thị
-    if (me.data && this.modelValue) {
-      me.displayValue = me.data.find(
-        (x) => x[me.valueField] == this.modelValue
-      )[this.displayField];
+    if (me.data) {
+      me.datax = [...me.data];
     }
+    // Nếu có giá trị thì tìm lại displayValue để hiển thị
+    me.$nextTick(() => {
+      if (me.initValue) {
+        me.displayValue = me.initValue;
+      }
+    });
     if (me.$el && !me.$el.getVueInstance) {
       me.$el.getVueInstance = () => {
         return this;
@@ -188,10 +210,26 @@ export default defineComponent({
      * Hiển thị Option list thì gán lại css
      * @param {*} newValue
      */
-    isOptionShow: function (newValue) {
+    isOptionShow: async function (newValue) {
       if (newValue == true) {
-        this.setOptionListPosition();
-        this.scrollToItem();
+        // Load remote
+        if (this.queryMode == "remote" && !this.datax) {
+          this.loading = true;
+          this.datax = await this.loadComboboxData();
+          this.setMatches();
+          // this.loading = false;
+        }
+        this.$nextTick(() => {
+          this.setselecedIndex();
+          this.setOptionListPosition();
+          this.scrollToItem();
+        });
+      }
+    },
+
+    initValue: function (newValue) {
+      if (newValue) {
+        this.displayValue = newValue;
       }
     },
   },
@@ -233,15 +271,17 @@ export default defineComponent({
      * Lọc dữ liệu theo input
      */
     setMatches(value) {
-      if (value == undefined || value == "") {
-        this.matches = this.data;
-      } else {
-        this.matches = this.data.filter((item) =>
-          item[this.displayField]
-            .toString()
-            .toLowerCase()
-            .includes(value.toString().toLowerCase())
-        );
+      if (this.datax && this.datax.length > 0) {
+        if (value == undefined || value == "") {
+          this.matches = this.datax;
+        } else {
+          this.matches = this.datax.filter((item) =>
+            item[this.displayField]
+              .toString()
+              .toLowerCase()
+              .includes(value.toString().toLowerCase())
+          );
+        }
       }
     },
 
@@ -256,7 +296,7 @@ export default defineComponent({
       this.isFocus = true;
       // Nếu chưa nhập gì thì matches list hiển thị tất cả
       if (this.$refs.input.value == null || this.$refs.input.value == "") {
-        this.matches = this.data;
+        this.matches = this.datax;
       }
       // this.$refs.input.select();
     },
@@ -287,11 +327,12 @@ export default defineComponent({
       this.selecedItem = this.matches[this.selecedIndex];
       // Cập nhật giá trị vào input
       await this.$emit("update:modelValue", this.selecedItem[this.valueField]);
-
       this.displayValue = this.selecedItem[this.displayField];
+      // Cập nhật giá trị display
+      await this.$emit("update:display", this.displayValue);
 
       // Gán lại matches list thành data:
-      this.matches = [...this.data];
+      this.matches = [...this.datax];
 
       var param = {
         value: this.modelValue, // giá trị của model
@@ -364,15 +405,21 @@ export default defineComponent({
      */
     toggle() {
       this.isOptionShow = !this.isOptionShow;
-      if (this.isOptionShow == true && this.data) {
-        this.matches = [...this.data];
+      this.$refs.input.focus();
+    },
+
+    /**
+     * Gán giá trị của selected index
+     */
+    setselecedIndex() {
+      if (this.isOptionShow == true && this.datax) {
+        this.matches = [...this.datax];
         // Nếu có giá trị trùng với giá trị trong combo
         var listValue = this.matches.map((x) => x[this.valueField]);
         if (this.modelValue && listValue.includes(this.modelValue)) {
           this.selecedIndex = listValue.findIndex((x) => x == this.modelValue);
         }
       }
-      this.$refs.input.focus();
     },
 
     /**
@@ -430,11 +477,13 @@ export default defineComponent({
     return {
       selecedIndex: 0,
       matches: [],
+      datax: null,
       selecedItem: {},
       isFocus: false,
       isOptionShow: false,
       optionPos: {},
       displayValue: null,
+      loading: false,
     };
   },
 });

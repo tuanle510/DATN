@@ -1,6 +1,5 @@
 import { $vfm } from "vue-final-modal";
 import { formMode } from "../enum/formMode";
-import axios from "axios";
 import commonFn from "../common/commonFn";
 import { confirm } from "../common/dialogFn";
 
@@ -12,9 +11,9 @@ export default {
     // Gán thêm dữ liệu trc khi binddata nếu cần
     this.beforeBinđData(this.data);
     this.binđData(this.data);
-    window._listDetail = this,
-    // Xóa mask
-    commonFn.unMask();
+    (window._listDetail = this),
+      // Xóa mask
+      commonFn.unMask();
   },
   methods: {
     /**
@@ -91,7 +90,7 @@ export default {
     async add() {
       //Load data mới
       try {
-        var res = await axios.get(`${this.module}/new`);
+        var res = await this.$axios.get(`${this.module}/new`);
         this.data = res.data;
       } catch (error) {
         console.log(error);
@@ -104,7 +103,7 @@ export default {
     async edit(param) {
       // Load Data
       try {
-        const res = await axios.get(`${this.module}/${param.id}`);
+        const res = await this.$axios.get(`${this.module}/${param.id}`);
         this.data = res.data;
       } catch (error) {
         console.log(error);
@@ -160,7 +159,9 @@ export default {
       this.$nextTick(() => {
         this.addObserveControl();
         // focus vào ô đầu tiên
-        const firstInput = $el.querySelector("input:not([disabled])");
+        const firstInput = $el.querySelector(
+          "input:not([disabled]), textarea:not([disabled])"
+        );
         if (firstInput) {
           firstInput.focus();
         }
@@ -240,7 +241,7 @@ export default {
      */
     async save() {
       try {
-        const res = await axios.post(`${this.module}`, this.model);
+        const res = await this.$axios.post(`${this.module}`, this.model);
         if (res.statusText == "Created") {
           //Hiển thị toast thành công
           this.hide();

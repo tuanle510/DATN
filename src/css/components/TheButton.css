@@ -48,10 +48,12 @@
 .sub-button {
   background-color: #fff;
   border: 1px solid #22a7ca;
-  color: #22a7ca;
+  /* color: #22a7ca; */
+  color: #000000;
 }
 
-.sub-button:hover {
+.sub-button:hover,
+.sub-button:focus {
   background-color: #d1edf4;
 }
 

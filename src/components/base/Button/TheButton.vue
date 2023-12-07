@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'the-button',
+  name: "the-button",
   props: [],
   setup(props, { emit }) {
     return {};

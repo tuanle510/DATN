@@ -66,11 +66,15 @@ class commonFn {
    * @returns
    */
   sanitizeHTML(input) {
-    return input
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
+    let value = "";
+    if (input) {
+      value = input
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+    return value;
   }
 
   genGuid() {

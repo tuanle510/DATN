@@ -69,6 +69,7 @@ export default defineComponent({
       position="top"
       :isOnlyChoose="true"
       v-model="pageSize"
+      :initValue="pageSize"
       @selectItem="changePageSize"
     ></TheComboBox>
     <Paginate

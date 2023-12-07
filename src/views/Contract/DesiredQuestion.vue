@@ -8,20 +8,20 @@ export default defineComponent({
   props: {},
   setup() {
     const { proxy } = getCurrentInstance();
-    const model = ref(null);
+    const number = ref(null);
     const submitForm = () => {
       if (
         proxy._formParam &&
         proxy._formParam.submit &&
         typeof proxy._formParam.submit === "function"
       ) {
-        proxy._formParam.submit(model.value);
+        proxy._formParam.submit(number.value);
       }
       proxy.hide();
     };
     return {
       submitForm,
-      model,
+      number,
     };
   },
 });
@@ -31,23 +31,50 @@ export default defineComponent({
   <DynamicModal
     ref="ContactDetail"
     :title="'Thông báo'"
-    class="contact-detail"
+    class="desired-question"
     position="center"
+    :height="'250px'"
+    :width="'600px'"
     @beforeOpen="beforeOpen($event, close)"
     @beforeClose="beforeClose($event)"
     @opened="opened"
   >
     <template #content>
-      <div class="container-above">
+      <div class="desired-question-container">
         <div>
-          <TheNumber v-model="model"></TheNumber>
+          Ngày trong tháng dự kiến cần thực hiện thanh toán, tính theo tháng đầu
+          tiên của kỳ thanh toán
         </div>
+        <div class="mes-text">
+          Ví dụ, kỳ thanh toán là 3 tháng, từ 10/2/2019 tới 19/5/2019, nếu:
+        </div>
+        <div class="mes-text">
+          - Ngày nhập là 14 thì ngày dự kiến thanh toán 14/2/2019.
+        </div>
+        <div class="mes-text">
+          - Nếu ngày nhập là -2, thì ngày dự kiến là trước 2 ngày so với đầu kì,
+          là 8/2/2019.
+        </div>
+        <TheNumber
+          :rules="[{ name: 'required' }]"
+          class="mt10"
+          v-model="number"
+        ></TheNumber>
       </div>
     </template>
     <template #footer>
       <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
-      <TheButton @click="submitForm()">Cất</TheButton>
+      <TheButton @click="submitForm()">Đồng ý</TheButton>
     </template>
   </DynamicModal>
 </template>
-<style lang="scss"></style>
+<style lang="scss">
+.desired-question {
+  .mes-text {
+    margin-top: 5px;
+  }
+  .mt10 {
+    margin-top: 10px;
+  }
+}
+</style>

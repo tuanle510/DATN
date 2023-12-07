@@ -1,5 +1,4 @@
 import { ref, onMounted } from "vue";
-import axios from "axios";
 import popupUtil from "../components/base/DynamicModal/popupUtil";
 import { formMode } from "../enum/formMode";
 import commonFn from "../common/commonFn";
@@ -25,7 +24,7 @@ export default {
           };
         }
         this.processColumns(payload);
-        const res = await axios.post(`${this.module}/list`, payload);
+        const res = await this.$axios.post(`${this.module}/list`, payload);
         // Lưu vào sau còn dùng
         // Dùng thế nào thì chưa biết
         this.lastPayload = Object.assign({}, payload);
@@ -45,7 +44,10 @@ export default {
       // nếu có lastPayload thì gọi theo cái đấy không thì load mới
       if (this.lastPayload) {
         try {
-          const res = await axios.post(`${this.module}/list`, this.lastPayload);
+          const res = await this.$axios.post(
+            `${this.module}/list`,
+            this.lastPayload
+          );
           this.data = res.data.Data;
           this.total = res.data.Sum;
         } catch (error) {
@@ -133,13 +135,19 @@ export default {
 
     /**
      * Xóa 1 dòng
+     *
+     *
      * @param {*} row
      */
     deleteAction(row) {
-      var title = "Xóa Chủ nhà";
+      var title = "Xóa " + this.headerText;
       const text =
-        'Bạn có muốn xóa Chủ nhà <span class="strong-text">{0}</span> không?';
-      var message = commonFn.replaceTextWithHTML(text, row[this.nameKey]);
+        'Bạn có muốn xóa {0} <span class="strong-text">{1}</span> không?';
+      var message = commonFn.replaceTextWithHTML(
+        text,
+        this.headerText,
+        row[this.nameKey]
+      );
       confirm(title, message).then((answer) => {
         if (answer) {
           commonFn.mask();
@@ -155,15 +163,15 @@ export default {
      */
     async delete(param) {
       try {
-        const res = await axios.delete(`${this.module}`, { data: param });
+        const res = await this.$axios.delete(`${this.module}`, { data: param });
         if (res.data.length == 0) {
           // Cập nhật lại List bên ngoài
           await this.reload();
           //Hiển thị toast thành công
           commonFn.toastSuccess("Xóa dữ liệu thành công");
         } else {
-          // Có lỗi nghiệp vụ
-          console.log(res.data);
+          // Xử lí lỗi nghiệp vụ
+          commonFn.toastError("Xóa dữ liệu không thành công");
         }
       } catch (error) {
         commonFn.toastError("Xóa dữ liệu không thành công");
