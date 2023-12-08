@@ -59,12 +59,15 @@ export default defineComponent({
           :rules="[{ name: 'required' }]"
           class="mt10"
           v-model="number"
+          :format="'Number'"
         ></TheNumber>
       </div>
     </template>
     <template #footer>
-      <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
-      <TheButton @click="submitForm()">Đồng ý</TheButton>
+      <div class="row-reverse" style="gap: 10px">
+        <TheButton @click="submitForm()">Đồng ý</TheButton>
+        <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
+      </div>
     </template>
   </DynamicModal>
 </template>

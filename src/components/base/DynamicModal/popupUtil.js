@@ -2,6 +2,7 @@ import { $vfm } from "vue-final-modal";
 class popupUtil {
   show(name, param) {
     const popup = $vfm.show({ component: name }, param);
+    console.log(name);
     return popup;
   }
 

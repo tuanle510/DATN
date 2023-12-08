@@ -1,6 +1,6 @@
 <template>
   <div
-    v-on:clickout="tab"
+    v-on:clickout="onTab"
     class="m-combobox"
     ref="combobox"
     :class="{ 'm-validate': isValidate }"
@@ -15,11 +15,11 @@
         :placeholder="placeholder"
         :disabled="isOnlyChoose"
         @click="onClick"
-        @keydown.tab="tab"
+        @keydown.tab="onTab"
         @focus="setFocus"
         @blur="outFocus"
-        @keydown.up="up"
-        @keydown.down="down"
+        @keydown.up="onUp"
+        @keydown.down="onDown"
         @input="onChangeHandler"
         @keydown.enter="selectItem"
         :value="this.displayValue"
@@ -256,7 +256,7 @@ export default defineComponent({
      * Created by: Lê Thiện Tuấn - MF1118
      * Created date: 00:00 02/05/2022
      */
-    onChangeHandler(e) {
+    async onChangeHandler(e) {
       this.isOptionShow = true;
       e.preventDefault();
       let newValue = e.target.value;
@@ -265,6 +265,18 @@ export default defineComponent({
       // Gán index về 0:
       this.selecedIndex = 0;
       this.setMatches(newValue);
+      // Nếu xóa đi text thì update model về rỗng
+      if (newValue == "") {
+        await this.$emit("update:modelValue", null);
+        await this.$emit("update:display", null);
+        this.selecedIndex = null;
+        var param = {
+          value: null, // giá trị của model
+          obj: {}, // cả obj nếu cần gán cho trường khác
+        };
+        //  truyền cả obj lên cho component cha:
+        this.$emit("selectItem", param);
+      }
     },
 
     /**
@@ -354,7 +366,7 @@ export default defineComponent({
      * Created by: Lê Thiện Tuấn - MF1118
      * Created date: 22:47 28/05/2022
      */
-    up() {
+    onUp() {
       // Nếu index bằng không thì không ấn được nữa
       if (this.selecedIndex == 0) {
         this.selecedIndex = this.matches.length - 1;
@@ -370,14 +382,17 @@ export default defineComponent({
      * Created by: Lê Thiện Tuấn - MF1118
      * Created date: 22:48 28/05/2022
      */
-    down() {
+    onDown() {
       // Nếu chưa hiện Option list thì hiển thị
       if (this.isOptionShow == false) {
         this.toggle();
         return;
       }
       // Hiển thị đến cuối thì quay lại đầu
-      if (this.selecedIndex >= this.matches.length - 1) {
+      if (
+        this.selecedIndex >= this.matches.length - 1 ||
+        this.selecedIndex == null
+      ) {
         this.selecedIndex = 0;
         return;
       }
@@ -392,9 +407,14 @@ export default defineComponent({
      * Created by: Lê Thiện Tuấn - MF1118
      * Created date: 22:48 28/05/2022
      */
-    tab() {
-      // Nếu ô input có giá trị và đang mở dropdown tab là chọn luôn dòng đầu tiên
-      if (this.displayValue && this.isOptionShow) {
+    onTab() {
+      // Nếu đang mở dropdown tab là chọn luôn dòng đầu tiên
+      if (
+        this.selecedIndex != null &&
+        this.isOptionShow &&
+        this.matches &&
+        this.matches.length > 0
+      ) {
         this.selectItem();
       }
       this.isOptionShow = false;

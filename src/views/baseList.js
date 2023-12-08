@@ -107,7 +107,6 @@ export default {
       param.reload = me.reload;
       if (me.formDetailName) {
         popupUtil.show(me.formDetailName, param);
-        console.log(me.formDetailName);
       } else {
         console.log("Chưa cấu hình form detail");
       }

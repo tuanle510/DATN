@@ -101,6 +101,11 @@ textarea {
   flex-direction: column;
 }
 
+.row-reverse {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
 ul {
   padding: 0;
 }
