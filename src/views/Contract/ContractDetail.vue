@@ -2,9 +2,10 @@
 import { ref, onMounted, getCurrentInstance, defineComponent } from "vue";
 import baseDetail from "../baseDetail";
 import { ContractDetailData } from "./ContractDetailData";
-import { comboboxColumns } from "../../common/comboboxColumns";
 import popupUtil from "../../components/base/DynamicModal/popupUtil";
 import commonFn from "../../common/commonFn";
+import { comboboxColumns } from "../../common/comboboxColumns";
+import { comboboxLoadData } from "../../common/comboboxLoadData";
 
 export default defineComponent({
   extends: baseDetail,
@@ -15,6 +16,7 @@ export default defineComponent({
     const module = "Contract";
     const { columns } = ContractDetailData();
     const { clientColumns, contractGroupColumns } = comboboxColumns();
+    const { loadClientData, loadContractGroupData } = comboboxLoadData();
     /**
      * Hiển thị form nhập ngày thanh toán
      */
@@ -30,15 +32,15 @@ export default defineComponent({
     const genPayment = (desired) => {
       //TODO: Chỗ này cần sửa không fix
       const paymentDates = generatePaymentDates(
-        new Date("2021-12-14"),
-        new Date("2023-12-25"),
+        proxy.model.start_date,
+        proxy.model.end_date,
         proxy.model.payment_period,
         desired
       );
       paymentDates.forEach((x) => {
         var date = new Date(x.start_date);
         x.id = commonFn.genGuid();
-        x.payment_batch = "T" + date.getDate() + "/" + date.getFullYear();
+        x.payment_batch = "T" + date.getMonth() + "/" + date.getFullYear();
         x.amount = proxy.model.payment_period * proxy.model.unit_price;
       });
       proxy.model.Detail = [...paymentDates];
@@ -73,6 +75,20 @@ export default defineComponent({
       console.log(paymentPeriods);
       return paymentPeriods;
     };
+
+    // Nếu có data từ form ở dưới thì bind vào
+    const beforeBinđData = (data) => {
+      if (proxy._formParam && proxy._formParam.data) {
+        var obj = proxy._formParam.data;
+        console.log(proxy._formParam.data);
+        data.contract_group_id = obj.contract_group_id;
+        data.contract_group_name = obj.contract_group_name;
+        data.owner_id = obj.owner_id;
+        data.owner_name = obj.owner_name;
+        data.apartment_id = obj.apartment_id;
+        data.apartment_name = obj.apartment_name;
+      }
+    };
     return {
       module,
       columns,
@@ -80,6 +96,9 @@ export default defineComponent({
       contractGroupColumns,
       genPayment,
       choseDesired,
+      loadContractGroupData,
+      loadClientData,
+      beforeBinđData,
     };
   },
 });
@@ -126,20 +145,30 @@ export default defineComponent({
                   class="flex1"
                   valueField="contract_group_id"
                   displayField="contract_group_name"
+                  :queryMode="'remote'"
                   dropdownWidth="500"
-                  v-model="model.contract_group_name"
+                  v-model="model.contract_group_id"
+                  v-model:display="model.contract_group_name"
+                  :initValue="model.contract_group_name"
                   :columns="contractGroupColumns"
+                  :loadComboboxData="loadContractGroupData"
+                  :rules="[{ name: 'required' }]"
                 ></TheComboBox>
               </div>
               <div class="modal-row">
                 <div class="m-label-text">Khách thuê</div>
                 <TheComboBox
                   class="flex1"
-                  valueField="id"
-                  displayField="name"
+                  valueField="client_id"
+                  displayField="client_name"
+                  :queryMode="'remote'"
                   dropdownWidth="400"
-                  v-model="model.client_name"
+                  v-model="model.client_id"
+                  v-model:display="model.client_name"
+                  :initValue="model.client_name"
                   :columns="clientColumns"
+                  :loadComboboxData="loadClientData"
+                  :rules="[{ name: 'required' }]"
                 ></TheComboBox>
               </div>
               <div class="modal-row">
@@ -209,6 +238,7 @@ export default defineComponent({
                   <div class="m-label-text pl-10">Tới ngày</div>
                   <TheDatepicker
                     class="flex1"
+                    :minDate="model.start_date"
                     v-model="model.end_date"
                   ></TheDatepicker>
                 </div>
@@ -292,7 +322,8 @@ export default defineComponent({
     </template>
     <template #footer>
       <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
-      <TheButton @click="saveAction()">Cất</TheButton>
+      <TheButton @click="setFormMode()" v-if="view">Sửa</TheButton>
+      <TheButton @click="saveAction()" v-else>Cất</TheButton>
     </template>
   </DynamicModal>
 </template>

@@ -74,7 +74,7 @@ export default defineComponent({
           :isPaging="true"
           :columns="columns"
           :data="data"
-          @onDbClick="edit"
+          @onDbClick="view"
           @onPaginate="onPaginate"
           :loading="tableLoading"
           :total="total"

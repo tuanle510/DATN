@@ -8,6 +8,7 @@ export default {
     const me = this;
     // Gọi dữ liệu
     await me.getData(me._formParam);
+    // Gán form mode cho dễ dùng
     this.mode = me._formParam.mode;
     // Gán thêm dữ liệu trc khi binddata nếu cần
     this.beforeBinđData(this.data);
@@ -16,6 +17,13 @@ export default {
       // Xóa mask
       commonFn.unMask();
   },
+
+  watch: {
+    mode(newValue) {
+      this.view = newValue == formMode.View;
+    },
+  },
+
   methods: {
     /**
      * Sự kiện mở form
@@ -86,6 +94,7 @@ export default {
           await me.add();
           break;
         case formMode.Edit:
+        case formMode.View:
           await me.edit(param);
           break;
         default:
@@ -272,6 +281,10 @@ export default {
     afterSaveSuccess() {
       this.hide();
     },
+
+    setFormMode() {
+      this.mode = formMode.Edit;
+    },
   },
 
   data() {
@@ -280,6 +293,7 @@ export default {
       model: {},
       oldData: {}, // Dữ liệu ban đầu khi bind vào form
       mode: null,
+      view: false,
     };
   },
 };

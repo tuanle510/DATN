@@ -14,12 +14,12 @@ export default defineComponent({
         dataField: "client_name",
         align: "left",
       },
-      {
-        width: 150,
-        name: "Công ty",
-        dataField: "company_name",
-        align: "left",
-      },
+      // {
+      //   width: 150,
+      //   name: "Công ty",
+      //   dataField: "company_name",
+      //   align: "left",
+      // },
       {
         width: 100,
         name: "Điện thoại",

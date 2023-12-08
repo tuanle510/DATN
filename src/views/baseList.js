@@ -84,8 +84,11 @@ export default {
      */
     async onClickAciton(row, action) {
       switch (action) {
-        case "View":
+        case "Edit":
           this.edit(row);
+          break;
+        case "View":
+          this.view(row);
           break;
         case "Delete":
           this.deleteAction(row);
@@ -119,6 +122,18 @@ export default {
     edit(row) {
       const param = {
         mode: formMode.Edit,
+        id: row[this.primaryKey],
+      };
+      this.showDetailForm(param);
+    },
+
+    /**
+     * Mở form view (chỉ xem)
+     * @param {*} row
+     */
+    view(row) {
+      const param = {
+        mode: formMode.View,
         id: row[this.primaryKey],
       };
       this.showDetailForm(param);

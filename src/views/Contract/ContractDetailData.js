@@ -48,12 +48,12 @@ export const ContractDetailData = () => {
     {
       width: 150,
       name: "Người gửi",
-      dataField: "sender",
+      dataField: "sender_name",
     },
     {
       width: 150,
       name: "Người nhận",
-      dataField: "receiver",
+      dataField: "receiver_name",
     },
   ];
 

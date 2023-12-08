@@ -23,6 +23,7 @@
   width: 100%;
   height: 100%;
   outline: none;
+  padding-right: 30px;
 }
 
 input.m-input {
@@ -37,6 +38,14 @@ input.m-input {
 
 input.m-input:hover {
   border: 1px solid #22a7ca;
+}
+
+input.m-input:disabled {
+  background-color: #f4f5f8;
+}
+
+input.m-input:disabled:hover {
+  border: 1px solid #afafaf;
 }
 
 .m-combobox .combobox-contaner input:focus {

@@ -9,7 +9,8 @@
       selectText="Chọn"
       format="dd/MM/yyyy"
       :enableTimePicker="false"
-      :maxDate="new Date()"
+      :maxDate="maxDate"
+      :minDate="minDate"
       textInput
       autoApply
       @blur="onBlur"
@@ -46,6 +47,12 @@ export default defineComponent({
     rules: {
       type: Array,
       default: () => [],
+    },
+    minDate: {
+      type: Date,
+    },
+    maxDate: {
+      type: Date,
     },
   },
   mounted() {

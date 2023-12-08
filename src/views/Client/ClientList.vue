@@ -98,7 +98,7 @@ export default defineComponent({
           :total="total"
         >
           <template #action="{ row }">
-            <span class="action-link" @click="onClickAciton(row, 'View')"
+            <span class="action-link" @click="onClickAciton(row, 'Edit')"
               >Xem/Sửa</span
             >
             <TheMenuWrapper>

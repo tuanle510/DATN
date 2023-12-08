@@ -13,7 +13,7 @@
         :class="['m-input', { 'm-input-error': errorMessage }]"
         :maxlength="maxlength"
         :placeholder="placeholder"
-        :disabled="isOnlyChoose"
+        :disabled="isOnlyChoose || disabled"
         @click="onClick"
         @keydown.tab="onTab"
         @focus="setFocus"
@@ -61,7 +61,7 @@
               v-for="(row, rowIndex) in matches"
               :key="rowIndex"
               class="m-option-table-item"
-              :class="{ 'm-item-selected': this.selecedIndex == rowIndex }"
+              :class="{ 'm-item-selected': this.selecedIndex === rowIndex }"
               @click="choseOption(rowIndex, row)"
             >
               <td v-for="(column, colindex) in columns" :key="colindex">
@@ -164,6 +164,9 @@ export default defineComponent({
     },
     loadComboboxData: {
       type: Function,
+    },
+    disabled: {
+      default: false,
     },
   },
   mounted() {
@@ -500,7 +503,7 @@ export default defineComponent({
   },
   data() {
     return {
-      selecedIndex: 0,
+      selecedIndex: null,
       matches: [],
       datax: null,
       selecedItem: {},

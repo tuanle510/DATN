@@ -20,6 +20,9 @@ export default defineComponent({
       type: Number,
       default: 3, // Số hàng mặc định
     },
+    disabled: {
+      default: false,
+    },
   },
   emits: ["update:modelValue"],
   mounted() {
@@ -97,6 +100,7 @@ export default defineComponent({
       ref="TheInput"
       :class="['m-input', { 'm-input-error': errorMessage }]"
       :value="modelValue"
+      :disabled="disabled"
       :placeholder="placeholder"
       @input="onChangeHandler"
       v-on="listeners"

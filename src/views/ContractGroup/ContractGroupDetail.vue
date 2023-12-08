@@ -18,7 +18,7 @@ export default defineComponent({
     const module = "ContractGroup";
     const { columns } = ContractGroupDetailData();
     const { apartmentColumns } = comboboxColumns();
-    const { loadApartmentComboboxData } = comboboxLoadData();
+    const { loadApartmentData } = comboboxLoadData();
     // Ấn từ các button thêm hợp đồng
     const isAddContract = ref(false);
     // Loại hợp đồng
@@ -38,9 +38,15 @@ export default defineComponent({
     const addContract = (value) => {
       isAddContract.value = true;
       contractType.value = value;
+      // Nếu là form thêm mới thì cất trc khi thêm
       if (proxy.mode == formMode.Add) {
         // Cất master trước khi mở form thêm hợp đồng
         proxy.saveAction();
+      } else if (proxy.mode == formMode.Edit) {
+        // Cập nhật xong thì mở form
+      } else {
+        // Nếu là form view thì mở form luôn
+        proxy.showContractForm();
       }
     };
 
@@ -84,19 +90,24 @@ export default defineComponent({
     const afterSaveSuccess = () => {
       if (isAddContract.value) {
         // Cất thành công thì mở form
-        let param = {
-          data: proxy.model,
-          mode: formMode.Add,
-        };
-        switch (contractType.value) {
-          case 0:
-            popupUtil.show("ContractDetail", param);
-            break;
-          case 1:
-            break;
-          case 2:
-            break;
-        }
+        proxy.showContractForm();
+      }
+    };
+
+    // Mở form thêm hợp đồng
+    const showContractForm = () => {
+      let param = {
+        data: proxy.model,
+        mode: formMode.Add,
+      };
+      switch (contractType.value) {
+        case 0:
+          popupUtil.show("ContractDetail", param);
+          break;
+        case 1:
+          break;
+        case 2:
+          break;
       }
     };
 
@@ -111,10 +122,11 @@ export default defineComponent({
       isAddContract,
       contractType,
       selectApartment,
-      loadApartmentComboboxData,
+      loadApartmentData,
       addContract,
       validateBeforeSave,
       buildMes,
+      showContractForm,
       afterSaveSuccess,
       afterSave,
     };
@@ -145,7 +157,7 @@ export default defineComponent({
                 <div class="m-label-text">Tên bộ hồ sơ</div>
                 <TheTextArea
                   class="flex1"
-                  disabled
+                  :disabled="view"
                   v-model="model.contract_group_name"
                   :rules="[{ name: 'required' }]"
                 ></TheTextArea>
@@ -171,15 +183,16 @@ export default defineComponent({
                   v-model:display="model.apartment_name"
                   :initValue="model.apartment_name"
                   :columns="apartmentColumns"
-                  :loadComboboxData="loadApartmentComboboxData"
+                  :loadComboboxData="loadApartmentData"
                   @selectItem="selectApartment"
+                  :disabled="view"
                   :rules="[{ name: 'required' }]"
                 ></TheComboBox>
               </div>
               <div class="modal-row">
                 <div class="m-label-text">Chủ nhà</div>
                 <TheInput
-                  disabled
+                  :disabled="view"
                   class="flex1"
                   v-model="model.owner_name"
                 ></TheInput>
@@ -217,7 +230,8 @@ export default defineComponent({
     </template>
     <template #footer>
       <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
-      <TheButton @click="saveAction()">Cất</TheButton>
+      <TheButton @click="setFormMode()" v-if="view">Sửa</TheButton>
+      <TheButton @click="saveAction()" v-else>Cất</TheButton>
     </template>
   </DynamicModal>
 </template>
