@@ -72,7 +72,6 @@ export default defineComponent({
       columnTab,
       dataTab,
       module,
-      columns,
       onTabClick,
     };
   },

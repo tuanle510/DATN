@@ -48,12 +48,8 @@ export default defineComponent({
       type: Array,
       default: () => [],
     },
-    minDate: {
-      type: Date,
-    },
-    maxDate: {
-      type: Date,
-    },
+    minDate: {},
+    maxDate: {},
   },
   mounted() {
     const me = this;
@@ -62,6 +58,18 @@ export default defineComponent({
         return this;
       };
     }
+  },
+
+  watch: {
+    /**
+     * Hiển thị Option list thì gán lại css
+     * @param {*} newValue
+     */
+    modelValue: function (newValue) {
+      if (newValue) {
+        this.date = newValue;
+      }
+    },
   },
   setup(props) {
     const { proxy } = getCurrentInstance();

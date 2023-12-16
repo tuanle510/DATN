@@ -34,9 +34,9 @@ input:placeholder-shown {
 }
 
 /* Trong trường hợp grid editor  */
-tr td input.m-input {
+/* tr td input.m-input {
   border: none !important;
-}
+} */
 
 textarea:disabled {
   background: #f5f5f5;

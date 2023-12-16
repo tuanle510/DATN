@@ -1,6 +1,7 @@
 <script>
 import { getCurrentInstance, ref } from "vue";
 import moment from "moment";
+import commonFn from "../../../common/commonFn";
 export default {
   props: {
     // Danh sách cột
@@ -31,6 +32,7 @@ export default {
           value = moment(new Date(value)).format("DD/MM/YYYY");
           break;
         case "currency":
+          value = commonFn.formatCurrency(value);
           break;
         default:
           break;
@@ -45,6 +47,7 @@ export default {
           component = "TheDatepicker";
           break;
         case "currency":
+          component = "TheNumber";
           break;
         default:
           break;
@@ -134,22 +137,14 @@ export default {
             >
               <component
                 :ref="`cell_${rowIndex}-${cellIndex}`"
-                v-show="
+                v-if="
                   editingCell.row === rowIndex &&
                   editingCell.column === cellIndex
                 "
                 :is="getComponent(column.type)"
                 v-model="row[column.dataField]"
               ></component>
-              <div
-                v-show="
-                  !(
-                    editingCell.row === rowIndex &&
-                    editingCell.column === cellIndex
-                  )
-                "
-                class="text-overflow editor-click"
-              >
+              <div v-else class="text-overflow editor-click">
                 <span class="td-normal-span">{{
                   colFormat(row[column.dataField], column.type)
                 }}</span>
@@ -161,7 +156,7 @@ export default {
     </div>
     <div class="m-footer-container">
       <div class="m-footer-total">
-        Tổng số: &nbsp; <strong>200</strong> &nbsp;bản ghi
+        Tổng số: &nbsp; <strong>{{ data.length }}</strong> &nbsp;bản ghi
       </div>
     </div>
   </div>

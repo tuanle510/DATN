@@ -94,7 +94,7 @@ export default {
       const css = {
         minWidth: item.width + "px",
         width: item.width + "px",
-        textAlign: item.align,
+        textAlign: item.align || "left",
       };
       let colIndex = this.columnx.findIndex((x) => x.autoRezie == true);
       if (colIndex) {
@@ -114,7 +114,7 @@ export default {
     genRowCss(item, index) {
       const css = {
         maxWidth: item.width + "px",
-        textAlign: item.align,
+        textAlign: item.align || "left",
       };
       let autoResizeCol = this.columnx.filter((x) => x.autoRezie == true);
       if (autoResizeCol) {

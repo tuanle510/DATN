@@ -29,11 +29,11 @@ export default {
         icon: "setting",
         name: "Khách hàng",
       },
-      {
-        path: "/contract",
-        icon: "setting",
-        name: "Hợp đồng",
-      },
+      // {
+      //   path: "/contract",
+      //   icon: "setting",
+      //   name: "Hợp đồng",
+      // },
       {
         path: "/contractgroup",
         icon: "setting",

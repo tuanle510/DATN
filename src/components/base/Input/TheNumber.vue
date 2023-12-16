@@ -24,17 +24,30 @@ export default defineComponent({
         return this;
       };
     }
-
-    if (this.format == "Currency") {
-      this.inputValue = commonFn.formatCurrency(this.modelValue);
-    } else {
-      this.inputValue = this.modelValue;
-    }
   },
   data() {
     return {
-      inputValue: null,
+      inputValue:
+        this.format != "Currency"
+          ? this.modelValue
+          : commonFn.formatCurrency(this.modelValue),
     };
+  },
+
+  watch: {
+    /**
+     * Hiển thị Option list thì gán lại css
+     * @param {*} newValue
+     */
+    modelValue: function (newValue) {
+      if (!isNaN(newValue)) {
+        if (this.format == "Currency") {
+          this.inputValue = commonFn.formatCurrency(this.modelValue);
+        } else {
+          this.inputValue = this.modelValue;
+        }
+      }
+    },
   },
   methods: {
     focus() {

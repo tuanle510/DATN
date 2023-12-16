@@ -13,9 +13,11 @@ export default {
     // Gán thêm dữ liệu trc khi binddata nếu cần
     this.beforeBinđData(this.data);
     this.binđData(this.data);
-    (window._listDetail = this),
-      // Xóa mask
-      commonFn.unMask();
+    if (me._popup.component != "DesiredQuestion") {
+      window._listDetail = this;
+    }
+    // Xóa mask
+    commonFn.unMask();
   },
 
   watch: {
@@ -122,7 +124,12 @@ export default {
       // Load Data
       try {
         const res = await this.$axios.get(`${this.module}/${param.id}`);
-        this.data = res.data;
+        if (this.isDetailMaster) {
+          this.data = res.data.master;
+          this.modelDetail = res.data.details;
+        } else {
+          this.data = res.data;
+        }
       } catch (error) {
         console.log(error);
       }
@@ -291,9 +298,11 @@ export default {
     return {
       data: {}, //Chi tiết gọi từ API
       model: {},
+      modelDetail: [],
       oldData: {}, // Dữ liệu ban đầu khi bind vào form
       mode: null,
       view: false,
+      isDetailMaster: false, // có phải detail master không
     };
   },
 };

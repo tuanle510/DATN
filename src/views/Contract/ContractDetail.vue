@@ -14,6 +14,7 @@ export default defineComponent({
   setup() {
     const { proxy } = getCurrentInstance();
     const module = "Contract";
+    const isDetailMaster = true;
     const { columns } = ContractDetailData();
     const { clientColumns, contractGroupColumns } = comboboxColumns();
     const { loadClientData, loadContractGroupData } = comboboxLoadData();
@@ -39,11 +40,13 @@ export default defineComponent({
       );
       paymentDates.forEach((x) => {
         var date = new Date(x.start_date);
-        x.id = commonFn.genGuid();
+        x.payment_transaction_id = commonFn.genGuid();
+        x.contract_id = proxy.model.contract_id;
         x.payment_batch = "T" + date.getMonth() + "/" + date.getFullYear();
         x.amount = proxy.model.payment_period * proxy.model.unit_price;
       });
-      proxy.model.Detail = [...paymentDates];
+      // Gán vào entity riêng để gửi lên BE
+      proxy.modelDetail = [...paymentDates];
     };
 
     const generatePaymentDates = (startDate, endDate, interval, desired) => {
@@ -72,7 +75,6 @@ export default defineComponent({
         }
         currentDate.setDate(currentDate.getDate() + 1);
       }
-      console.log(paymentPeriods);
       return paymentPeriods;
     };
 
@@ -80,14 +82,45 @@ export default defineComponent({
     const beforeBinđData = (data) => {
       if (proxy._formParam && proxy._formParam.data) {
         var obj = proxy._formParam.data;
-        console.log(proxy._formParam.data);
         data.contract_group_id = obj.contract_group_id;
         data.contract_group_name = obj.contract_group_name;
         data.owner_id = obj.owner_id;
         data.owner_name = obj.owner_name;
         data.apartment_id = obj.apartment_id;
         data.apartment_name = obj.apartment_name;
+        // Fake data
+        data.payment_period = 2;
+        data.start_date = new Date();
+        data.end_date = new Date(
+          new Date().setFullYear(new Date().getFullYear() + 4)
+        );
+        data.unit_price = 120000000;
       }
+    };
+
+    // overide hàm save
+    const save = async () => {
+      try {
+        console.log(proxy.model);
+        console.log(proxy.modelDetail);
+        var param = {
+          master: proxy.model,
+          details: proxy.modelDetail,
+        };
+        const res = await proxy.$axios.post(`${proxy.module}/custom`, param);
+        if (res.statusText == "Created") {
+          commonFn.toastSuccess("Cất pthành công");
+          // Cập nhật lại List bên ngoài
+          proxy.afterSaveSuccess();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    // Sau khi thêm thành công thì chuyển sang mode sửa
+    const afterSaveSuccess = () => {
+      this.mode = formMode.View;
     };
     return {
       module,
@@ -99,6 +132,8 @@ export default defineComponent({
       loadContractGroupData,
       loadClientData,
       beforeBinđData,
+      save,
+      isDetailMaster,
     };
   },
 });
@@ -227,14 +262,14 @@ export default defineComponent({
           <div class="grids-tab-content">
             <div class="grids-tab-container">
               <div class="modal-row">
-                <div class="d-flex">
+                <div class="d-flex flex1">
                   <div class="m-label-text">Từ ngày</div>
                   <TheDatepicker
                     class="flex1"
                     v-model="model.start_date"
                   ></TheDatepicker>
                 </div>
-                <div class="d-flex">
+                <div class="d-flex flex1">
                   <div class="m-label-text pl-10">Tới ngày</div>
                   <TheDatepicker
                     class="flex1"
@@ -256,14 +291,14 @@ export default defineComponent({
                 </div>
               </div>
               <div class="modal-row">
-                <div class="d-flex">
+                <div class="d-flex flex1">
                   <div class="m-label-text">Ngày nhận nhà</div>
                   <TheDatepicker
                     class="flex1"
                     v-model="model.receive_date"
                   ></TheDatepicker>
                 </div>
-                <div class="d-flex">
+                <div class="d-flex flex1">
                   <div class="m-label-text pl-10">Ngày trả nhà</div>
                   <TheDatepicker
                     class="flex1"
@@ -315,7 +350,7 @@ export default defineComponent({
         </div>
         <div class="grids-tab-content">
           <div class="grids-tab-container">
-            <GridViewer :data="model.Detail" :columns="columns"></GridViewer>
+            <GridEditor :data="modelDetail" :columns="columns"></GridEditor>
           </div>
         </div>
       </div>

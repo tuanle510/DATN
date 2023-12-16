@@ -16,6 +16,7 @@ export default defineComponent({
   setup() {
     const { proxy } = getCurrentInstance();
     const module = "ContractGroup";
+    const isDetailMaster = true;
     const { columns } = ContractGroupDetailData();
     const { apartmentColumns } = comboboxColumns();
     const { loadApartmentData } = comboboxLoadData();
@@ -115,6 +116,15 @@ export default defineComponent({
     const afterSave = () => {
       isAddContract.value = false;
     };
+
+    // Hiển thị form chi tiết hợp đồng
+    const editDetail = (row) => {
+      const param = {
+        mode: formMode.Edit,
+        id: row.contract_id,
+      };
+      popupUtil.show("ContractDetail", param);
+    };
     return {
       module,
       columns,
@@ -129,6 +139,8 @@ export default defineComponent({
       showContractForm,
       afterSaveSuccess,
       afterSave,
+      isDetailMaster,
+      editDetail,
     };
   },
 });
@@ -223,7 +235,11 @@ export default defineComponent({
         </div>
         <div class="grids-tab-content">
           <div class="grids-tab-container">
-            <GridViewer :data="model.Detail" :columns="columns"></GridViewer>
+            <GridViewer
+              :data="modelDetail"
+              @onDbClick="editDetail"
+              :columns="columns"
+            ></GridViewer>
           </div>
         </div>
       </div>

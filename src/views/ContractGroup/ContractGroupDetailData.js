@@ -8,20 +8,18 @@ export const ContractGroupDetailData = () => {
     {
       width: 300,
       name: "Tên căn hộ",
-      dataField: "amount",
+      dataField: "apartment_name",
     },
     {
       autoRezie: true,
       width: 200,
       name: "Bên cho thuê",
-      dataField: "note",
+      dataField: "client_name",
     },
     {
       width: 300,
       name: "Bên thuê/Môi giới",
-      dataField: "start_date",
-      align: "center",
-      type: "date",
+      dataField: "client_name",
     },
     {
       width: 150,
