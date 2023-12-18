@@ -1,7 +1,6 @@
 <script>
 import { ref, onMounted, getCurrentInstance, defineComponent } from "vue";
 import baseDetail from "../baseDetail";
-import { formMode } from "../../enum/formMode";
 import { ContractGroupDetailData } from "./ContractGroupDetailData";
 import { comboboxColumns } from "../../common/comboboxColumns";
 import { comboboxLoadData } from "../../common/comboboxLoadData";
@@ -37,13 +36,28 @@ export default defineComponent({
      * @param {*} value
      */
     const addContract = (value) => {
+      if (proxy.mode == proxy.$constants.formMode.Add) {
+        confirmYes(
+          "Thông báo",
+          "Thông tin Bộ hồ sơ đã thay đổi. Chương trình sẽ lưu lại trước khi tại mới các hợp đồng liên quan"
+        ).then((answer) => {
+          if (answer) {
+            proxy.beforeShowContractForm(value);
+          }
+        });
+      } else {
+        proxy.beforeShowContractForm(value);
+      }
+    };
+
+    const beforeShowContractForm = (value) => {
       isAddContract.value = true;
       contractType.value = value;
       // Nếu là form thêm mới thì cất trc khi thêm
-      if (proxy.mode == formMode.Add) {
+      if (proxy.mode == proxy.$constants.formMode.Add) {
         // Cất master trước khi mở form thêm hợp đồng
         proxy.saveAction();
-      } else if (proxy.mode == formMode.Edit) {
+      } else if (proxy.mode == proxy.$constants.formMode.Edit) {
         // Cập nhật xong thì mở form
       } else {
         // Nếu là form view thì mở form luôn
@@ -88,18 +102,21 @@ export default defineComponent({
     };
 
     // Sau khi thêm thành công thì chuyển sang mode sửa
-    const afterSaveSuccess = () => {
+    const customAfterSaveSuccess = () => {
       if (isAddContract.value) {
         // Cất thành công thì mở form
         proxy.showContractForm();
       }
+
+      proxy.binđData(proxy.model, proxy.dataDetail);
     };
 
     // Mở form thêm hợp đồng
     const showContractForm = () => {
       let param = {
         data: proxy.model,
-        mode: formMode.Add,
+        mode: proxy.$constants.formMode.Add,
+        reloadDetail: proxy.reloadDetail,
       };
       switch (contractType.value) {
         case 0:
@@ -119,11 +136,28 @@ export default defineComponent({
 
     // Hiển thị form chi tiết hợp đồng
     const editDetail = (row) => {
+      commonFn.mask();
       const param = {
-        mode: formMode.Edit,
+        mode: proxy.$constants.formMode.View,
         id: row.contract_id,
       };
       popupUtil.show("ContractDetail", param);
+    };
+
+    // Load lại trang
+    const reloadDetail = async () => {
+      try {
+        const res = await proxy.$axios.get(
+          `${proxy.module}/${proxy.model.contract_group_id}`
+        );
+        proxy.data = res.data.master;
+        proxy.dataDetail = res.data.details;
+        proxy.beforeBinđData(proxy.data, proxy.dataDetail);
+        proxy.binđData(proxy.data, proxy.dataDetail);
+        window._listDetail = proxy;
+      } catch (error) {
+        console.log(error);
+      }
     };
     return {
       module,
@@ -131,16 +165,18 @@ export default defineComponent({
       apartmentColumns,
       isAddContract,
       contractType,
+      isDetailMaster,
       selectApartment,
       loadApartmentData,
       addContract,
       validateBeforeSave,
       buildMes,
       showContractForm,
-      afterSaveSuccess,
+      customAfterSaveSuccess,
+      beforeShowContractForm,
       afterSave,
-      isDetailMaster,
       editDetail,
+      reloadDetail,
     };
   },
 });
@@ -204,7 +240,7 @@ export default defineComponent({
               <div class="modal-row">
                 <div class="m-label-text">Chủ nhà</div>
                 <TheInput
-                  :disabled="view"
+                  :disabled="true"
                   class="flex1"
                   v-model="model.owner_name"
                 ></TheInput>
@@ -246,7 +282,7 @@ export default defineComponent({
     </template>
     <template #footer>
       <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
-      <TheButton @click="setFormMode()" v-if="view">Sửa</TheButton>
+      <TheButton @click="setModeEdit()" v-if="view">Sửa</TheButton>
       <TheButton @click="saveAction()" v-else>Cất</TheButton>
     </template>
   </DynamicModal>

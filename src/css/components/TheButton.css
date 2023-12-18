@@ -19,7 +19,7 @@
   background-color: #28b7dc;
 }
 
-.m-button-disabled {
+.m-button:disabled {
   cursor: no-drop;
   background-color: #8cd1e3;
 }

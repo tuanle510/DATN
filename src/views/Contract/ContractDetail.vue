@@ -42,7 +42,8 @@ export default defineComponent({
         var date = new Date(x.start_date);
         x.payment_transaction_id = commonFn.genGuid();
         x.contract_id = proxy.model.contract_id;
-        x.payment_batch = "T" + date.getMonth() + "/" + date.getFullYear();
+        x.payment_batch =
+          "T" + (date.getMonth() + 1) + "/" + date.getFullYear();
         x.amount = proxy.model.payment_period * proxy.model.unit_price;
       });
       // Gán vào entity riêng để gửi lên BE
@@ -54,18 +55,31 @@ export default defineComponent({
       let currentDate = new Date(startDate);
 
       while (currentDate <= new Date(endDate)) {
+        // Ngày bắt đầu kì
         const periodStart = currentDate.toISOString();
+        // Cộng thêm số tháng theo Kỳ thanh toán
         currentDate.setMonth(currentDate.getMonth() + interval);
-        currentDate.setDate(0); // Đặt ngày cuối của tháng trước
+        // Đặt ngày cuối của tháng trước
+        currentDate.setDate(0);
         const daysInMonth = currentDate.getDate();
+        // Ngày kết thúc kì thanh toán
         const periodEnd = new Date(
           currentDate.getFullYear(),
           currentDate.getMonth(),
           daysInMonth
         ).toISOString();
 
+        // Gán bằng ngày thực trả
+        let paymentDay = desired;
+        // Xử lý trường hợp ngày mong muốn không hợp lệ cho tháng hiện tại
+        if (paymentDay > daysInMonth) {
+          // Đặt lại ngày là ngày cuối cùng của tháng
+          paymentDay = daysInMonth;
+        }
+
         const paymentDate = new Date(periodStart);
         paymentDate.setDate(desired);
+        // Nếu ngày thực trả nhỏ hơn ngày kết thúc kì thì thêm vào
         if (paymentDate <= new Date(periodEnd)) {
           paymentPeriods.push({
             start_date: periodStart,
@@ -118,10 +132,20 @@ export default defineComponent({
       }
     };
 
-    // Sau khi thêm thành công thì chuyển sang mode sửa
-    const afterSaveSuccess = () => {
-      this.mode = formMode.View;
+    const customAfterSaveSuccess = () => {
+      proxy.binđData(proxy.model, proxy.modelDetail);
     };
+
+    const customBeforeClose = () => {
+      if (
+        proxy._formParam &&
+        proxy._formParam.reloadDetail &&
+        typeof proxy._formParam.reloadDetail === "function"
+      ) {
+        proxy._formParam.reloadDetail();
+      }
+    };
+
     return {
       module,
       columns,
@@ -134,6 +158,8 @@ export default defineComponent({
       beforeBinđData,
       save,
       isDetailMaster,
+      customAfterSaveSuccess,
+      customBeforeClose,
     };
   },
 });
@@ -188,6 +214,7 @@ export default defineComponent({
                   :columns="contractGroupColumns"
                   :loadComboboxData="loadContractGroupData"
                   :rules="[{ name: 'required' }]"
+                  :disabled="view"
                 ></TheComboBox>
               </div>
               <div class="modal-row">
@@ -204,6 +231,7 @@ export default defineComponent({
                   :columns="clientColumns"
                   :loadComboboxData="loadClientData"
                   :rules="[{ name: 'required' }]"
+                  :disabled="view"
                 ></TheComboBox>
               </div>
               <div class="modal-row">
@@ -213,6 +241,7 @@ export default defineComponent({
                   valueField="id"
                   displayField="name"
                   v-model="model.purchaser_name"
+                  :disabled="view"
                 ></TheComboBox>
               </div>
             </div>
@@ -232,6 +261,7 @@ export default defineComponent({
                 <TheNumber
                   class="input-money"
                   v-model="model.unit_price"
+                  :disabled="view"
                 ></TheNumber>
                 <div class="m-label-text pl-10">vnđ/tháng</div>
               </div>
@@ -240,6 +270,7 @@ export default defineComponent({
                 <TheNumber
                   class="input-money"
                   v-model="model.deposit_amount"
+                  :disabled="view"
                 ></TheNumber>
                 <div class="m-label-text pl-10">vnđ</div>
               </div>
@@ -248,6 +279,7 @@ export default defineComponent({
                 <TheTextArea
                   class="flex1"
                   v-model="model.extension_condition"
+                  :disabled="view"
                   :rows="5"
                 ></TheTextArea>
               </div>
@@ -267,6 +299,7 @@ export default defineComponent({
                   <TheDatepicker
                     class="flex1"
                     v-model="model.start_date"
+                    :disabled="view"
                   ></TheDatepicker>
                 </div>
                 <div class="d-flex flex1">
@@ -275,6 +308,7 @@ export default defineComponent({
                     class="flex1"
                     :minDate="model.start_date"
                     v-model="model.end_date"
+                    :disabled="view"
                   ></TheDatepicker>
                 </div>
               </div>
@@ -284,6 +318,7 @@ export default defineComponent({
                   <TheNumber
                     class="flex1"
                     v-model="model.payment_period"
+                    :disabled="view"
                   ></TheNumber>
                 </div>
                 <div class="d-flex flex1">
@@ -296,6 +331,7 @@ export default defineComponent({
                   <TheDatepicker
                     class="flex1"
                     v-model="model.receive_date"
+                    :disabled="view"
                   ></TheDatepicker>
                 </div>
                 <div class="d-flex flex1">
@@ -303,12 +339,17 @@ export default defineComponent({
                   <TheDatepicker
                     class="flex1"
                     v-model="model.return_date"
+                    :disabled="view"
                   ></TheDatepicker>
                 </div>
               </div>
               <div class="modal-row">
                 <div class="m-label-text">Ghi chú</div>
-                <TheInput class="flex1" v-model="model.note"></TheInput>
+                <TheInput
+                  class="flex1"
+                  v-model="model.note"
+                  :disabled="view"
+                ></TheInput>
               </div>
               <div class="modal-row">
                 <div class="d-flex flex1">
@@ -317,6 +358,7 @@ export default defineComponent({
                     valueField="id"
                     displayField="name"
                     v-model="model.status"
+                    :disabled="view"
                   ></TheComboBox>
                 </div>
                 <div class="d-flex flex1">
@@ -345,20 +387,34 @@ export default defineComponent({
             <div class="item-tabs">Các đợt thanh toán dịch vụ</div>
           </div>
           <div class="header-right" @click="choseDesired()">
-            <TheButton>Tạo đợt thanh toán hợp đồng</TheButton>
+            <TheButton :disabled="view">Tạo đợt thanh toán hợp đồng</TheButton>
           </div>
         </div>
         <div class="grids-tab-content">
           <div class="grids-tab-container">
-            <GridEditor :data="modelDetail" :columns="columns"></GridEditor>
+            <GridEditor
+              :data="modelDetail"
+              :columns="columns"
+              :disabled="view"
+            ></GridEditor>
           </div>
         </div>
       </div>
     </template>
     <template #footer>
-      <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
-      <TheButton @click="setFormMode()" v-if="view">Sửa</TheButton>
-      <TheButton @click="saveAction()" v-else>Cất</TheButton>
+      <div class="m-footer-container">
+        <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
+        <div class="m-footer-container-right">
+          <TheButton
+            class="outline-button"
+            v-if="mode == $constants.formMode.Edit"
+            @click="postpone()"
+            >Hoãn</TheButton
+          >
+          <TheButton @click="setModeEdit()" v-if="view">Sửa</TheButton>
+          <TheButton @click="saveAction()" v-else>Cất</TheButton>
+        </div>
+      </div>
     </template>
   </DynamicModal>
 </template>
@@ -440,6 +496,15 @@ export default defineComponent({
         overflow: auto;
         height: 100%;
       }
+    }
+  }
+  .m-footer-container {
+    width: 100%;
+    justify-content: space-between;
+    display: flex;
+    .m-footer-container-right {
+      display: flex;
+      gap: 10px;
     }
   }
 }

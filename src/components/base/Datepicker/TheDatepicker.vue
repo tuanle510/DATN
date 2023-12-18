@@ -11,6 +11,7 @@
       :enableTimePicker="false"
       :maxDate="maxDate"
       :minDate="minDate"
+      :disabled="disabled"
       textInput
       autoApply
       @blur="onBlur"
@@ -43,6 +44,9 @@ export default defineComponent({
     },
     label: {
       default: null,
+    },
+    disabled: {
+      default: false,
     },
     rules: {
       type: Array,
@@ -154,6 +158,10 @@ input.m-input:focus {
 }
 input.m-input:hover {
   border: 1px solid #22a7ca;
+}
+
+.dp__disabled:hover {
+  border: 1px solid #afafaf !important;
 }
 
 /* Trong trường hợp grid editor  */

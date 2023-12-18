@@ -12,6 +12,9 @@ export default defineComponent({
       type: Array,
       default: () => [],
     },
+    disabled: {
+      default: false,
+    },
     format: {
       type: String,
       default: "Currency",
@@ -185,6 +188,7 @@ export default defineComponent({
       ref="TheInput"
       :class="['m-input', 'm-input-number', { 'm-input-error': errorMessage }]"
       :value="inputValue"
+      :disabled="disabled"
       @input="onChangeHandler"
       @keydown="handleKeydown"
       @focus="onFocus"

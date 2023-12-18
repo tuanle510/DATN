@@ -35,6 +35,10 @@ import Toast from "vue-toastification";
 // Import the CSS or use your own!
 import "vue-toastification/dist/index.css";
 
+// Constants
+import constants from "./constant";
+
+// Axios
 axios.defaults.baseURL = "http://localhost:5002/api/";
 
 const app = createApp(App);
@@ -79,5 +83,8 @@ app.use(Toast, {
   closeOnClick: false,
   transition: "fade",
 });
+
+// Thêm các object constant vào global properties
+app.config.globalProperties.$constants = constants;
 
 app.mount("#app");

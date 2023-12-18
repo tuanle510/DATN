@@ -1,6 +1,5 @@
 import { ref, onMounted } from "vue";
 import popupUtil from "../components/base/DynamicModal/popupUtil";
-import { formMode } from "../enum/formMode";
 import commonFn from "../common/commonFn";
 import { confirm } from "../common/dialogFn";
 export default {
@@ -121,7 +120,7 @@ export default {
      */
     edit(row) {
       const param = {
-        mode: formMode.Edit,
+        mode: this.$constants.formMode.Edit,
         id: row[this.primaryKey],
       };
       this.showDetailForm(param);
@@ -133,7 +132,7 @@ export default {
      */
     view(row) {
       const param = {
-        mode: formMode.View,
+        mode: this.$constants.formMode.View,
         id: row[this.primaryKey],
       };
       this.showDetailForm(param);
@@ -144,7 +143,7 @@ export default {
      */
     add() {
       const param = {
-        mode: formMode.Add,
+        mode: this.$constants.formMode.Add,
       };
       this.showDetailForm(param);
     },

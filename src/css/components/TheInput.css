@@ -26,7 +26,7 @@ input.m-input:disabled {
 }
 
 input.m-input:disabled:hover {
-  border: 1px solid #afafaf;
+  border: 1px solid #afafaf !important;
 }
 
 input:placeholder-shown {

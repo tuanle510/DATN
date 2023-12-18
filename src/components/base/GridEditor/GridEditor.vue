@@ -8,6 +8,9 @@ export default {
     columns: Array,
     // Danh sách dữ liệu
     data: Array,
+    disabled: {
+      default: false,
+    },
   },
 
   methods: {
@@ -67,7 +70,13 @@ export default {
       };
       var ref = `cell_${rowIndex}-${cellIndex}`;
       this.$nextTick(() => {
-        this.$refs[ref][0].focus();
+        if (
+          this.$refs[ref] &&
+          this.$refs[ref][0] &&
+          typeof this.$refs[ref][0].focus === "function"
+        ) {
+          this.$refs[ref][0].focus();
+        }
       });
     },
 
@@ -139,7 +148,8 @@ export default {
                 :ref="`cell_${rowIndex}-${cellIndex}`"
                 v-if="
                   editingCell.row === rowIndex &&
-                  editingCell.column === cellIndex
+                  editingCell.column === cellIndex &&
+                  !disabled
                 "
                 :is="getComponent(column.type)"
                 v-model="row[column.dataField]"

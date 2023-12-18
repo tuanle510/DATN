@@ -20,7 +20,12 @@ export default {
 </script>
 
 <template>
-  <VueFinalModal v-slot="{ close }" :clickToClose="false">
+  <VueFinalModal
+    v-slot="{ close }"
+    :clickToClose="false"
+    :transition="{}"
+    :overlay-transition="{}"
+  >
     <div
       :class="[`m-modal-${position}`]"
       :style="{ width: width, height: height }"

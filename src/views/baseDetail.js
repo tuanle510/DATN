@@ -1,5 +1,4 @@
 import { $vfm } from "vue-final-modal";
-import { formMode } from "../enum/formMode";
 import commonFn from "../common/commonFn";
 import { confirm } from "../common/dialogFn";
 
@@ -11,8 +10,8 @@ export default {
     // Gán form mode cho dễ dùng
     this.mode = me._formParam.mode;
     // Gán thêm dữ liệu trc khi binddata nếu cần
-    this.beforeBinđData(this.data);
-    this.binđData(this.data);
+    this.beforeBinđData(this.data, this.dataDetail);
+    this.binđData(this.data, this.dataDetail);
     if (me._popup.component != "DesiredQuestion") {
       window._listDetail = this;
     }
@@ -22,7 +21,7 @@ export default {
 
   watch: {
     mode(newValue) {
-      this.view = newValue == formMode.View;
+      this.view = newValue == this.$constants.formMode.View;
     },
   },
 
@@ -52,15 +51,10 @@ export default {
           return;
         }
       }
-      // load lại danh sách
-      if (
-        me._formParam &&
-        me._formParam.reload &&
-        typeof me._formParam.reload === "function"
-      ) {
-        me._formParam.reload();
-      }
+      me.customBeforeClose();
     },
+
+    customBeforeClose() {},
 
     /**
      * Hỏi khi đã thay đổi dữ liệu
@@ -92,11 +86,11 @@ export default {
       // Case theo mode
       const editMode = param.mode;
       switch (editMode) {
-        case formMode.Add:
+        case me.$constants.formMode.Add:
           await me.add();
           break;
-        case formMode.Edit:
-        case formMode.View:
+        case me.$constants.formMode.Edit:
+        case me.$constants.formMode.View:
           await me.edit(param);
           break;
         default:
@@ -126,7 +120,7 @@ export default {
         const res = await this.$axios.get(`${this.module}/${param.id}`);
         if (this.isDetailMaster) {
           this.data = res.data.master;
-          this.modelDetail = res.data.details;
+          this.dataDetail = res.data.details;
         } else {
           this.data = res.data;
         }
@@ -145,9 +139,12 @@ export default {
      * Gán dữ liệu vào model
      * @param {*} data
      */
-    binđData(data) {
+    binđData(data, dataDetail) {
       this.model = data;
+      this.modelDetail = dataDetail;
+      // Gán vào 1 object khác dể dùng sau
       this.oldData = Object.assign({}, this.model);
+      this.oldDataDetail = [...dataDetail];
     },
     /**
      * Đóng form
@@ -286,11 +283,42 @@ export default {
      * Thực hiện sau khi save thành công
      */
     afterSaveSuccess() {
-      this.hide();
+      // load lại danh sách
+      if (
+        this._formParam &&
+        this._formParam.reload &&
+        typeof this._formParam.reload === "function"
+      ) {
+        this._formParam.reload();
+      }
+      // List form cất xong thì không đóng mà  chuyển sang mode sửa
+      var listNotHide = ["ContractGroupDetail", "ContractDetail"];
+      if (listNotHide.includes(this._popup.component)) {
+        this.mode = this.$constants.formMode.View;
+      } else {
+        this.hide();
+      }
+      this.customAfterSaveSuccess();
     },
 
-    setFormMode() {
-      this.mode = formMode.Edit;
+    customAfterSaveSuccess() {},
+
+    /**
+     * Chuyển sang mode Sửa
+     */
+    setModeEdit() {
+      this.mode = this.$constants.formMode.Edit;
+    },
+
+    /**
+     * Hoãn:
+     */
+    postpone() {
+      // Gán về object ban đầu
+      this.model = Object.assign({}, this.oldData);
+      this.modelDetail = [...this.oldDataDetail];
+      // Chuyền về mode xem
+      this.mode = this.$constants.formMode.View;
     },
   },
 
@@ -300,6 +328,7 @@ export default {
       model: {},
       modelDetail: [],
       oldData: {}, // Dữ liệu ban đầu khi bind vào form
+      dataDetail: [], // Dữ liệu ban đầu detail khi bind vào form
       mode: null,
       view: false,
       isDetailMaster: false, // có phải detail master không

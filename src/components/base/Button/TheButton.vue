@@ -1,7 +1,11 @@
 <script>
 export default {
   name: "the-button",
-  props: [],
+  props: {
+    disabled: {
+      default: false,
+    },
+  },
   setup(props, { emit }) {
     return {};
   },
@@ -13,7 +17,7 @@ export default {
 };
 </script>
 <template>
-  <button class="m-button" ref="button">
+  <button class="m-button" ref="button" :disabled="disabled">
     <slot> </slot>
   </button>
 </template>
