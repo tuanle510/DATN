@@ -55,8 +55,8 @@ export default {
     },
 
     // sự kiện thay đổi phân trang
-    onPaginate(payload) {
-      this.$emit("onPaginate", payload);
+    async onPaginate(payload) {
+      await this.$emit("onPaginate", payload);
     },
 
     onClickAciton(row) {

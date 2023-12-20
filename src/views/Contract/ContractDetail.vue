@@ -53,32 +53,26 @@ export default defineComponent({
     const generatePaymentDates = (startDate, endDate, interval, desired) => {
       const paymentPeriods = [];
       let currentDate = new Date(startDate);
+      // Xử lí ngày dự tính thanh toán
+      desired = desired < 0 ? currentDate.getDate() + desired : desired;
 
       while (currentDate <= new Date(endDate)) {
         // Ngày bắt đầu kì
         const periodStart = currentDate.toISOString();
         // Cộng thêm số tháng theo Kỳ thanh toán
         currentDate.setMonth(currentDate.getMonth() + interval);
-        // Đặt ngày cuối của tháng trước
-        currentDate.setDate(0);
-        const daysInMonth = currentDate.getDate();
         // Ngày kết thúc kì thanh toán
-        const periodEnd = new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth(),
-          daysInMonth
+        var periodEnd = new Date(currentDate);
+        periodEnd = new Date(
+          periodEnd.setDate(periodEnd.getDate() - 1)
         ).toISOString();
 
+        // Đặt ngày cuối của tháng trước
+        var daysInMonth = new Date(currentDate);
+        daysInMonth = new Date(daysInMonth.setDate(0)).getDate();
         // Gán bằng ngày thực trả
-        let paymentDay = desired;
-        // Xử lý trường hợp ngày mong muốn không hợp lệ cho tháng hiện tại
-        if (paymentDay > daysInMonth) {
-          // Đặt lại ngày là ngày cuối cùng của tháng
-          paymentDay = daysInMonth;
-        }
-
-        const paymentDate = new Date(periodStart);
-        paymentDate.setDate(desired);
+        let paymentDay = desired > daysInMonth ? daysInMonth : desired;
+        const paymentDate = new Date(new Date(periodStart).setDate(paymentDay));
         // Nếu ngày thực trả nhỏ hơn ngày kết thúc kì thì thêm vào
         if (paymentDate <= new Date(periodEnd)) {
           paymentPeriods.push({
@@ -87,7 +81,6 @@ export default defineComponent({
             expected_payment_date: paymentDate.toISOString(),
           });
         }
-        currentDate.setDate(currentDate.getDate() + 1);
       }
       return paymentPeriods;
     };
@@ -103,10 +96,10 @@ export default defineComponent({
         data.apartment_id = obj.apartment_id;
         data.apartment_name = obj.apartment_name;
         // Fake data
-        data.payment_period = 2;
+        data.payment_period = 1;
         data.start_date = new Date();
         data.end_date = new Date(
-          new Date().setFullYear(new Date().getFullYear() + 4)
+          new Date().setFullYear(new Date().getFullYear() + 1)
         );
         data.unit_price = 120000000;
       }
@@ -214,7 +207,7 @@ export default defineComponent({
                   :columns="contractGroupColumns"
                   :loadComboboxData="loadContractGroupData"
                   :rules="[{ name: 'required' }]"
-                  :disabled="view"
+                  :disabled="isView"
                 ></TheComboBox>
               </div>
               <div class="modal-row">
@@ -231,7 +224,7 @@ export default defineComponent({
                   :columns="clientColumns"
                   :loadComboboxData="loadClientData"
                   :rules="[{ name: 'required' }]"
-                  :disabled="view"
+                  :disabled="isView"
                 ></TheComboBox>
               </div>
               <div class="modal-row">
@@ -241,7 +234,7 @@ export default defineComponent({
                   valueField="id"
                   displayField="name"
                   v-model="model.purchaser_name"
-                  :disabled="view"
+                  :disabled="isView"
                 ></TheComboBox>
               </div>
             </div>
@@ -261,7 +254,7 @@ export default defineComponent({
                 <TheNumber
                   class="input-money"
                   v-model="model.unit_price"
-                  :disabled="view"
+                  :disabled="isView"
                 ></TheNumber>
                 <div class="m-label-text pl-10">vnđ/tháng</div>
               </div>
@@ -270,7 +263,7 @@ export default defineComponent({
                 <TheNumber
                   class="input-money"
                   v-model="model.deposit_amount"
-                  :disabled="view"
+                  :disabled="isView"
                 ></TheNumber>
                 <div class="m-label-text pl-10">vnđ</div>
               </div>
@@ -279,7 +272,7 @@ export default defineComponent({
                 <TheTextArea
                   class="flex1"
                   v-model="model.extension_condition"
-                  :disabled="view"
+                  :disabled="isView"
                   :rows="5"
                 ></TheTextArea>
               </div>
@@ -299,7 +292,7 @@ export default defineComponent({
                   <TheDatepicker
                     class="flex1"
                     v-model="model.start_date"
-                    :disabled="view"
+                    :disabled="isView"
                   ></TheDatepicker>
                 </div>
                 <div class="d-flex flex1">
@@ -308,7 +301,7 @@ export default defineComponent({
                     class="flex1"
                     :minDate="model.start_date"
                     v-model="model.end_date"
-                    :disabled="view"
+                    :disabled="isView"
                   ></TheDatepicker>
                 </div>
               </div>
@@ -318,7 +311,7 @@ export default defineComponent({
                   <TheNumber
                     class="flex1"
                     v-model="model.payment_period"
-                    :disabled="view"
+                    :disabled="isView"
                   ></TheNumber>
                 </div>
                 <div class="d-flex flex1">
@@ -331,7 +324,7 @@ export default defineComponent({
                   <TheDatepicker
                     class="flex1"
                     v-model="model.receive_date"
-                    :disabled="view"
+                    :disabled="isView"
                   ></TheDatepicker>
                 </div>
                 <div class="d-flex flex1">
@@ -339,7 +332,7 @@ export default defineComponent({
                   <TheDatepicker
                     class="flex1"
                     v-model="model.return_date"
-                    :disabled="view"
+                    :disabled="isView"
                   ></TheDatepicker>
                 </div>
               </div>
@@ -348,7 +341,7 @@ export default defineComponent({
                 <TheInput
                   class="flex1"
                   v-model="model.note"
-                  :disabled="view"
+                  :disabled="isView"
                 ></TheInput>
               </div>
               <div class="modal-row">
@@ -358,7 +351,7 @@ export default defineComponent({
                     valueField="id"
                     displayField="name"
                     v-model="model.status"
-                    :disabled="view"
+                    :disabled="isView"
                   ></TheComboBox>
                 </div>
                 <div class="d-flex flex1">
@@ -387,7 +380,9 @@ export default defineComponent({
             <div class="item-tabs">Các đợt thanh toán dịch vụ</div>
           </div>
           <div class="header-right" @click="choseDesired()">
-            <TheButton :disabled="view">Tạo đợt thanh toán hợp đồng</TheButton>
+            <TheButton :disabled="isView"
+              >Tạo đợt thanh toán hợp đồng</TheButton
+            >
           </div>
         </div>
         <div class="grids-tab-content">
@@ -395,7 +390,7 @@ export default defineComponent({
             <GridEditor
               :data="modelDetail"
               :columns="columns"
-              :disabled="view"
+              :disabled="isView"
             ></GridEditor>
           </div>
         </div>
@@ -411,7 +406,7 @@ export default defineComponent({
             @click="postpone()"
             >Hoãn</TheButton
           >
-          <TheButton @click="setModeEdit()" v-if="view">Sửa</TheButton>
+          <TheButton @click="setModeEdit()" v-if="isView">Sửa</TheButton>
           <TheButton @click="saveAction()" v-else>Cất</TheButton>
         </div>
       </div>

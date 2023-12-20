@@ -28,13 +28,6 @@ export const ContractDetailData = () => {
     },
     {
       width: 100,
-      name: "Ngày kết thúc",
-      dataField: "end_date",
-      align: "center",
-      type: "date",
-    },
-    {
-      width: 100,
       name: "Ngày dự trả",
       dataField: "expected_payment_date",
       align: "center",
@@ -42,8 +35,22 @@ export const ContractDetailData = () => {
     },
     {
       width: 100,
+      name: "Ngày thực trá",
+      dataField: "real_payment_date",
+      align: "center",
+      type: "date",
+    },
+    {
+      width: 100,
       name: "Trạng thái",
       dataField: "status",
+    },
+    {
+      width: 100,
+      name: "Ngày kết thúc",
+      dataField: "end_date",
+      align: "center",
+      type: "date",
     },
     {
       width: 150,

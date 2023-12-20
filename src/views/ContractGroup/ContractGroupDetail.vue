@@ -36,7 +36,11 @@ export default defineComponent({
      * @param {*} value
      */
     const addContract = (value) => {
-      if (proxy.mode == proxy.$constants.formMode.Add) {
+      if (
+        proxy.mode == proxy.$constants.formMode.Add ||
+        (proxy.mode == proxy.$constants.formMode.Edit &&
+          commonFn.checkDiff(proxy.model, proxy.oldData))
+      ) {
         confirmYes(
           "Thông báo",
           "Thông tin Bộ hồ sơ đã thay đổi. Chương trình sẽ lưu lại trước khi tại mới các hợp đồng liên quan"
@@ -50,15 +54,21 @@ export default defineComponent({
       }
     };
 
+    /**
+     * Trước khi show thì thêm mói/sủa master
+     * @param {*} value
+     */
     const beforeShowContractForm = (value) => {
       isAddContract.value = true;
       contractType.value = value;
       // Nếu là form thêm mới thì cất trc khi thêm
-      if (proxy.mode == proxy.$constants.formMode.Add) {
-        // Cất master trước khi mở form thêm hợp đồng
+      if (
+        proxy.mode == proxy.$constants.formMode.Add ||
+        (proxy.mode == proxy.$constants.formMode.Edit &&
+          commonFn.checkDiff(proxy.model, proxy.oldData))
+      ) {
+        // Cất/sửa master trước khi mở form thêm hợp đồng
         proxy.saveAction();
-      } else if (proxy.mode == proxy.$constants.formMode.Edit) {
-        // Cập nhật xong thì mở form
       } else {
         // Nếu là form view thì mở form luôn
         proxy.showContractForm();
@@ -113,6 +123,7 @@ export default defineComponent({
 
     // Mở form thêm hợp đồng
     const showContractForm = () => {
+      proxy.mode = proxy.$constants.formMode.View;
       let param = {
         data: proxy.model,
         mode: proxy.$constants.formMode.Add,
@@ -205,7 +216,7 @@ export default defineComponent({
                 <div class="m-label-text">Tên bộ hồ sơ</div>
                 <TheTextArea
                   class="flex1"
-                  :disabled="view"
+                  :disabled="isView"
                   v-model="model.contract_group_name"
                   :rules="[{ name: 'required' }]"
                 ></TheTextArea>
@@ -233,7 +244,7 @@ export default defineComponent({
                   :columns="apartmentColumns"
                   :loadComboboxData="loadApartmentData"
                   @selectItem="selectApartment"
-                  :disabled="view"
+                  :disabled="isView"
                   :rules="[{ name: 'required' }]"
                 ></TheComboBox>
               </div>
@@ -282,7 +293,7 @@ export default defineComponent({
     </template>
     <template #footer>
       <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
-      <TheButton @click="setModeEdit()" v-if="view">Sửa</TheButton>
+      <TheButton @click="setModeEdit()" v-if="isView">Sửa</TheButton>
       <TheButton @click="saveAction()" v-else>Cất</TheButton>
     </template>
   </DynamicModal>

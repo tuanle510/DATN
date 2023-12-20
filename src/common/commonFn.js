@@ -102,5 +102,16 @@ class commonFn {
         .trim();
     }
   }
+
+  formatDate(value) {
+    // Tạo một đối tượng Date mới
+    let currentDate = new Date(value);
+
+    // Đặt thời gian thành 00:00:00.000
+    currentDate.setHours(0, 0, 0, 0);
+
+    // Chuyển đổi thành chuỗi ISO 8601
+    return currentDate.toISOString();
+  }
 }
 export default new commonFn();

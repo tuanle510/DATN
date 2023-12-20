@@ -32,7 +32,7 @@ export default {
     colFormat(value, type) {
       switch (type) {
         case "date":
-          value = moment(new Date(value)).format("DD/MM/YYYY");
+          value = value ? moment(new Date(value)).format("DD/MM/YYYY") : null;
           break;
         case "currency":
           value = commonFn.formatCurrency(value);
@@ -111,7 +111,7 @@ export default {
   <div class="m-grid">
     <!-- Table -->
     <div class="m-table-container" ref="MainTable">
-      <table class="m-table">
+      <table class="m-table" v-on:clickout="endEditing()">
         <!-- Header -->
         <thead>
           <tr>
@@ -140,9 +140,8 @@ export default {
               v-for="(column, cellIndex) in columns"
               :key="cellIndex"
               :style="genCss(column, cellIndex)"
-              @click.prevent="startEditing(rowIndex, cellIndex)"
               @keydown.tab.prevent="onTab(rowIndex, cellIndex)"
-              v-on:clickout="endEditing()"
+              @click.prevent="startEditing(rowIndex, cellIndex)"
             >
               <component
                 :ref="`cell_${rowIndex}-${cellIndex}`"

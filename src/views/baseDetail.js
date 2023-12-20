@@ -21,7 +21,7 @@ export default {
 
   watch: {
     mode(newValue) {
-      this.view = newValue == this.$constants.formMode.View;
+      this.isView = newValue == this.$constants.formMode.View;
     },
   },
 
@@ -91,7 +91,7 @@ export default {
           break;
         case me.$constants.formMode.Edit:
         case me.$constants.formMode.View:
-          await me.edit(param);
+          await me.view(param);
           break;
         default:
           break;
@@ -114,7 +114,7 @@ export default {
     /**
      * Gọi dữ liệu theo id
      */
-    async edit(param) {
+    async view(param) {
       // Load Data
       try {
         const res = await this.$axios.get(`${this.module}/${param.id}`);
@@ -254,7 +254,14 @@ export default {
         commonFn.unMask();
         return;
       }
-      await this.save();
+      switch (this.mode) {
+        case this.$constants.formMode.Add:
+          await this.save();
+          break;
+        case this.$constants.formMode.Edit:
+          await this.edit();
+          break;
+      }
       this.afterSave();
       // Nếu thành công và có config đóng form thì sẽ đóng form
       commonFn.unMask();
@@ -271,6 +278,22 @@ export default {
         const res = await this.$axios.post(`${this.module}`, this.model);
         if (res.statusText == "Created") {
           commonFn.toastSuccess("Cất pthành công");
+          // Cập nhật lại List bên ngoài
+          this.afterSaveSuccess();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    /**
+     * Gửi API lên để thêm mới
+     */
+    async edit() {
+      try {
+        const res = await this.$axios.put(`${this.module}`, this.model);
+        if (res.statusText == "OK") {
+          commonFn.toastSuccess("Sửa pthành công");
           // Cập nhật lại List bên ngoài
           this.afterSaveSuccess();
         }
@@ -330,7 +353,7 @@ export default {
       oldData: {}, // Dữ liệu ban đầu khi bind vào form
       dataDetail: [], // Dữ liệu ban đầu detail khi bind vào form
       mode: null,
-      view: false,
+      isView: false,
       isDetailMaster: false, // có phải detail master không
     };
   },
