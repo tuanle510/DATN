@@ -1,6 +1,6 @@
 <template>
   <div
-    v-on:clickout="onTab"
+    v-on:clickout="onClickout"
     class="m-combobox"
     ref="combobox"
     :class="{ 'm-validate': isValidate }"
@@ -420,6 +420,11 @@ export default defineComponent({
       ) {
         this.selectItem();
       }
+      this.isOptionShow = false;
+      this.isFocus = false;
+    },
+
+    onClickout() {
       this.isOptionShow = false;
       this.isFocus = false;
     },

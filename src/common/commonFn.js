@@ -68,7 +68,7 @@ class commonFn {
   sanitizeHTML(input) {
     let value = "";
     if (input) {
-      value = input
+      value = String(input)
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")

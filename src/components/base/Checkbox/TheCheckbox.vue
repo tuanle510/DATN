@@ -2,8 +2,8 @@
   <label class="m-checkbox">
     <input
       type="checkbox"
-      :value="modelValue"
-      :checked="modelValue"
+      :value="isChecked"
+      :checked="isChecked"
       @change="$emit('update:modelValue', !modelValue)"
     />
     <span class="checkmark"></span>
@@ -11,15 +11,22 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, computed } from "vue";
 
 export default defineComponent({
   props: {
     modelValue: Boolean, // The value passed via v-model
+    checked: {
+      type: [Boolean, Number],
+      default: false,
+    },
   },
   emits: ["update:modelValue"],
   setup(props, { emit }) {
-    return {};
+    const isChecked = computed(() => props.modelValue || props.checked);
+    return {
+      isChecked,
+    };
   },
 });
 </script>

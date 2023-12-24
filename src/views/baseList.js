@@ -1,13 +1,18 @@
 import { ref, onMounted } from "vue";
 import popupUtil from "../components/base/DynamicModal/popupUtil";
 import commonFn from "../common/commonFn";
-import { confirm } from "../common/dialogFn";
+import { confirm, confirmYes } from "../common/dialogFn";
 export default {
   setup() {},
   async beforeMount() {
     // Load dữ liệu
     await this.loadData();
   },
+
+  async mounted() {
+    window._list = this;
+  },
+
   methods: {
     /**
      * Load data
@@ -42,6 +47,7 @@ export default {
     async reload() {
       // nếu có lastPayload thì gọi theo cái đấy không thì load mới
       if (this.lastPayload) {
+        this.tableLoading = true;
         try {
           const res = await this.$axios.post(
             `${this.module}/list`,
@@ -51,6 +57,8 @@ export default {
           this.total = res.data.Sum;
         } catch (error) {
           console.log(error);
+        } finally {
+          this.tableLoading = false;
         }
       } else {
         this.loadData();
@@ -185,13 +193,73 @@ export default {
           //Hiển thị toast thành công
           commonFn.toastSuccess("Xóa dữ liệu thành công");
         } else {
-          // Xử lí lỗi nghiệp vụ
-          commonFn.toastError("Xóa dữ liệu không thành công");
+          this.handleValidateError(res.data);
         }
+        // Gán lại danh sách đã chọn
+        this.selected = [];
       } catch (error) {
         commonFn.toastError("Xóa dữ liệu không thành công");
       } finally {
         commonFn.unMask();
+      }
+    },
+
+    // Xử lí lỗi
+    async handleValidateError(res) {
+      console.log(res);
+      // có bản ghi xóa được
+      if (res.length < this.selected.length) {
+        // Cập nhật lại List bên ngoài
+        await this.reload();
+        commonFn.toastSuccess("Xóa dữ liệu thành công");
+      } else {
+        commonFn.toastError("Xóa dữ liệu không thành công");
+      }
+      var length = res.length < 10 ? "0" + res.length : res.length;
+      const text =
+        '<span class="strong-text">{0} </span> bản ghi được chọn không thể xóa vì đã phát sinh bộ hồ sơ. Vui lòng kiểm tra lại trước khi thực hiện xóa';
+      var message = commonFn.replaceTextWithHTML(text, length);
+      confirmYes("Không hợp lệ", message).then((answer) => {
+        if (answer) {
+          // chả làm gì
+        }
+      });
+    },
+
+    /**
+     * Hành động xóa nhiều
+     */
+    async deleteMulti() {
+      if (this.selected && this.selected.length == 0) {
+        const text =
+          'Vui lòng chọn <span class="strong-text"> ít nhất 1 bản ghi </span> để thực hiện được chức năng này.';
+        var message = commonFn.replaceTextWithHTML(text);
+        confirmYes("Không hợp lệ", message).then((answer) => {
+          if (answer) {
+            // chả làm gì
+          }
+        });
+      } else {
+        var title = "Xóa " + this.headerText;
+        const text =
+          '<span class="strong-text">{0} </span> bản ghi đã được chọn. Bạn có chắc muốn xóa các bản ghi {1} này khỏi danh sách không?';
+        var length =
+          this.selected.length < 10
+            ? "0" + this.selected.length
+            : this.selected.length;
+        var message = commonFn.replaceTextWithHTML(
+          text,
+          length,
+          this.headerText
+        );
+        confirm(title, message).then(async (answer) => {
+          if (answer) {
+            commonFn.mask();
+            //xóa & đóng
+            var param = this.selected.map((x) => x[this.primaryKey]);
+            await this.delete(param);
+          }
+        });
       }
     },
   },
@@ -201,6 +269,7 @@ export default {
       total: null, // Tổng số bảng ghi
       tableLoading: false,
       lastPayload: null,
+      selected: [],
     };
   },
 };

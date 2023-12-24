@@ -80,6 +80,7 @@ export default defineComponent({
       margin: 15px 20px 20px;
       max-height: 300px;
       overflow: auto;
+      line-height: 18px;
     }
     .m-dialog-footer {
       bottom: 0px;

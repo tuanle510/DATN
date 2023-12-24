@@ -57,12 +57,12 @@ export default defineComponent({
           <TheInput placeholder="Tìm kiếm căn hộ" />
         </div>
         <div class="toolbar-right">
-          <div class="toolbar-btn">
+          <div class="toolbar-btn" @click="reload">
             <div class="refresh"></div>
           </div>
-          <div class="toolbar-btn">
+          <!-- <div class="toolbar-btn">
             <div class="excel"></div>
-          </div>
+          </div> -->
           <div class="toolbar-btn">
             <div class="remove"></div>
           </div>

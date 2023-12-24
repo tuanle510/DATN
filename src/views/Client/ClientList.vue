@@ -75,19 +75,21 @@ export default defineComponent({
           <TheInput placeholder="Tìm kiếm căn hộ" />
         </div>
         <div class="toolbar-right">
-          <div class="toolbar-btn">
+          <div class="toolbar-btn" @click="reload">
             <div class="refresh"></div>
           </div>
-          <div class="toolbar-btn">
+          <!-- <div class="toolbar-btn">
             <div class="excel"></div>
-          </div>
-          <div class="toolbar-btn">
+          </div> -->
+          <div class="toolbar-btn" @click="deleteMulti">
             <div class="remove"></div>
           </div>
         </div>
       </div>
       <div class="m-container-content">
         <GridViewer
+          v-model:selected="selected"
+          idField="client_id"
           :isMulti="true"
           :isPaging="true"
           :columns="columns"

@@ -5,11 +5,14 @@ import commonFn from "../../../common/commonFn";
 import ThePaginate from "../Paginate/ThePaginate.vue";
 export default {
   components: { ThePaginate },
+  emits: ["update:selected", "onPaginate", "onClickAciton", "onDbClick"],
   props: {
     // Danh sách cột
     columns: Array,
     // Danh sách dữ liệu
     data: Array,
+    // id để v-model:seleced
+    idField: String,
     // Có tích chọn nhiều không
     isMulti: {
       default: false,
@@ -30,10 +33,33 @@ export default {
       default: null,
       type: Number,
     },
+    // Value thực hiện lưu giá trị các cột được chọn
+    selected: {
+      type: Array,
+      return: () => [],
+    },
   },
   watch: {
     columns(newValue) {
       this.initColumns(newValue);
+    },
+    selected(newVal, oldVal) {
+      if (newVal) {
+        this.$nextTick(() => {
+          setTimeout(() => {
+            this.checkedAll = this.isCheckedMultiple(newVal);
+          }, 0);
+        });
+      }
+    },
+    data(newVal, olVal) {
+      if (newVal) {
+        const me = this;
+        // check selected các bản ghi khi mà load lại trang hoặc search làm thay đổi data grid
+        if (Array.isArray(me.selected) && me.selected.length > 0) {
+          me.checkedAll = me.isCheckedMultiple(me.selected);
+        }
+      }
     },
   },
   created() {
@@ -68,25 +94,79 @@ export default {
       this.$emit("onDbClick", row);
     },
 
-    // Checkbox all
-    onClickCheckAll() {
-      if (checkedAll.value) {
-        proxy.data.forEach((item) => {
-          item.checked = true;
-        });
-      } else {
-        proxy.data.forEach((item) => {
-          item.checked = false;
-        });
+    /**
+     * Kiểm tra xem tất cả dữ liệu có đang được check hay không
+     * created by LTDAT 25.06.2020
+     * modify by nnlam 05/05/2021
+     */
+    isCheckedMultiple(selected) {
+      const me = this;
+      if (selected) {
+        //Nếu ko có paging và filter thì check luôn length để kiểm tra selected hết
+        if (!me.isPaging) return selected.length === me.data.length;
+        if (me.data && me.data.length != 0) {
+          return (
+            selected.length >= me.data.length &&
+            me.data.every((item, index) => {
+              return selected.findIndex(
+                (dataRow) => dataRow[me.idField] === item[me.idField]
+              ) === -1
+                ? false
+                : true;
+            })
+          );
+        } else {
+          return false;
+        }
       }
     },
 
     // Checkbox từng dòng
-    onClickCheck() {
-      // Kiểm tra xem checked list có bằng list data không
-      const checkedList = proxy.data.filter((x) => x.checked);
-      // Nếu có thì đổi checkall thành true
-      proxy.checkedAll = checkedList.length === proxy.data.length;
+    clickMultiple($e, dataRow) {
+      const me = this;
+      const checked = $e.target.checked;
+      let VModel = me.selected ? [...me.selected] : [];
+      const index = VModel.findIndex(
+        (x) => x[me.idField] === dataRow[me.idField]
+      );
+      if (!checked) {
+        VModel = VModel.filter((x) => x[me.idField] !== dataRow[me.idField]);
+      } else {
+        if (index === -1) {
+          VModel.push(dataRow);
+        }
+      }
+
+      me.$emit("update:selected", VModel);
+    },
+
+    changeCheckedMultiple(e) {
+      const me = this;
+      const checked =
+        e.target.tagName.toLowerCase() === "input" ? e.target.checked : false;
+
+      let VModel = [...me.selected];
+      if (!checked) {
+        me.data.forEach((dataRow) => {
+          const existed = VModel.find(
+            (x) => x[me.idField] === dataRow[me.idField]
+          );
+          if (existed) {
+            VModel = VModel.filter((x) => x[me.idField] != existed[me.idField]);
+          }
+        });
+      } else {
+        me.data.forEach((dataRow) => {
+          const existed = VModel.find(
+            (x) => x[me.idField] === dataRow[me.idField]
+          );
+
+          if (!VModel.includes(existed)) {
+            VModel.push(dataRow);
+          }
+        });
+      }
+      me.$emit("update:selected", VModel);
     },
 
     // Gen css cho header table
@@ -144,6 +224,19 @@ export default {
       }
       return value;
     },
+
+    // Trạng thái chọn của từng dòng
+    isSelected(dataRow) {
+      const me = this;
+      if (me.selected && me.selected.length > 0) {
+        return this.selected.findIndex(
+          (x) => x[me.idField] === dataRow[me.idField]
+        ) === -1
+          ? false
+          : true;
+      }
+      return false;
+    },
   },
   data() {
     return {
@@ -175,7 +268,7 @@ export default {
               <div class="d-flex-center">
                 <TheCheckbox
                   v-model="checkedAll"
-                  @change="onClickCheckAll"
+                  @change="changeCheckedMultiple"
                 ></TheCheckbox>
               </div>
             </th>
@@ -210,9 +303,10 @@ export default {
           >
             <td class="m-tr-checkbox" v-if="isMulti">
               <div class="d-flex-center">
+                <!-- v-model="row.checked" -->
                 <TheCheckbox
-                  v-model="row.checked"
-                  @change="onClickCheck()"
+                  :checked="isSelected(row)"
+                  @change="clickMultiple($event, row)"
                 ></TheCheckbox>
               </div>
             </td>
