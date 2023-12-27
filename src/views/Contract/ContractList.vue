@@ -75,7 +75,11 @@ export default defineComponent({
           <TheInput placeholder="Tìm kiếm căn hộ" />
         </div>
         <div class="toolbar-right">
-          <div class="toolbar-btn" @click="reload">
+          <div
+            class="toolbar-btn"
+            @click="reload"
+            v-tooltip="'Lấy lại dữ liệu'"
+          >
             <div class="refresh"></div>
           </div>
           <!-- <div class="toolbar-btn">

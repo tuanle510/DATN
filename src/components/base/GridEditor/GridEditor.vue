@@ -64,44 +64,97 @@ export default {
      * @param {*} cellIndex
      */
     startEditing(rowIndex, cellIndex) {
-      this.editingCell = {
-        row: rowIndex,
-        column: cellIndex,
-      };
-      var ref = `cell_${rowIndex}-${cellIndex}`;
-      this.$nextTick(() => {
-        if (
-          this.$refs[ref] &&
-          this.$refs[ref][0] &&
-          typeof this.$refs[ref][0].focus === "function"
-        ) {
-          this.$refs[ref][0].focus();
-        }
-      });
+      if (!this.disabled) {
+        this.editingCell = {
+          row: rowIndex,
+          column: cellIndex,
+        };
+        var ref = `cell_${rowIndex}-${cellIndex}`;
+        this.$nextTick(() => {
+          if (
+            this.$refs[ref] &&
+            this.$refs[ref][0] &&
+            typeof this.$refs[ref][0].focus === "function"
+          ) {
+            this.$refs[ref][0].focus();
+            // Lưu giá trị trước khi sửa
+            this.oldCellValue = this.$refs[ref][0].modelValue;
+          }
+        });
+      }
     },
 
     endEditing() {
+      this.beforeEndEdit();
       this.editingCell = {
         row: null,
         column: null,
       };
     },
 
+    // Check sự thay đổi giá trị
+    beforeEndEdit() {
+      // Lưu giá trị trước khi chuyển sang ô khác hoặc khong edit nữa
+      var ref = `cell_${this.editingCell.row}-${this.editingCell.column}`;
+      if (this.$refs[ref] && this.$refs[ref][0]) {
+        var newCellValue = this.$refs[ref][0].modelValue;
+        // So sánh ngày phải làm thế này thôi
+        if (this.columns[this.editingCell.column].type == "date") {
+          newCellValue = new Date(newCellValue).setHours(0, 0, 0, 0);
+          this.oldCellValue = new Date(this.oldCellValue).setHours(0, 0, 0, 0);
+        }
+        // Nếu thay đổi giá trị thì gán cho dòng đấy bằng state Sửa
+        if (newCellValue != this.oldCellValue) {
+          this.data[this.editingCell.row].state = "edit";
+        }
+      }
+    },
+
+    // Sự kiện tab
     onTab(rowIndex, cellIndex) {
       const isLastColumn = cellIndex === this.columns.length - 1;
       const isLastRow = rowIndex === this.data.length - 1;
       if (isLastColumn && !isLastRow) {
+        this.beforeEndEdit();
         this.startEditing(rowIndex + 1, 0); // Di chuyển sang ô đầu tiên của hàng mới
       } else if (!isLastColumn) {
+        this.beforeEndEdit();
         this.startEditing(rowIndex, cellIndex + 1); // Di chuyển sang ô bên cạnh
       } else if (isLastColumn && isLastRow) {
         this.endEditing(); // Kết thúc chỉnh sửa nếu ở ô cuối cùng của bảng
+      }
+    },
+
+    // Sự kiện Shift + Tab
+    onShiftTab(rowIndex, cellIndex) {
+      const isFirstColumn = cellIndex === 0;
+      const isFirstRow = rowIndex === 0;
+
+      if (isFirstColumn && !isFirstRow) {
+        this.startEditing(rowIndex - 1, this.columns.length - 1); // Di chuyển sang ô cuối cùng của hàng trước đó
+      } else if (!isFirstColumn) {
+        this.startEditing(rowIndex, cellIndex - 1); // Di chuyển sang ô bên cạnh bên trái
+      } else if (isFirstColumn && isFirstRow) {
+        this.endEditing(); // Kết thúc chỉnh sửa nếu ở ô đầu tiên của bảng
+      }
+    },
+
+    // Sự kiện click out
+    onClikcout(event) {
+      if (
+        this.editingCell.row != null &&
+        this.editingCell.column != null &&
+        (!document.querySelector(".dp__menu") ||
+          !document.querySelector(".dp__menu").contains(event.relatedTarget))
+      ) {
+        this.endEditing();
       }
     },
   },
   data() {
     return {
       editingCell: {},
+      oldCellValue: null,
     };
   },
 };
@@ -111,7 +164,7 @@ export default {
   <div class="m-grid">
     <!-- Table -->
     <div class="m-table-container" ref="MainTable">
-      <table class="m-table" v-on:clickout="endEditing()">
+      <table class="m-table" v-on:clickout="(event) => onClikcout(event)">
         <!-- Header -->
         <thead>
           <tr>
@@ -140,7 +193,8 @@ export default {
               v-for="(column, cellIndex) in columns"
               :key="cellIndex"
               :style="genCss(column, cellIndex)"
-              @keydown.tab.prevent="onTab(rowIndex, cellIndex)"
+              @keydown.tab.exact.prevent="onTab(rowIndex, cellIndex)"
+              @keydown.shift.tab.prevent="onShiftTab(rowIndex, cellIndex)"
               @click.prevent="startEditing(rowIndex, cellIndex)"
             >
               <component

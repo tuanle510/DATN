@@ -1,6 +1,8 @@
 <script>
 import { ref, onMounted, getCurrentInstance, defineComponent } from "vue";
 import baseDetail from "../baseDetail";
+import { comboboxColumns } from "../../common/comboboxColumns";
+import { comboboxLoadData } from "../../common/comboboxLoadData";
 export default defineComponent({
   extends: baseDetail,
   name: "CanHoDetail",
@@ -10,6 +12,8 @@ export default defineComponent({
     const module = "Apartment";
     // Mặd định vào tab đầu tiên
     const activeTab = ref(0);
+    const { ownerColumns } = comboboxColumns();
+    const { loadOwnerData } = comboboxLoadData();
 
     const tabList = [
       {
@@ -75,6 +79,8 @@ export default defineComponent({
       columnTab,
       dataTab,
       module,
+      ownerColumns,
+      loadOwnerData,
       onTabClick,
     };
   },
@@ -131,52 +137,38 @@ export default defineComponent({
                 <TheComboBox
                   class="flex1"
                   label="Chủ sở hữu"
-                  valueField="id"
-                  displayField="name"
-                  v-model="model.purchaser_name"
+                  valueField="owner_id"
+                  displayField="owner_name"
+                  :queryMode="'remote'"
+                  dropdownWidth="450"
+                  v-model="model.owner_id"
+                  v-model:display="model.owner_name"
+                  :initValue="model.owner_name"
+                  :columns="ownerColumns"
+                  :loadComboboxData="loadOwnerData"
+                  :rules="[{ name: 'required' }]"
                 ></TheComboBox>
                 <div class="flex1"></div>
                 <div class="flex1"></div>
               </div>
               <div class="modal-row">
-                <TheInput
-                  class="flex1"
-                  label="Mẫ KH điện lực"
-                  v-model="model.paper_number"
-                ></TheInput>
-                <TheInput
-                  class="flex1"
-                  label="Mẫ KH internet"
-                  v-model="model.paper_number"
-                ></TheInput>
-                <TheInput
-                  class="flex1"
-                  label="Mật khẩu"
-                  v-model="model.paper_place"
-                ></TheInput>
+                <TheInput class="flex1" label="Mẫ KH điện lực"></TheInput>
+                <TheInput class="flex1" label="Mẫ KH internet"></TheInput>
+                <TheInput class="flex1" label="Mật khẩu"></TheInput>
               </div>
               <div class="modal-row">
                 <TheInput
                   class="flex1"
                   label="Giấy chứng nhận quyền sở hữu đất"
-                  v-model="model.paper_number"
                 ></TheInput>
-                <TheInput
-                  class="flex1"
-                  label="Nơi cấp"
-                  v-model="model.paper_number"
-                ></TheInput>
-                <TheDatepicker
-                  class="flex1"
-                  label="Ngày cấp"
-                  v-model="model.birthdate"
-                ></TheDatepicker>
+                <TheInput class="flex1" label="Nơi cấp"></TheInput>
+                <TheDatepicker class="flex1" label="Ngày cấp"></TheDatepicker>
               </div>
               <div class="modal-row">
                 <TheTextArea
                   class="flex1"
                   label="Mô tả căn hộ"
-                  v-model="model.note"
+                  v-model="model.description"
                 ></TheTextArea>
               </div>
               <div class="modal-row">

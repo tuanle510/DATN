@@ -76,13 +76,17 @@ export default defineComponent({
           <TheInput placeholder="Tìm kiếm chủ nhà" />
         </div>
         <div class="toolbar-right">
-          <div class="toolbar-btn" @click="reload">
+          <div
+            class="toolbar-btn"
+            @click="reload"
+            v-tooltip="'Lấy lại dữ liệu'"
+          >
             <div class="refresh"></div>
           </div>
           <!-- <div class="toolbar-btn">
             <div class="excel"></div>
           </div> -->
-          <div class="toolbar-btn" @click="deleteMulti">
+          <div class="toolbar-btn" @click="deleteMulti" v-tooltip="'Xóa nhiều'">
             <div class="remove"></div>
           </div>
         </div>

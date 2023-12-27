@@ -83,8 +83,7 @@ export default defineComponent({
     ref="CanHoDetail"
     :title="`Khách hàng ${model.apartment_name || ''}`"
     width="900px"
-    height="620px"
-    position="center"
+    position="right"
     @beforeOpen="beforeOpen($event, close)"
     @beforeClose="beforeClose($event)"
     @opened="opened"
@@ -136,19 +135,16 @@ export default defineComponent({
                   class="flex1"
                   label="Tên trợ lý"
                   v-model="model.assistant_name"
-                  :rules="[{ name: 'required' }]"
                 ></TheInput>
                 <TheInput
                   class="flex1"
                   label="Số điện thoại"
                   v-model="model.assistant_phone"
-                  :rules="[{ name: 'required' }]"
                 ></TheInput>
                 <TheInput
                   class="flex1"
                   label="Email"
                   v-model="model.assistant_email"
-                  :rules="[{ name: 'required' }]"
                 ></TheInput>
                 <div class="flex1"></div>
               </div>

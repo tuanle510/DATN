@@ -50,7 +50,7 @@
               <th
                 v-for="(col, colindex) in columns"
                 :key="colindex"
-                :style="{ width: col.width + 'px', textAlign: col.align }"
+                :style="genHeaderCss(col, colindex)"
               >
                 {{ col.name }}
               </th>
@@ -64,10 +64,14 @@
               :class="{ 'm-item-selected': this.selecedIndex === rowIndex }"
               @click="choseOption(rowIndex, row)"
             >
-              <td v-for="(column, colindex) in columns" :key="colindex">
+              <td
+                v-for="(column, colindex) in columns"
+                :key="colindex"
+                :style="genRowCss(column, colindex)"
+              >
                 <div class="text-overflow">
                   <span class="td-normal-span" :title="row[column.dataField]">
-                    {{ row[column.dataField] }}
+                    {{ colFormat(row[column.dataField], column.type) }}
                   </span>
                 </div>
               </td>
@@ -94,6 +98,8 @@
 <script>
 import "clickout-event";
 import { defineComponent, getCurrentInstance } from "vue";
+import commonFn from "../../../common/commonFn";
+import moment from "moment";
 import { useValidateControl } from "../../../common/validateControl";
 export default defineComponent({
   name: "the-combobox",
@@ -238,6 +244,61 @@ export default defineComponent({
   },
 
   methods: {
+    // Gen css cho header table
+    genHeaderCss(item, index) {
+      const css = {
+        minWidth: item.width + "px",
+        width: item.width + "px",
+        textAlign: item.align || "left",
+      };
+      let colIndex = this.columns.findIndex((x) => x.autoRezie == true);
+      if (colIndex) {
+        if (colIndex == index) {
+          delete css.width;
+        }
+      } else {
+        // Nếu là cột cuối thì bỏ fix witdh đi
+        if (this.columns && index == this.columns.length - 1) {
+          delete css.width;
+        }
+      }
+      return css;
+    },
+
+    // Gen css cho row table
+    genRowCss(item, index) {
+      const css = {
+        maxWidth: item.width + "px",
+        textAlign: item.align || "left",
+      };
+      let autoResizeCol = this.columns.filter((x) => x.autoRezie == true);
+      if (autoResizeCol) {
+        if (autoResizeCol.dataField == item.dataField) {
+          delete css.maxWidth;
+        }
+      } else {
+        // Nếu là cột cuối thì bỏ fix witdh đi
+        if (this.columns && index == this.columns.length - 1) {
+          delete css.maxWidth;
+        }
+      }
+      return css;
+    },
+
+    // Format theo kiểu dữ liệu
+    colFormat(value, type) {
+      switch (type) {
+        case "date":
+          value = moment(new Date(value)).format("DD/MM/YYYY");
+          break;
+        case "currency":
+          value = commonFn.formatCurrency(value);
+          break;
+        default:
+          break;
+      }
+      return value;
+    },
     /**
      * Mô tả : chọn ô input thì bôi đen chữ
      * @param

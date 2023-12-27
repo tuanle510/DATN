@@ -10,7 +10,7 @@ export const comboboxColumns = () => {
       align: "left",
     },
     {
-      name: "CMT",
+      name: "CMT/CCCD",
       dataField: "paper_number",
       align: "left",
     },
@@ -52,9 +52,31 @@ export const comboboxColumns = () => {
     },
   ];
 
+  const ownerColumns = [
+    {
+      width: 200,
+      name: "Tên Chủ nhà",
+      dataField: "owner_name",
+      align: "left",
+    },
+    {
+      width: 150,
+      name: "CMT/CCCD",
+      dataField: "paper_number",
+      align: "left",
+    },
+    {
+      name: "Ngày sinh",
+      dataField: "birthdate",
+      align: "center",
+      type: "date",
+    },
+  ];
+
   return {
     clientColumns,
     contractGroupColumns,
     apartmentColumns,
+    ownerColumns,
   };
 };

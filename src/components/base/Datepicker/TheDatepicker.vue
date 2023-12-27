@@ -99,10 +99,7 @@ export default defineComponent({
      * Created date: 00:35 31/05/2022
      */
     async handleDate(value) {
-      if (value) {
-        this.date = value;
-        await this.$emit("update:modelValue", this.date);
-      }
+      await this.$emit("update:modelValue", value);
     },
 
     onClosePicker() {

@@ -293,7 +293,7 @@ export default {
       try {
         const res = await this.$axios.put(`${this.module}`, this.model);
         if (res.statusText == "OK") {
-          commonFn.toastSuccess("Sửa pthành công");
+          commonFn.toastSuccess("Sửa thành công");
           // Cập nhật lại List bên ngoài
           this.afterSaveSuccess();
         }

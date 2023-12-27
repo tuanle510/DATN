@@ -32,6 +32,8 @@ import router from "./router";
 import i18n from "./i18ns/i18n";
 import axios from "axios";
 import Toast from "vue-toastification";
+import FloatingVue from "floating-vue";
+import "floating-vue/dist/style.css";
 // Import the CSS or use your own!
 import "vue-toastification/dist/index.css";
 
@@ -70,6 +72,7 @@ app.use(router);
 app.use(i18n);
 app.use(vfmPlugin);
 app.use(PromiseDialog);
+app.use(FloatingVue);
 app.use(Toast, {
   transition: "Vue-Toastification__bounce",
   maxToasts: 10,

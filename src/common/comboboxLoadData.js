@@ -36,6 +36,18 @@ export const comboboxLoadData = () => {
   };
 
   /**
+   * Comboo Chủ nhà
+   * @returns
+   */
+  const loadOwnerData = async () => {
+    let payload = {
+      columns: "owner_id, owner_name, paper_number, birthdate",
+    };
+    let module = "owner";
+    return await loadData(module, payload);
+  };
+
+  /**
    * Gọi api
    * @param {*} module
    * @param {*} payload
@@ -57,6 +69,7 @@ export const comboboxLoadData = () => {
     loadApartmentData,
     loadContractGroupData,
     loadClientData,
+    loadOwnerData,
     loadData,
   };
 };
