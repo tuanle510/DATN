@@ -1,7 +1,7 @@
 export const ContractDetailData = () => {
   const columns = [
     {
-      width: 100,
+      width: 120,
       name: "Đợt",
       dataField: "payment_batch",
       align: "left",
@@ -20,21 +20,21 @@ export const ContractDetailData = () => {
       dataField: "note",
     },
     {
-      width: 100,
+      width: 120,
       name: "Ngày bắt đầu",
       dataField: "start_date",
       align: "center",
       type: "date",
     },
     {
-      width: 100,
+      width: 120,
       name: "Ngày dự trả",
       dataField: "expected_payment_date",
       align: "center",
       type: "date",
     },
     {
-      width: 100,
+      width: 120,
       name: "Ngày thực trá",
       dataField: "real_payment_date",
       align: "center",
@@ -46,7 +46,7 @@ export const ContractDetailData = () => {
       dataField: "status",
     },
     {
-      width: 100,
+      width: 120,
       name: "Ngày kết thúc",
       dataField: "end_date",
       align: "center",

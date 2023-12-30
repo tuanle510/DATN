@@ -114,7 +114,7 @@ export default {
       commonFn.mask();
       const me = this;
       // Truyền hàm reload vào cho detial load lại trước khi đóng
-      param.reload = me.reload;
+      param.submit = me.reload();
       if (me.formDetailName) {
         popupUtil.show(me.formDetailName, param);
       } else {

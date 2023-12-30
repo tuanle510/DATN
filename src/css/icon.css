@@ -80,6 +80,17 @@
   height: 5px;
 }
 
+.add:hover {
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -419px -419px;
+  width: 18px;
+  height: 18px;
+}
+
+.add {
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -375px -419px;
+  width: 18px;
+  height: 18px;
+}
 .close {
   background: url("/src/assets/icon/qlts-icon.png") no-repeat -375px -287px;
   width: 18px;

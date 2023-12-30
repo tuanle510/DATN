@@ -146,6 +146,7 @@ export default defineComponent({
                   :initValue="model.owner_name"
                   :columns="ownerColumns"
                   :loadComboboxData="loadOwnerData"
+                  :quickAddForm="'OwnerDetail'"
                   :rules="[{ name: 'required' }]"
                 ></TheComboBox>
                 <div class="flex1"></div>
@@ -188,7 +189,7 @@ export default defineComponent({
     </template>
     <template #footer>
       <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
-      <TheButton @click="saveAction()">Cất</TheButton>
+      <TheButton @click="saveAction()">Lưu</TheButton>
     </template>
   </DynamicModal>
 </template>

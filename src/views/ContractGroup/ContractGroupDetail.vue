@@ -294,7 +294,7 @@ export default defineComponent({
     <template #footer>
       <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
       <TheButton @click="setModeEdit()" v-if="isView">Sửa</TheButton>
-      <TheButton @click="saveAction()" v-else>Cất</TheButton>
+      <TheButton @click="saveAction()" v-else>Lưu</TheButton>
     </template>
   </DynamicModal>
 </template>

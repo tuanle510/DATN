@@ -125,6 +125,25 @@ export default defineComponent({
       }
     };
 
+    // overide hàm edit
+    const edit = async () => {
+      try {
+        var param = {
+          master: proxy.model,
+          details: proxy.modelDetail,
+        };
+        console.log(param);
+        const res = await proxy.$axios.put(`${proxy.module}/custom`, param);
+        if (res.statusText == "OK") {
+          commonFn.toastSuccess("Sửa thành công");
+          // Cập nhật lại List bên ngoài
+          proxy.afterSaveSuccess();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     const customAfterSaveSuccess = () => {
       proxy.binđData(proxy.model, proxy.modelDetail);
     };
@@ -150,6 +169,7 @@ export default defineComponent({
       loadClientData,
       beforeBinđData,
       save,
+      edit,
       isDetailMaster,
       customAfterSaveSuccess,
       customBeforeClose,

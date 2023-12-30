@@ -141,7 +141,20 @@ input.m-input:disabled:hover {
   visibility: hidden;
 }
 
+.m-quick-add {
+  position: absolute;
+  right: 30px;
+  height: 100%;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .icon-combobox {
+  border-left: 1px solid #afafaf;
+  position: absolute;
+  right: 0px;
   height: 100%;
   width: 30px;
   display: flex;

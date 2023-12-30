@@ -195,7 +195,7 @@ export default defineComponent({
     </template>
     <template #footer>
       <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
-      <TheButton @click="saveAction()">Cất</TheButton>
+      <TheButton @click="saveAction()">Lưu</TheButton>
     </template>
   </DynamicModal>
 </template>

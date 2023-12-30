@@ -14,17 +14,43 @@ export default {
   },
 
   methods: {
-    // Gen css cho table
-    genCss(item, index) {
+    // Gen css cho header table
+    genHeaderCss(item, index) {
       const css = {
-        maxWidth: item.width + "px",
         minWidth: item.width + "px",
         width: item.width + "px",
-        textAlign: item.align,
+        textAlign: item.align || "left",
       };
-      // Nếu là cột cuối thì bỏ fix witdh đi
-      if (this.columns && index == this.columns.length - 1) {
-        delete css.maxWidth;
+      let colIndex = this.columns.findIndex((x) => x.autoRezie == true);
+      if (colIndex) {
+        if (colIndex == index) {
+          delete css.width;
+        }
+      } else {
+        // Nếu là cột cuối thì bỏ fix witdh đi
+        if (this.columns && index == this.columns.length - 1) {
+          delete css.width;
+        }
+      }
+      return css;
+    },
+
+    // Gen css cho row table
+    genRowCss(item, index) {
+      const css = {
+        maxWidth: item.width + "px",
+        textAlign: item.align || "left",
+      };
+      let autoResizeCol = this.columns.filter((x) => x.autoRezie == true);
+      if (autoResizeCol) {
+        if (autoResizeCol.dataField == item.dataField) {
+          delete css.maxWidth;
+        }
+      } else {
+        // Nếu là cột cuối thì bỏ fix witdh đi
+        if (this.columns && index == this.columns.length - 1) {
+          delete css.maxWidth;
+        }
       }
       return css;
     },
@@ -105,7 +131,7 @@ export default {
         }
         // Nếu thay đổi giá trị thì gán cho dòng đấy bằng state Sửa
         if (newCellValue != this.oldCellValue) {
-          this.data[this.editingCell.row].state = "edit";
+          this.data[this.editingCell.row].state = "update";
         }
       }
     },
@@ -171,7 +197,7 @@ export default {
             <th
               v-for="(column, index) in columns"
               :key="index"
-              :style="genCss(column, index)"
+              :style="genHeaderCss(column, index)"
             >
               <div class="th-content">
                 <span class="th-title">
@@ -192,7 +218,7 @@ export default {
             <td
               v-for="(column, cellIndex) in columns"
               :key="cellIndex"
-              :style="genCss(column, cellIndex)"
+              :style="genRowCss(column, cellIndex)"
               @keydown.tab.exact.prevent="onTab(rowIndex, cellIndex)"
               @keydown.shift.tab.prevent="onShiftTab(rowIndex, cellIndex)"
               @click.prevent="startEditing(rowIndex, cellIndex)"

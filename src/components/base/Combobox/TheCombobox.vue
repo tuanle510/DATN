@@ -24,11 +24,10 @@
         @keydown.enter="selectItem"
         :value="this.displayValue"
       />
-      <div
-        style="position: absolute; right: 0"
-        @click="toggle()"
-        class="icon-combobox"
-      >
+      <div class="m-quick-add" v-if="quickAddForm">
+        <div class="add" @click="quickAdd()"></div>
+      </div>
+      <div @click="toggle()" class="icon-combobox">
         <div v-if="isOptionShow" class="up"></div>
         <div v-else class="down"></div>
       </div>
@@ -101,6 +100,8 @@ import { defineComponent, getCurrentInstance } from "vue";
 import commonFn from "../../../common/commonFn";
 import moment from "moment";
 import { useValidateControl } from "../../../common/validateControl";
+import popupUtil from "../../../components/base/DynamicModal/popupUtil";
+
 export default defineComponent({
   name: "the-combobox",
   emits: [
@@ -174,6 +175,9 @@ export default defineComponent({
     disabled: {
       default: false,
     },
+    quickAddForm: {
+      default: null,
+    },
   },
   mounted() {
     const me = this;
@@ -222,9 +226,10 @@ export default defineComponent({
     isOptionShow: async function (newValue) {
       if (newValue == true) {
         // Load remote
-        if (this.queryMode == "remote" && !this.datax) {
+        if (this.queryMode == "remote" && (!this.datax || this.reloadData)) {
           this.loading = true;
           this.datax = await this.loadComboboxData();
+          this.reloadData = false;
           this.setMatches();
           // this.loading = false;
         }
@@ -553,6 +558,40 @@ export default defineComponent({
         }
       });
     },
+
+    /**
+     * Thêm nhanh
+     * @param {*} quickAddForm
+     */
+    quickAdd() {
+      this.isOptionShow = false;
+      if (this.quickAddForm) {
+        const param = {
+          mode: this.$constants.formMode.Add,
+          submit: this.submitQuickAdd,
+        };
+        popupUtil.show(this.quickAddForm, param);
+      }
+    },
+
+    /**
+     * Sau khi thêm thì bind vào input
+     * @param {*} value
+     */
+    async submitQuickAdd(value) {
+      // Thêm vào danh sách data nếu đã load data rồi
+      await this.$emit("update:modelValue", value[this.valueField]);
+      this.validate();
+      this.displayValue = value[this.displayField];
+      // Cập nhật giá trị display
+      await this.$emit("update:display", this.displayValue);
+      // Thêm vào danh sách data nếu đã load data rồi
+      this.reloadData = true;
+      // Focus vào input
+      setTimeout(() => {
+        this.$refs.input.focus();
+      }, 100);
+    },
   },
 
   setup(props) {
@@ -578,6 +617,7 @@ export default defineComponent({
       optionPos: {},
       displayValue: null,
       loading: false,
+      reloadData: false, // load lại danh sách không
     };
   },
 });

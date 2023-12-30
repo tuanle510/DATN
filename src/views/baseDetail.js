@@ -309,10 +309,10 @@ export default {
       // load lại danh sách
       if (
         this._formParam &&
-        this._formParam.reload &&
-        typeof this._formParam.reload === "function"
+        this._formParam.submit &&
+        typeof this._formParam.submit === "function"
       ) {
-        this._formParam.reload();
+        this._formParam.submit(this.model);
       }
       // List form cất xong thì không đóng mà  chuyển sang mode sửa
       var listNotHide = ["ContractGroupDetail", "ContractDetail"];
