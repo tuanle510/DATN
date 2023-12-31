@@ -20,6 +20,11 @@ export default {
         name: "Chủ nhà",
       },
       {
+        path: "/building",
+        icon: "setting",
+        name: "Tòa nhà",
+      },
+      {
         path: "/apartment",
         icon: "setting",
         name: "Căn hộ",
@@ -86,5 +91,5 @@ export default {
 </template>
 
 <style scoped>
-@import url(../../css/layout/navbar.css);
+@import url(@/css/layout/navbar.css);
 </style>

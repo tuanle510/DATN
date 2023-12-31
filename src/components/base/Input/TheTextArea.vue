@@ -1,6 +1,6 @@
 <script>
 import { defineComponent, computed, getCurrentInstance } from "vue";
-import { useValidateControl } from "../../../common/validateControl";
+import { useValidateControl } from "@/common/validateControl";
 export default defineComponent({
   props: {
     modelValue: {
@@ -112,5 +112,5 @@ export default defineComponent({
   </div>
 </template>
 <style scoped>
-@import url(../../../css/components/TheInput.css);
+@import url(@/css/components/TheInput.css);
 </style>

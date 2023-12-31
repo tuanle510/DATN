@@ -3,7 +3,7 @@
   <the-button @click="showToastError">Toast Error</the-button>
 </template>
 <script>
-import commonFn from "../common/commonFn";
+import commonFn from "@/common/commonFn";
 
 export default {
   methods: {

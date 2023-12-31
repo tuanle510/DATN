@@ -1,6 +1,6 @@
 import { $vfm } from "vue-final-modal";
-import commonFn from "../common/commonFn";
-import { confirm } from "../common/dialogFn";
+import commonFn from "@/common/commonFn";
+import { confirm } from "@/common/dialogFn";
 
 export default {
   async mounted() {
@@ -10,11 +10,12 @@ export default {
     // Gán form mode cho dễ dùng
     this.mode = me._formParam.mode;
     // Gán thêm dữ liệu trc khi binddata nếu cần
-    this.beforeBinđData(this.data, this.dataDetail);
-    this.binđData(this.data, this.dataDetail);
+    this.beforebindData(this.data, this.dataDetail);
+    this.bindData(this.data, this.dataDetail);
     if (me._popup.component != "DesiredQuestion") {
       window._listDetail = this;
     }
+    console.log(this.model);
     // Xóa mask
     commonFn.unMask();
   },
@@ -133,13 +134,13 @@ export default {
      * Gán thêm dữ liệu trc khi binddata nếu cần
      * @param {*} data
      */
-    beforeBinđData(data) {},
+    beforebindData(data) {},
 
     /**
      * Gán dữ liệu vào model
      * @param {*} data
      */
-    binđData(data, dataDetail) {
+    bindData(data, dataDetail) {
       this.model = data;
       this.modelDetail = dataDetail;
       // Gán vào 1 object khác dể dùng sau

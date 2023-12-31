@@ -48,6 +48,18 @@ export const comboboxLoadData = () => {
   };
 
   /**
+   * Combo tòa nhà
+   * @returns
+   */
+  const loadBuildingData = async () => {
+    let payload = {
+      columns: "building_id, building_name, building_address",
+    };
+    let module = "building";
+    return await loadData(module, payload);
+  };
+
+  /**
    * Gọi api
    * @param {*} module
    * @param {*} payload
@@ -71,5 +83,6 @@ export const comboboxLoadData = () => {
     loadClientData,
     loadOwnerData,
     loadData,
+    loadBuildingData,
   };
 };

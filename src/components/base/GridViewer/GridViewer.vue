@@ -1,7 +1,7 @@
 <script>
 import { getCurrentInstance, ref } from "vue";
 import moment from "moment";
-import commonFn from "../../../common/commonFn";
+import commonFn from "@/common/commonFn";
 import ThePaginate from "../Paginate/ThePaginate.vue";
 export default {
   components: { ThePaginate },
@@ -341,7 +341,7 @@ export default {
   </div>
 </template>
 <style lang="scss" scoped>
-@import url(../../../css/components/GridViewer.scss);
+@import url(@/css/components/GridViewer.scss);
 
 .m-footer-total {
   position: sticky;

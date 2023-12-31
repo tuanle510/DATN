@@ -1,6 +1,6 @@
 import { useToast } from "vue-toastification";
-import iconSuccess from "../components/icons/IconSuccess.vue";
-import iconError from "../components/icons/IconError.vue";
+import iconSuccess from "@/components/icons/IconSuccess.vue";
+import iconError from "@/components/icons/IconError.vue";
 class commonFn {
   findLoading() {
     const el = document.getElementById("mloading");

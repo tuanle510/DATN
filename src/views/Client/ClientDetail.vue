@@ -1,6 +1,6 @@
 <script>
 import { ref, onMounted, getCurrentInstance, defineComponent } from "vue";
-import baseDetail from "../baseDetail";
+import baseDetail from "@/views/baseDetail";
 export default defineComponent({
   extends: baseDetail,
   name: "KhachHangDetail",
@@ -81,7 +81,7 @@ export default defineComponent({
 <template>
   <DynamicModal
     ref="CanHoDetail"
-    :title="`Khách hàng ${model.apartment_name || ''}`"
+    :title="`Thêm Khách hàng`"
     width="900px"
     position="right"
     @beforeOpen="beforeOpen($event, close)"

@@ -39,5 +39,5 @@ export default {
 </template>
 
 <style>
-@import url(../../css/layout/content.css);
+@import url(@/css/layout/content.css);
 </style>

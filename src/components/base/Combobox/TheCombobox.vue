@@ -24,7 +24,7 @@
         @keydown.enter="selectItem"
         :value="this.displayValue"
       />
-      <div class="m-quick-add" v-if="quickAddForm">
+      <div class="m-quick-add" v-if="quickAddForm && !disabled">
         <div class="add" @click="quickAdd()"></div>
       </div>
       <div @click="toggle()" class="icon-combobox">
@@ -97,10 +97,10 @@
 <script>
 import "clickout-event";
 import { defineComponent, getCurrentInstance } from "vue";
-import commonFn from "../../../common/commonFn";
+import commonFn from "@/common/commonFn";
 import moment from "moment";
-import { useValidateControl } from "../../../common/validateControl";
-import popupUtil from "../../../components/base/DynamicModal/popupUtil";
+import { useValidateControl } from "@/common/validateControl";
+import popupUtil from "@/components/base/DynamicModal/popupUtil";
 
 export default defineComponent({
   name: "the-combobox",
@@ -230,8 +230,9 @@ export default defineComponent({
           this.loading = true;
           this.datax = await this.loadComboboxData();
           this.reloadData = false;
-          this.setMatches();
-          // this.loading = false;
+          this.$nextTick(() => {
+            this.setMatches(this.$refs.input.value);
+          });
         }
         this.$nextTick(() => {
           this.setselecedIndex();
@@ -503,6 +504,9 @@ export default defineComponent({
      * Created date: 10:21 08/05/2022
      */
     toggle() {
+      if (this.disabled) {
+        return;
+      }
       this.isOptionShow = !this.isOptionShow;
       this.$refs.input.focus();
     },
@@ -512,7 +516,10 @@ export default defineComponent({
      */
     setselecedIndex() {
       if (this.isOptionShow == true && this.datax) {
-        this.matches = [...this.datax];
+        // Nếu có modelValue rồi thì gán bằng tât cả
+        if (this.modelValue) {
+          this.matches = [...this.datax];
+        }
         // Nếu có giá trị trùng với giá trị trong combo
         var listValue = this.matches.map((x) => x[this.valueField]);
         if (this.modelValue && listValue.includes(this.modelValue)) {
@@ -533,10 +540,17 @@ export default defineComponent({
         height = item * this.matches.length + 8;
       }
       let container = this.$refs.container.getBoundingClientRect();
+      let width = this.dropdownWidth || container.width;
       this.optionPos = {
-        left: container.left + "px",
-        width: (this.dropdownWidth || container.width) + "px",
+        width: width + "px",
       };
+
+      if (window.innerWidth - container.left < width) {
+        this.optionPos.left = container.right - width + "px";
+      } else {
+        this.optionPos.left = container.left + "px";
+      }
+
       if (this.position == "bottom") {
         this.optionPos.top = container.top + container.height + "px";
       } else if (this.position == "top") {
@@ -623,5 +637,5 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-@import url(../../../css/components/TheCombobox.scss);
+@import url(@/css/components/TheCombobox.scss);
 </style>

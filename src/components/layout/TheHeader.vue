@@ -46,5 +46,5 @@ export default {
 </template>
 
 <style scoped>
-@import url(../../css/layout/header.css);
+@import url(@/css/layout/header.css);
 </style>

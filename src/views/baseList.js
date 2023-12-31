@@ -1,7 +1,7 @@
 import { ref, onMounted } from "vue";
-import popupUtil from "../components/base/DynamicModal/popupUtil";
-import commonFn from "../common/commonFn";
-import { confirm, confirmYes } from "../common/dialogFn";
+import popupUtil from "@/components/base/DynamicModal/popupUtil";
+import commonFn from "@/common/commonFn";
+import { confirm, confirmYes } from "@/common/dialogFn";
 export default {
   setup() {},
   async beforeMount() {
@@ -90,6 +90,7 @@ export default {
      * Action click => mặc định đang dùng để xóa
      */
     async onClickAciton(row, action) {
+      this.onClickAcitonCustom(row, action);
       switch (action) {
         case "Edit":
           this.edit(row);
@@ -98,13 +99,15 @@ export default {
           this.view(row);
           break;
         case "Delete":
-          this.deleteAction(row);
+          this.delete(row);
           break;
         default:
           console.log("Thiếu config action");
           break;
       }
     },
+
+    onClickAcitonCustom(row, action) {},
 
     /**
      * Mở form detail theo cấu hình formDetailName
@@ -114,7 +117,7 @@ export default {
       commonFn.mask();
       const me = this;
       // Truyền hàm reload vào cho detial load lại trước khi đóng
-      param.submit = me.reload();
+      param.submit = me.reload;
       if (me.formDetailName) {
         popupUtil.show(me.formDetailName, param);
       } else {
@@ -162,7 +165,7 @@ export default {
      *
      * @param {*} row
      */
-    deleteAction(row) {
+    delete(row) {
       var title = "Xóa " + this.headerText;
       const text =
         'Bạn có muốn xóa {0} <span class="strong-text">{1}</span> không?';
@@ -176,7 +179,7 @@ export default {
           commonFn.mask();
           //xóa & đóng
           var param = [row[this.primaryKey]];
-          await this.delete(param);
+          await this.deleteAction(param);
         }
       });
     },
@@ -184,7 +187,7 @@ export default {
     /**
      * Hành động xóa
      */
-    async delete(param) {
+    async deleteAction(param) {
       try {
         const res = await this.$axios.delete(`${this.module}`, { data: param });
         if (res.data.length == 0) {
@@ -257,7 +260,7 @@ export default {
             commonFn.mask();
             //xóa & đóng
             var param = this.selected.map((x) => x[this.primaryKey]);
-            await this.delete(param);
+            await this.deleteAction(param);
           }
         });
       }

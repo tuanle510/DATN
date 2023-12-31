@@ -1,6 +1,6 @@
 <script>
 import { defineComponent, getCurrentInstance, ref } from "vue";
-import baseList from "../baseList";
+import baseList from "@/views/baseList";
 export default defineComponent({
   extends: baseList,
   props: {},
@@ -126,5 +126,5 @@ export default defineComponent({
   </div>
 </template>
 <style lang="scss" scoped>
-@import url(../../css/baseList.scss);
+@import url(@/css/baseList.scss);
 </style>

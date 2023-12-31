@@ -1,7 +1,7 @@
 <script>
 import { getCurrentInstance, ref } from "vue";
 import moment from "moment";
-import commonFn from "../../../common/commonFn";
+import commonFn from "@/common/commonFn";
 export default {
   props: {
     // Danh sách cột
@@ -251,7 +251,7 @@ export default {
   </div>
 </template>
 <style lang="scss" scoped>
-@import url(../../../css/components/GridEditor.scss);
+@import url(@/css/components/GridEditor.scss);
 
 .m-footer-total {
   position: sticky;

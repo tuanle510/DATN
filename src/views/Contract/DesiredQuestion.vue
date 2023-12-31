@@ -1,6 +1,6 @@
 <script>
 import { ref, getCurrentInstance, defineComponent } from "vue";
-import baseDetail from "../baseDetail";
+import baseDetail from "@/views/baseDetail";
 
 export default defineComponent({
   extends: baseDetail,

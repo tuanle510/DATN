@@ -1,8 +1,8 @@
 <script>
 import { ref, onMounted, getCurrentInstance, defineComponent } from "vue";
-import baseDetail from "../baseDetail";
-import { comboboxColumns } from "../../common/comboboxColumns";
-import { comboboxLoadData } from "../../common/comboboxLoadData";
+import baseDetail from "@/views/baseDetail";
+import { comboboxColumns } from "@/common/comboboxColumns";
+import { comboboxLoadData } from "@/common/comboboxLoadData";
 export default defineComponent({
   extends: baseDetail,
   name: "CanHoDetail",
@@ -12,8 +12,8 @@ export default defineComponent({
     const module = "Apartment";
     // Mặd định vào tab đầu tiên
     const activeTab = ref(0);
-    const { ownerColumns } = comboboxColumns();
-    const { loadOwnerData } = comboboxLoadData();
+    const { ownerColumns, buildingColumns } = comboboxColumns();
+    const { loadOwnerData, loadBuildingData } = comboboxLoadData();
 
     const tabList = [
       {
@@ -60,8 +60,10 @@ export default defineComponent({
         so_dien_thoai: "012314124124",
       },
     ]);
+    const isFromBuilding = ref(false);
     onMounted(() => {
       columnTab.value = tabList[0].columns;
+      isFromBuilding.value = proxy._formParam.isFromBuilding;
     });
 
     const onTabClick = (index) => {
@@ -73,6 +75,14 @@ export default defineComponent({
       dataTab.value = tabList[index]?.data || [];
     };
 
+    const beforebindData = (data) => {
+      if (proxy._formParam.isFromBuilding) {
+        var master = proxy._formParam.data;
+        data.building_id = master.building_id;
+        data.building_name = master.building_name;
+      }
+    };
+
     return {
       tabList,
       activeTab,
@@ -80,8 +90,12 @@ export default defineComponent({
       dataTab,
       module,
       ownerColumns,
+      buildingColumns,
       loadOwnerData,
+      loadBuildingData,
+      beforebindData,
       onTabClick,
+      isFromBuilding,
     };
   },
 });
@@ -90,7 +104,7 @@ export default defineComponent({
 <template>
   <DynamicModal
     ref="CanHoDetail"
-    :title="`Căn hộ ${model.apartment_name || ''}`"
+    :title="`Căn hộ`"
     width="900px"
     position="right"
     @beforeOpen="beforeOpen($event, close)"
@@ -130,7 +144,15 @@ export default defineComponent({
                   label="Tòa nhà (Nếu có)"
                   valueField="building_id"
                   displayField="building_name"
+                  :queryMode="'remote'"
+                  dropdownWidth="450"
                   v-model="model.building_id"
+                  v-model:display="model.building_name"
+                  :initValue="model.building_name"
+                  :columns="buildingColumns"
+                  :quickAddForm="'BuildingDetail'"
+                  :loadComboboxData="loadBuildingData"
+                  :disabled="isFromBuilding"
                 ></TheComboBox>
               </div>
               <div class="modal-row">

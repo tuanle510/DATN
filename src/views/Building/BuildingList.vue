@@ -1,6 +1,7 @@
 <script>
 import { defineComponent, getCurrentInstance, ref } from "vue";
 import baseList from "@/views/baseList";
+import popupUtil from "@/components/base/DynamicModal/popupUtil";
 
 export default defineComponent({
   extends: baseList,
@@ -10,46 +11,35 @@ export default defineComponent({
     const columns = ref([
       {
         width: 150,
-        name: "Tên chủ nhà",
-        dataField: "owner_name",
+        name: "Tên tòa nhà",
+        dataField: "building_name",
         align: "left",
       },
       {
-        width: 100,
-        name: "Ngày sinh",
-        dataField: "birthdate",
-        align: "center",
-        type: "date",
-      },
-      {
-        width: 100,
-        name: "Điện thoại",
-        dataField: "phone_number",
-        align: "left",
-      },
-      {
-        width: 200,
-        name: "Email",
-        dataField: "email",
-        align: "left",
-      },
-      {
-        width: 250,
+        // width: 150,
         name: "Địa chỉ",
-        dataField: "address",
-        align: "left",
-      },
-      {
-        name: "Ghi chú",
-        dataField: "note",
+        dataField: "building_address",
         align: "left",
       },
     ]);
-    const formDetailName = "OwnerDetail";
-    const module = "Owner";
-    const primaryKey = "owner_id";
-    const nameKey = "owner_name";
-    const headerText = "Chủ nhà";
+    const formDetailName = "BuildingDetail";
+    const module = "Building";
+    const primaryKey = "building_id";
+    const nameKey = "building_name";
+    const headerText = "Tòa nhà";
+
+    function onClickAcitonCustom(row, action) {
+      let param = {
+        data: row,
+        mode: proxy.$constants.formMode.Add,
+        isFromBuilding: true,
+      };
+      switch (action) {
+        case "InsertDetail":
+          popupUtil.show("ApartmentDetail", param);
+          break;
+      }
+    }
     return {
       columns,
       formDetailName,
@@ -57,6 +47,7 @@ export default defineComponent({
       primaryKey,
       nameKey,
       headerText,
+      onClickAcitonCustom,
     };
   },
 });
@@ -73,7 +64,7 @@ export default defineComponent({
     <div class="m-container">
       <div class="m-container-toolbar">
         <div class="toolbar-field">
-          <TheInput placeholder="Tìm kiếm chủ nhà" />
+          <TheInput placeholder="Tìm kiếm căn hộ" />
         </div>
         <div class="toolbar-right">
           <div
@@ -94,7 +85,7 @@ export default defineComponent({
       <div class="m-container-content">
         <GridViewer
           v-model:selected="selected"
-          idField="owner_id"
+          idField="building_id"
           :isMulti="true"
           :isPaging="true"
           :columns="columns"
@@ -118,7 +109,7 @@ export default defineComponent({
                 <TheMenuItem @click="onClickAciton(row, 'Delete')"
                   >Xóa</TheMenuItem
                 >
-                <TheMenuItem @click="onClickAciton(row)"
+                <TheMenuItem @click="onClickAciton(row, 'InsertDetail')"
                   >Thêm căn hộ</TheMenuItem
                 >
               </template>

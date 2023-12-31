@@ -38,6 +38,9 @@ export const comboboxColumns = () => {
     },
   ];
 
+  /**
+   * Căn hộ
+   */
   const apartmentColumns = [
     {
       width: 200,
@@ -52,10 +55,13 @@ export const comboboxColumns = () => {
     },
   ];
 
+  /**
+   * Chủ nhà
+   */
   const ownerColumns = [
     {
       width: 200,
-      name: "Tên Chủ nhà",
+      name: "Tên chủ nhà",
       dataField: "owner_name",
       align: "left",
     },
@@ -73,10 +79,28 @@ export const comboboxColumns = () => {
     },
   ];
 
+  /**
+   * Tòa nhà
+   */
+  const buildingColumns = [
+    {
+      width: 200,
+      name: "Tên tòa nhà",
+      dataField: "building_name",
+      align: "left",
+    },
+    {
+      name: "Địa chỉ",
+      dataField: "building_address",
+      align: "left",
+    },
+  ];
+
   return {
     clientColumns,
     contractGroupColumns,
     apartmentColumns,
     ownerColumns,
+    buildingColumns,
   };
 };

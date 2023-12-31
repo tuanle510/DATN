@@ -1,12 +1,12 @@
 <script>
 import { ref, onMounted, getCurrentInstance, defineComponent } from "vue";
-import baseDetail from "../baseDetail";
+import baseDetail from "@/views/baseDetail";
 import { ContractGroupDetailData } from "./ContractGroupDetailData";
-import { comboboxColumns } from "../../common/comboboxColumns";
-import { comboboxLoadData } from "../../common/comboboxLoadData";
-import popupUtil from "../../components/base/DynamicModal/popupUtil";
-import { confirmYes } from "../../common/dialogFn";
-import commonFn from "../../common/commonFn";
+import { comboboxColumns } from "@/common/comboboxColumns";
+import { comboboxLoadData } from "@/common/comboboxLoadData";
+import popupUtil from "@/components/base/DynamicModal/popupUtil";
+import { confirmYes } from "@/common/dialogFn";
+import commonFn from "@/common/commonFn";
 
 export default defineComponent({
   extends: baseDetail,
@@ -122,6 +122,7 @@ export default defineComponent({
     };
 
     // Mở form thêm hợp đồng
+    //TODO: Làm nốt 2 hợp đồng kia
     const showContractForm = () => {
       proxy.mode = proxy.$constants.formMode.View;
       let param = {
@@ -196,7 +197,7 @@ export default defineComponent({
 <template>
   <DynamicModal
     ref="ContactDetail"
-    :title="`Hợp đồng ${model.contract_name || ''}`"
+    :title="`Thêm Hợp đồng`"
     class="contact-group-detail"
     position="full"
     @beforeOpen="beforeOpen($event, close)"

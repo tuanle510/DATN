@@ -20,6 +20,7 @@ import TheMenuItem from "./components/base/MenuWrapper/TheMenuItem.vue";
 // View
 import OwnerDetail from "./views/Owner/OwnerDetail.vue";
 import ApartmentDetail from "./views/Apartment/ApartmentDetail.vue";
+import BuildingDetail from "./views/Building/BuildingDetail.vue";
 import ClientDetail from "./views/Client/ClientDetail.vue";
 import ContractDetail from "./views/Contract/ContractDetail.vue";
 import ContractGroupDetail from "./views/ContractGroup/ContractGroupDetail.vue";
@@ -63,6 +64,7 @@ app.component("TheMenuItem", TheMenuItem);
 // modal
 app.component("OwnerDetail", OwnerDetail);
 app.component("ApartmentDetail", ApartmentDetail);
+app.component("BuildingDetail", BuildingDetail);
 app.component("ClientDetail", ClientDetail);
 app.component("ContractDetail", ContractDetail);
 app.component("ContractGroupDetail", ContractGroupDetail);

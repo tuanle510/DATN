@@ -1,11 +1,11 @@
 <script>
 import { ref, onMounted, getCurrentInstance, defineComponent } from "vue";
-import baseDetail from "../baseDetail";
+import baseDetail from "@/views/baseDetail";
 import { ContractDetailData } from "./ContractDetailData";
-import popupUtil from "../../components/base/DynamicModal/popupUtil";
-import commonFn from "../../common/commonFn";
-import { comboboxColumns } from "../../common/comboboxColumns";
-import { comboboxLoadData } from "../../common/comboboxLoadData";
+import popupUtil from "@/components/base/DynamicModal/popupUtil";
+import commonFn from "@/common/commonFn";
+import { comboboxColumns } from "@/common/comboboxColumns";
+import { comboboxLoadData } from "@/common/comboboxLoadData";
 
 export default defineComponent({
   extends: baseDetail,
@@ -181,7 +181,7 @@ export default defineComponent({
 <template>
   <DynamicModal
     ref="ContactDetail"
-    :title="`Hợp đồng ${model.contract_name || ''}`"
+    :title="`Thêm Hợp đồng`"
     class="contact-detail"
     position="full"
     @beforeOpen="beforeOpen($event, close)"

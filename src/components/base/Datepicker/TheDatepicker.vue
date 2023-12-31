@@ -33,7 +33,7 @@
 <script>
 import Datepicker from "@vuepic/vue-datepicker";
 import { defineComponent, getCurrentInstance } from "vue";
-import { useValidateControl } from "../../../common/validateControl";
+import { useValidateControl } from "@/common/validateControl";
 
 export default defineComponent({
   components: { Datepicker },
@@ -176,90 +176,4 @@ tr td .dp__icon {
 tr td .dp__input:focus {
   border-color: #22a7ca !important;
 }
-/* .calendar-next-enter-active,
-.calendar-next-leave-active,
-.calendar-prev-enter-active,
-.calendar-prev-leave-active {
-  transition: all 0s ease-out !important;
-}
-
-.dp-menu-appear-enter-active,
-.dp-menu-appear-leave-active,
-.dp-slide-up-enter-active,
-.dp-slide-up-leave-active,
-.dp-slide-down-enter-active,
-.dp-slide-down-leave-active {
-  transition: all 0s ease-out !important;
-}
-
-.dp-slide-down-leave-to,
-.dp-slide-up-enter-from {
-  opacity: 0;
-  transform: none !important;
-}
-
-.calendar-next-enter-from {
-  opacity: 0;
-  transform: none !important;
-}
-
-.calendar-next-leave-to {
-  opacity: 0;
-  transform: none !important;
-}
-
-.calendar-prev-enter-from {
-  opacity: 0;
-  transform: none !important;
-}
-
-.dp__menu {
-  font-family: MISA Font !important;
-  font-size: 13px !important;
-}
-.dp__main {
-  height: 30px;
-}
-.dp__input_wrap {
-  height: 30px !important;
-  font-family: MISA Font !important;
-  font-size: 14px !important;
-  transition: none !important;
-}
-.dp__input_icon_pad {
-  padding-left: 14px !important;
-  border: 1px solid #afafaf !important;
-}
-
-.dp__input_focus {
-  border: 1px solid #22a7ca !important;
-}
-
-.dp__input_icon {
-  right: 0 !important;
-}
-
-.dp__input_icons {
-  display: none !important;
-}
-
-.datepicker-container {
-  position: relative;
-}
-
-.datepicker-container .m-label {
-  padding-bottom: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 15px;
-}
-
-.datepicker-container .datepicker-icon {
-  background: url("../../assets/icon/qlts-icon.png") no-repeat -287px -67px;
-  width: 18px;
-  height: 18px;
-  position: absolute;
-  right: 10px;
-  top: 25%;
-} */
 </style>

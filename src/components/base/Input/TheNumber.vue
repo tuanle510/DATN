@@ -1,7 +1,7 @@
 <script>
 import { defineComponent, computed, getCurrentInstance } from "vue";
-import commonFn from "../../../common/commonFn";
-import { useValidateControl } from "../../../common/validateControl";
+import commonFn from "@/common/commonFn";
+import { useValidateControl } from "@/common/validateControl";
 export default defineComponent({
   props: {
     modelValue: { default: null },
@@ -201,7 +201,7 @@ export default defineComponent({
   </div>
 </template>
 <style scoped>
-@import url(../../../css/components/TheInput.css);
+@import url(@/css/components/TheInput.css);
 .m-input-number {
   text-align: right;
 }
