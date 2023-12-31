@@ -35,7 +35,7 @@ export const ContractDetailData = () => {
     },
     {
       width: 120,
-      name: "Ngày thực trá",
+      name: "Ngày thực trả",
       dataField: "real_payment_date",
       align: "center",
       type: "date",

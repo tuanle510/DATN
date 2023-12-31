@@ -86,7 +86,7 @@ export default defineComponent({
     };
 
     // Nếu có data từ form ở dưới thì bind vào
-    const beforeBinđData = (data) => {
+    const beforeBindData = (data) => {
       if (proxy._formParam && proxy._formParam.data) {
         var obj = proxy._formParam.data;
         data.contract_group_id = obj.contract_group_id;
@@ -145,7 +145,7 @@ export default defineComponent({
     };
 
     const customAfterSaveSuccess = () => {
-      proxy.binđData(proxy.model, proxy.modelDetail);
+      proxy.bindData(proxy.model, proxy.modelDetail);
     };
 
     const customBeforeClose = () => {
@@ -163,14 +163,14 @@ export default defineComponent({
       columns,
       clientColumns,
       contractGroupColumns,
-      genPayment,
-      choseDesired,
       loadContractGroupData,
       loadClientData,
-      beforeBinđData,
+      isDetailMaster,
+      genPayment,
+      choseDesired,
+      beforeBindData,
       save,
       edit,
-      isDetailMaster,
       customAfterSaveSuccess,
       customBeforeClose,
     };
