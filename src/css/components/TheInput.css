@@ -61,6 +61,14 @@ textarea.m-input:hover {
   border: 1px solid #22a7ca;
 }
 
+textarea.m-input:disabled {
+  background-color: #f4f5f8;
+}
+
+textarea.m-input:disabled:hover {
+  border: 1px solid #afafaf !important;
+}
+
 textarea:placeholder-shown {
   font-family: MISA Font Italic;
 }

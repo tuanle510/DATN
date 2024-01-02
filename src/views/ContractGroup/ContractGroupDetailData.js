@@ -6,7 +6,7 @@ export const ContractGroupDetailData = () => {
       dataField: "payment_batch",
     },
     {
-      width: 300,
+      width: 200,
       name: "Tên căn hộ",
       dataField: "apartment_name",
     },

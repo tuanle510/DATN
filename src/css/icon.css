@@ -80,7 +80,7 @@
   height: 5px;
 }
 
-.add:hover {
+.add:not(.disable):hover {
   background: url("/src/assets/icon/qlts-icon.png") no-repeat -419px -419px;
   width: 18px;
   height: 18px;
@@ -311,6 +311,12 @@
 }
 
 .remove {
+  background: url("/src/assets/icon/qlts-icon.png") no-repeat -419px -111px;
+  width: 18px;
+  height: 18px;
+}
+
+.remove:not(.disable):hover {
   background: url("/src/assets/icon/qlts-icon.png") no-repeat -463px -111px;
   width: 18px;
   height: 18px;

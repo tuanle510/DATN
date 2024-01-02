@@ -15,7 +15,6 @@ export default {
     if (me._popup.component != "DesiredQuestion") {
       window._listDetail = this;
     }
-    console.log(this.model);
     // Xóa mask
     commonFn.unMask();
   },
@@ -121,7 +120,10 @@ export default {
         const res = await this.$axios.get(`${this.module}/${param.id}`);
         if (this.isDetailMaster) {
           this.data = res.data.master;
-          this.dataDetail = res.data.details;
+          this.dataDetail = res.data.details || [];
+          // Phàn dịch vụ
+          this.serviceList = res.data.serviceList || [];
+          this.serviceDetail = res.data.serviceDetail || [];
         } else {
           this.data = res.data;
         }
@@ -250,6 +252,7 @@ export default {
      * @returns
      */
     async saveAction() {
+      this.beforeSave();
       commonFn.mask();
       if (!this.validateBeforeSave()) {
         commonFn.unMask();
@@ -270,6 +273,8 @@ export default {
 
     // Để đấy màn nào cần làm gì thì làm
     afterSave() {},
+
+    beforeSave() {},
 
     /**
      * Gửi API lên để thêm mới
@@ -340,6 +345,7 @@ export default {
     postpone() {
       // Gán về object ban đầu
       this.model = Object.assign({}, this.oldData);
+      console.log(this.oldDataDetail);
       this.modelDetail = [...this.oldDataDetail];
       // Chuyền về mode xem
       this.mode = this.$constants.formMode.View;
@@ -353,6 +359,8 @@ export default {
       modelDetail: [],
       oldData: {}, // Dữ liệu ban đầu khi bind vào form
       dataDetail: [], // Dữ liệu ban đầu detail khi bind vào form
+      serviceList: [],
+      serviceDetail: [],
       mode: null,
       isView: false,
       isDetailMaster: false, // có phải detail master không

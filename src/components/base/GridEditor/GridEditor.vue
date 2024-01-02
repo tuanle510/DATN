@@ -3,13 +3,18 @@ import { getCurrentInstance, ref } from "vue";
 import moment from "moment";
 import commonFn from "@/common/commonFn";
 export default {
+  emits: ["update:list"],
   props: {
     // Danh sách cột
     columns: Array,
     // Danh sách dữ liệu
     data: Array,
+    idField: String,
     disabled: {
       default: false,
+    },
+    showFooter: {
+      default: true,
     },
   },
 
@@ -120,6 +125,9 @@ export default {
 
     // Check sự thay đổi giá trị
     beforeEndEdit() {
+      if (this.data[this.editingCell.row].state == "update") {
+        return;
+      }
       // Lưu giá trị trước khi chuyển sang ô khác hoặc khong edit nữa
       var ref = `cell_${this.editingCell.row}-${this.editingCell.column}`;
       if (this.$refs[ref] && this.$refs[ref][0]) {
@@ -131,7 +139,15 @@ export default {
         }
         // Nếu thay đổi giá trị thì gán cho dòng đấy bằng state Sửa
         if (newCellValue != this.oldCellValue) {
-          this.data[this.editingCell.row].state = "update";
+          if (
+            this.data[this.editingCell.row].state == "none" &&
+            this.data[this.editingCell.row].emptyRow
+          ) {
+            this.data[this.editingCell.row].state = "insert";
+            delete this.data[this.editingCell.row].emptyRow;
+          } else {
+            this.data[this.editingCell.row].state = "update";
+          }
         }
       }
     },
@@ -176,6 +192,51 @@ export default {
         this.endEditing();
       }
     },
+
+    // Thêm dòng
+    async addRow(index) {
+      this.editingCell = {
+        row: null,
+        column: null,
+      };
+      if (this.disabled) {
+        return;
+      }
+      let newRow = {
+        [this.idField]: commonFn.genGuid(),
+        state: "none",
+        emptyRow: true,
+      };
+      this.data.splice(index + 1, 0, newRow);
+      await this.$emit("update:list", this.data);
+    },
+
+    // Xóa dòng
+    async removeRow(index, row) {
+      this.editingCell = {
+        row: null,
+        column: null,
+      };
+      if (
+        this.disabled ||
+        this.data.filter((x) => x.state != "delete").length == 1
+      ) {
+        return;
+      }
+      // nếu trang thái đang là thêm thì bỏ luôn đi
+      if ((row.state && row.state == "insert") || row.emptyRow) {
+        let datax = this.data.filter(
+          (x) => x[this.idField] != row[this.idField]
+        );
+        await this.$emit("update:list", datax);
+      } else {
+        row.state = "delete";
+      }
+
+      if (this.data.filter((x) => x.state != "delete").length == 0) {
+        this.addRow(-1);
+      }
+    },
   },
   data() {
     return {
@@ -189,7 +250,10 @@ export default {
 <template>
   <div class="m-grid">
     <!-- Table -->
-    <div class="m-table-container" ref="MainTable">
+    <div
+      :class="['m-table-container', { 'm-table-container-full': !showFooter }]"
+      ref="MainTable"
+    >
       <table class="m-table" v-on:clickout="(event) => onClikcout(event)">
         <!-- Header -->
         <thead>
@@ -205,16 +269,21 @@ export default {
                 </span>
               </div>
             </th>
+            <th class="m-th-action">
+              <div class="th-content">
+                <div class="th-title">Chức năng</div>
+              </div>
+            </th>
           </tr>
         </thead>
         <!-- Body -->
         <tbody>
           <tr
             v-for="(row, rowIndex) in data"
+            v-show="!row.state || row.state != 'delete'"
             :key="rowIndex"
             :class="[{ 'm-tr-seleced': editingCell.row == rowIndex }, 'm-tr']"
           >
-            <!-- :title="row[column.dataField]" -->
             <td
               v-for="(column, cellIndex) in columns"
               :key="cellIndex"
@@ -239,11 +308,19 @@ export default {
                 }}</span>
               </div>
             </td>
+            <td class="m-tr-action">
+              <div class="icon-box-24" @click="addRow(rowIndex)">
+                <div :class="['add', { disable: disabled }]"></div>
+              </div>
+              <div class="icon-box-24" @click="removeRow(rowIndex, row)">
+                <div :class="['remove', { disable: disabled }]"></div>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
-    <div class="m-footer-container">
+    <div class="m-footer-container" v-if="showFooter">
       <div class="m-footer-total">
         Tổng số: &nbsp; <strong>{{ data.length }}</strong> &nbsp;bản ghi
       </div>

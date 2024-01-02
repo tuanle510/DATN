@@ -15,9 +15,12 @@ export default defineComponent({
     const { proxy } = getCurrentInstance();
     const module = "Contract";
     const isDetailMaster = true;
-    const { columns } = ContractDetailData();
+    const { columns, columnsService, columnsServiceDetail } =
+      ContractDetailData();
     const { clientColumns, contractGroupColumns } = comboboxColumns();
     const { loadClientData, loadContractGroupData } = comboboxLoadData();
+    const upperTab = ref(0);
+    const underTab = ref(0);
     /**
      * Hiển thị form nhập ngày thanh toán
      */
@@ -31,7 +34,59 @@ export default defineComponent({
      * Auto Gen các dòng thanh toán
      */
     const genPayment = (desired) => {
-      //TODO: Chỗ này cần sửa không fix
+      switch (underTab.value) {
+        case 0:
+          proxy.handlePayment(desired);
+          break;
+        case 1:
+          proxy.handleService(desired);
+          break;
+      }
+    };
+
+    /**
+     * Xử lí gen thanh toán dịch vụ
+     * @param {*} desired
+     */
+    const handleService = (desired) => {
+      var arr = proxy.serviceList.filter((x) => x.state != "none");
+      var allPayment = [];
+      arr.forEach((item) => {
+        const paymentDates = generatePaymentDates(
+          proxy.model.start_date,
+          proxy.model.end_date,
+          item.payment_period,
+          desired
+        );
+        var amount = item.payment_period * item.unit_price;
+        paymentDates.forEach((x) => {
+          var date = new Date(x.start_date);
+          x.payment_service_id = commonFn.genGuid();
+          x.contract_id = proxy.model.contract_id;
+          x.service_name = item.service_name;
+          x.state = "insert";
+          x.payment_batch =
+            "T" + (date.getMonth() + 1) + "/" + date.getFullYear();
+          x.amount = amount;
+        });
+        allPayment = [...allPayment, ...paymentDates];
+      });
+      //
+      if (proxy.serviceDetail && proxy.serviceDetail.length > 0) {
+        proxy.serviceDetail.forEach((x) => {
+          x.state = "delete";
+        });
+      }
+      allPayment.sort(commonFn.dynamicSort("start_date"));
+      console.log(allPayment);
+      proxy.serviceDetail = [...allPayment];
+    };
+
+    /**
+     * Xử lí gen thanh toán hợp đồng
+     * @param {*} desired
+     */
+    const handlePayment = (desired) => {
       const paymentDates = generatePaymentDates(
         proxy.model.start_date,
         proxy.model.end_date,
@@ -42,14 +97,28 @@ export default defineComponent({
         var date = new Date(x.start_date);
         x.payment_transaction_id = commonFn.genGuid();
         x.contract_id = proxy.model.contract_id;
+        x.state = "insert";
         x.payment_batch =
           "T" + (date.getMonth() + 1) + "/" + date.getFullYear();
         x.amount = proxy.model.payment_period * proxy.model.unit_price;
       });
+      if (proxy.modelDetail && proxy.modelDetail.length > 0) {
+        proxy.modelDetail.forEach((e) => {
+          e.state = "delete";
+        });
+      }
       // Gán vào entity riêng để gửi lên BE
-      proxy.modelDetail = [...paymentDates];
+      proxy.modelDetail = [...proxy.modelDetail, ...paymentDates];
+      console.log(proxy.modelDetail);
     };
 
+    /**
+     * Tạo đợt thanh toán
+     * @param {*} startDate
+     * @param {*} endDate
+     * @param {*} interval
+     * @param {*} desired
+     */
     const generatePaymentDates = (startDate, endDate, interval, desired) => {
       const paymentPeriods = [];
       let currentDate = new Date(startDate);
@@ -95,14 +164,45 @@ export default defineComponent({
         data.owner_name = obj.owner_name;
         data.apartment_id = obj.apartment_id;
         data.apartment_name = obj.apartment_name;
-        // Fake data
-        data.payment_period = 1;
-        data.start_date = new Date();
-        data.end_date = new Date(
-          new Date().setFullYear(new Date().getFullYear() + 1)
-        );
-        data.unit_price = 120000000;
       }
+
+      // Fake data
+      data.payment_period = 1;
+      data.start_date = new Date();
+      data.end_date = new Date(
+        new Date().setFullYear(new Date().getFullYear() + 1)
+      );
+      data.unit_price = 120000000;
+
+      // Tạo dòng Dịch vụ mặc định
+      if (proxy.serviceList.length == 0) {
+        for (let i = 0; i < 3; i++) {
+          proxy.serviceList.push({
+            service_id: commonFn.genGuid(),
+            state: "none",
+            contract_id: data.contract_id,
+            emptyRow: true,
+          });
+        }
+      }
+    };
+
+    /**
+     * Trước khi lưu
+     */
+    const beforeSave = () => {
+      var sort = 0;
+      for (let i = 0; i < proxy.modelDetail.length; i++) {
+        proxy.modelDetail[i].contract_id = proxy.model.contract_id;
+        if (proxy.modelDetail[i].state != "delete") {
+          proxy.modelDetail[i].sort_order = sort;
+          proxy.modelDetail[i].state =
+            proxy.modelDetail[i].state == "insert" ? "insert" : "update";
+          sort++;
+        }
+      }
+
+      console.log(proxy.modelDetail);
     };
 
     // overide hàm save
@@ -145,7 +245,7 @@ export default defineComponent({
     };
 
     const customAfterSaveSuccess = () => {
-      proxy.bindData(proxy.model, proxy.modelDetail);
+      proxy.reloadDetail();
     };
 
     const customBeforeClose = () => {
@@ -158,14 +258,50 @@ export default defineComponent({
       }
     };
 
+    /**
+     * Thay đổi tab bên trên
+     * @param {*} value
+     */
+    const changeUpperTab = (value) => {
+      upperTab.value = value;
+    };
+
+    /**
+     * Thay đổi tab bên dưới
+     * @param {*} value
+     */
+    const changeUnderTab = (value) => {
+      underTab.value = value;
+    };
+
+    // Load lại trang
+    const reloadDetail = async () => {
+      try {
+        const res = await proxy.$axios.get(
+          `${proxy.module}/${proxy.model.contract_id}`
+        );
+        proxy.data = res.data.master;
+        proxy.dataDetail = res.data.details;
+        proxy.beforeBindData(proxy.data, proxy.dataDetail);
+        proxy.bindData(proxy.data, proxy.dataDetail);
+        window._listDetail = proxy;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     return {
       module,
       columns,
+      columnsService,
       clientColumns,
+      columnsServiceDetail,
       contractGroupColumns,
       loadContractGroupData,
       loadClientData,
       isDetailMaster,
+      upperTab,
+      underTab,
       genPayment,
       choseDesired,
       beforeBindData,
@@ -173,6 +309,12 @@ export default defineComponent({
       edit,
       customAfterSaveSuccess,
       customBeforeClose,
+      changeUpperTab,
+      changeUnderTab,
+      reloadDetail,
+      beforeSave,
+      handlePayment,
+      handleService,
     };
   },
 });
@@ -261,13 +403,23 @@ export default defineComponent({
           </div>
         </div>
         <!-- Giữa  -->
-        <div class="container-center flex5">
+        <div class="container-center flex5" style="overflow: hidden">
           <div class="grids-tab-header">
-            <div class="item-tabs item-tabs-active">Giá trị hợp đồng</div>
-            <!-- <div class="item-tabs">Ngoại tệ</div> -->
-            <div class="item-tabs">Dịch vụ</div>
+            <div
+              :class="['item-tabs', { 'item-tabs-active': upperTab == 0 }]"
+              @click="changeUpperTab(0)"
+            >
+              Giá trị hợp đồng
+            </div>
+            <div
+              :class="['item-tabs', { 'item-tabs-active': upperTab == 1 }]"
+              @click="changeUpperTab(1)"
+            >
+              Dịch vụ
+            </div>
           </div>
-          <div class="grids-tab-content">
+          <!-- Giá trị hợp đồng -->
+          <div class="grids-tab-content" v-show="upperTab == 0">
             <div class="grids-tab-container">
               <div class="modal-row">
                 <div class="m-label-text">Giá thuê</div>
@@ -296,6 +448,18 @@ export default defineComponent({
                   :rows="5"
                 ></TheTextArea>
               </div>
+            </div>
+          </div>
+          <!-- Dịch vụ -->
+          <div class="grids-tab-content-grid" v-show="upperTab == 1">
+            <div class="grids-tab-container">
+              <GridEditor
+                :data="serviceList"
+                v-model:list="serviceList"
+                :idField="'service_id'"
+                :columns="columnsService"
+                :disabled="isView"
+              ></GridEditor>
             </div>
           </div>
         </div>
@@ -392,25 +556,45 @@ export default defineComponent({
         <div class="grids-tab-header">
           <div class="header-left">
             <div
-              class="item-tabs item-tabs-active"
+              :class="['item-tabs', { 'item-tabs-active': underTab == 0 }]"
+              @click="changeUnderTab(0)"
               style="border-right: 1px solid #c1c4cc"
             >
               Các đợt thanh toán hợp đồng
             </div>
-            <div class="item-tabs">Các đợt thanh toán dịch vụ</div>
+            <div
+              :class="['item-tabs', { 'item-tabs-active': underTab == 1 }]"
+              @click="changeUnderTab(1)"
+            >
+              Các đợt thanh toán dịch vụ
+            </div>
           </div>
           <div class="header-right" @click="choseDesired()">
-            <TheButton :disabled="isView"
+            <TheButton :disabled="isView" v-show="underTab == 0"
               >Tạo đợt thanh toán hợp đồng</TheButton
+            >
+            <TheButton :disabled="isView" v-show="underTab == 1"
+              >Tạo đợt thanh toán dịch vụ</TheButton
             >
           </div>
         </div>
         <div class="grids-tab-content">
-          <div class="grids-tab-container">
+          <div class="grids-tab-container" v-show="underTab == 0">
             <GridEditor
               :data="modelDetail"
               :columns="columns"
               :disabled="isView"
+              v-model:list="modelDetail"
+              :idField="'payment_transaction_id'"
+            ></GridEditor>
+          </div>
+          <div class="grids-tab-container" v-show="underTab == 1">
+            <GridEditor
+              :data="serviceDetail"
+              :columns="columnsServiceDetail"
+              :disabled="isView"
+              v-model:list="serviceDetail"
+              :idField="'payment_service_id'"
             ></GridEditor>
           </div>
         </div>
@@ -420,12 +604,12 @@ export default defineComponent({
       <div class="m-footer-container">
         <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
         <div class="m-footer-container-right">
-          <TheButton
+          <!-- <TheButton
             class="outline-button"
             v-if="mode == $constants.formMode.Edit"
             @click="postpone()"
             >Hoãn</TheButton
-          >
+          > -->
           <TheButton @click="setModeEdit()" v-if="isView">Sửa</TheButton>
           <TheButton @click="saveAction()" v-else>Cất</TheButton>
         </div>
@@ -462,6 +646,17 @@ export default defineComponent({
       flex-direction: column;
       padding: 0 8px;
       border-right: 1px solid #c1c4cc;
+      .grids-tab-content-grid {
+        flex: 1;
+        padding-top: unset;
+        display: flex;
+        max-height: 200px;
+        overflow: hidden;
+        .grids-tab-container {
+          overflow: hidden;
+          width: 100%;
+        }
+      }
     }
     .container-right {
       display: flex;

@@ -303,7 +303,6 @@ export default {
           >
             <td class="m-tr-checkbox" v-if="isMulti">
               <div class="d-flex-center">
-                <!-- v-model="row.checked" -->
                 <TheCheckbox
                   :checked="isSelected(row)"
                   @change="clickMultiple($event, row)"
