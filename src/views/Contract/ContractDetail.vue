@@ -49,7 +49,7 @@ export default defineComponent({
      * @param {*} desired
      */
     const handleService = (desired) => {
-      var arr = proxy.serviceList.filter((x) => x.state != "none");
+      var arr = proxy.serviceList.filter((x) => x.state != "empty");
       var allPayment = [];
       arr.forEach((item) => {
         const paymentDates = generatePaymentDates(
@@ -78,8 +78,7 @@ export default defineComponent({
         });
       }
       allPayment.sort(commonFn.dynamicSort("start_date"));
-      console.log(allPayment);
-      proxy.serviceDetail = [...allPayment];
+      proxy.serviceDetail = [...proxy.serviceDetail, ...allPayment];
     };
 
     /**
@@ -109,7 +108,6 @@ export default defineComponent({
       }
       // Gán vào entity riêng để gửi lên BE
       proxy.modelDetail = [...proxy.modelDetail, ...paymentDates];
-      console.log(proxy.modelDetail);
     };
 
     /**
@@ -178,8 +176,8 @@ export default defineComponent({
       if (proxy.serviceList.length == 0) {
         for (let i = 0; i < 3; i++) {
           proxy.serviceList.push({
-            service_id: commonFn.genGuid(),
-            state: "none",
+            contract_service_id: commonFn.genGuid(),
+            state: "empty",
             contract_id: data.contract_id,
             emptyRow: true,
           });
@@ -201,19 +199,22 @@ export default defineComponent({
           sort++;
         }
       }
-
-      console.log(proxy.modelDetail);
     };
 
     // overide hàm save
     const save = async () => {
       try {
-        console.log(proxy.model);
-        console.log(proxy.modelDetail);
+        commonFn.standardizedParam(proxy.model);
+        commonFn.standardizedParam(proxy.modelDetail);
+        commonFn.standardizedParam(proxy.serviceDetail);
+        commonFn.standardizedParam(proxy.serviceList);
         var param = {
           master: proxy.model,
           details: proxy.modelDetail,
+          detailsService: proxy.serviceDetail,
+          service: proxy.serviceList,
         };
+        console.log(param);
         const res = await proxy.$axios.post(`${proxy.module}/custom`, param);
         if (res.statusText == "Created") {
           commonFn.toastSuccess("Cất pthành công");
@@ -228,9 +229,18 @@ export default defineComponent({
     // overide hàm edit
     const edit = async () => {
       try {
+        commonFn.standardizedParam(proxy.model);
+        commonFn.standardizedParam(proxy.modelDetail);
+        commonFn.standardizedParam(proxy.serviceDetail);
+        // proxy.serviceList = proxy.serviceList.forEach(
+        //   (x) => (x.contract_id = proxy.model.contract_id)
+        // );
+        commonFn.standardizedParam(proxy.serviceList);
         var param = {
           master: proxy.model,
           details: proxy.modelDetail,
+          detailsService: proxy.serviceDetail,
+          service: proxy.serviceList,
         };
         console.log(param);
         const res = await proxy.$axios.put(`${proxy.module}/custom`, param);
@@ -456,7 +466,7 @@ export default defineComponent({
               <GridEditor
                 :data="serviceList"
                 v-model:list="serviceList"
-                :idField="'service_id'"
+                :idField="'contract_service_id'"
                 :columns="columnsService"
                 :disabled="isView"
               ></GridEditor>

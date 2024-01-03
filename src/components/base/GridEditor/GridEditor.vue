@@ -138,13 +138,12 @@ export default {
           this.oldCellValue = new Date(this.oldCellValue).setHours(0, 0, 0, 0);
         }
         // Nếu thay đổi giá trị thì gán cho dòng đấy bằng state Sửa
-        if (newCellValue != this.oldCellValue) {
-          if (
-            this.data[this.editingCell.row].state == "none" &&
-            this.data[this.editingCell.row].emptyRow
-          ) {
+        if (
+          newCellValue != this.oldCellValue &&
+          this.data[this.editingCell.row].state !== "insert"
+        ) {
+          if (this.data[this.editingCell.row].state == "empty") {
             this.data[this.editingCell.row].state = "insert";
-            delete this.data[this.editingCell.row].emptyRow;
           } else {
             this.data[this.editingCell.row].state = "update";
           }
@@ -204,8 +203,7 @@ export default {
       }
       let newRow = {
         [this.idField]: commonFn.genGuid(),
-        state: "none",
-        emptyRow: true,
+        state: "empty",
       };
       this.data.splice(index + 1, 0, newRow);
       await this.$emit("update:list", this.data);

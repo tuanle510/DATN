@@ -1,6 +1,7 @@
 import { $vfm } from "vue-final-modal";
 import commonFn from "@/common/commonFn";
 import { confirm } from "@/common/dialogFn";
+import dayjs from "dayjs";
 
 export default {
   async mounted() {
@@ -122,8 +123,8 @@ export default {
           this.data = res.data.master;
           this.dataDetail = res.data.details || [];
           // Phàn dịch vụ
-          this.serviceList = res.data.serviceList || [];
-          this.serviceDetail = res.data.serviceDetail || [];
+          this.serviceList = res.data.service || [];
+          this.serviceDetail = res.data.detailsService || [];
         } else {
           this.data = res.data;
         }
@@ -281,6 +282,8 @@ export default {
      */
     async save() {
       try {
+        // Chuẩn hóa param
+        commonFn.standardizedParam(this.model);
         const res = await this.$axios.post(`${this.module}`, this.model);
         if (res.statusText == "Created") {
           commonFn.toastSuccess("Cất pthành công");
@@ -297,6 +300,8 @@ export default {
      */
     async edit() {
       try {
+        // Chuẩn hóa param
+        commonFn.standardizedParam(this.model);
         const res = await this.$axios.put(`${this.module}`, this.model);
         if (res.statusText == "OK") {
           commonFn.toastSuccess("Sửa thành công");

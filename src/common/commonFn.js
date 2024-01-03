@@ -1,6 +1,7 @@
 import { useToast } from "vue-toastification";
 import iconSuccess from "@/components/icons/IconSuccess.vue";
 import iconError from "@/components/icons/IconError.vue";
+import dayjs from "dayjs";
 class commonFn {
   findLoading() {
     const el = document.getElementById("mloading");
@@ -128,6 +129,34 @@ class commonFn {
         a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
       return result * sortOrder;
     };
+  }
+
+  /**
+   * Chuẩn hóa param
+   * @param {*} param
+   */
+  standardizedParam(param) {
+    if (param && typeof param == "object") {
+      for (const key in param) {
+        if (Object.prototype.hasOwnProperty.call(param, key)) {
+          const value = param[key];
+          if (value instanceof Date && !isNaN(value)) {
+            param[key] = dayjs(value).format("YYYY-MM-DDTHH:mm:ssZ");
+          }
+        }
+      }
+    } else {
+      param.forEach((obj) => {
+        for (const key in obj) {
+          if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            const value = obj[key];
+            if (value instanceof Date && !isNaN(value)) {
+              obj[key] = dayjs(value).format("YYYY-MM-DDTHH:mm:ssZ");
+            }
+          }
+        }
+      });
+    }
   }
 }
 export default new commonFn();

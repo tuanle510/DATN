@@ -37,14 +37,16 @@ import FloatingVue from "floating-vue";
 import "floating-vue/dist/style.css";
 // Import the CSS or use your own!
 import "vue-toastification/dist/index.css";
+import PrototypeExtensions from "./common/prototype.js";
 
 // Constants
 import constants from "./constant";
 
 // Axios
-axios.defaults.baseURL = "http://localhost:5002/api/";
 
 const app = createApp(App);
+app.use(PrototypeExtensions);
+axios.defaults.baseURL = "http://localhost:5002/api/";
 app.config.globalProperties.$axios = axios;
 // base component
 app.component("MainLayout", MainLayout);
