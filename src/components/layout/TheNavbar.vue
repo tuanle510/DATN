@@ -44,11 +44,6 @@ export default {
         icon: "setting",
         name: "Bộ hồ sơ",
       },
-      {
-        path: "/demo",
-        icon: "setting",
-        name: "Demo",
-      },
     ]);
 
     // Icon đóng mở navbar

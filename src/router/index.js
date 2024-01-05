@@ -6,7 +6,6 @@ import ApartmentList from "@/views/Apartment/ApartmentList.vue";
 import ClientList from "@/views/Client/ClientList.vue";
 import ContractList from "@/views/Contract/ContractList.vue";
 import ContractGroupList from "@/views/ContractGroup/ContractGroupList.vue";
-import DemoCompoent from "@/views/DemoCompoent.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,11 +48,6 @@ const router = createRouter({
       path: "/contractgroup",
       name: "contractgroup",
       component: ContractGroupList,
-    },
-    {
-      path: "/demo",
-      name: "demo",
-      component: DemoCompoent,
     },
     // {
     //   path: '/about',

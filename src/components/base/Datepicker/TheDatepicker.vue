@@ -18,7 +18,8 @@
       @closed="onClosePicker"
       v-model="date"
       @update:modelValue="handleDate"
-      @onInput="onInput"
+      @input="onInput"
+      @keydown="onKeypress"
       :inputClassName="errorMessage ? 'm-input m-input-error' : 'm-input '"
       :day-names="['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']"
       :teleport="true"
@@ -88,8 +89,30 @@ export default defineComponent({
     };
   },
   methods: {
-    onInput() {
-      this.validate();
+    onInput(event) {
+      let input = event.target.value;
+
+      if (input.length >= 2 && input.charAt(2) !== "/") {
+        input = input.slice(0, 2) + "/" + input.slice(2);
+      }
+      if (input.length >= 5 && input.charAt(5) !== "/") {
+        input = input.slice(0, 5) + "/" + input.slice(5);
+      }
+
+      event.target.value = input;
+    },
+
+    onKeypress(event) {
+      if (event.keyCode === 9) {
+        console.log(this.modelValue);
+      }
+      if (event.keyCode === 8 || event.keyCode === 46) {
+        // Kiểm tra phím xóa hoặc backspace
+        let input = event.target.value;
+        if (input.charAt(input.length - 1) === "/") {
+          event.target.value = input.slice(0, -1); // Xóa chữ trước dấu '/'
+        }
+      }
     },
     /**
      * Mô tả : câp nhât giá trị v-model
@@ -99,7 +122,11 @@ export default defineComponent({
      * Created date: 00:35 31/05/2022
      */
     async handleDate(value) {
-      await this.$emit("update:modelValue", value);
+      if (value) {
+        value = new Date(value).getDateOnly();
+        await this.$emit("update:modelValue", value);
+      }
+      this.validate();
     },
 
     onClosePicker() {

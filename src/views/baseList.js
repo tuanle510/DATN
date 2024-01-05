@@ -209,7 +209,6 @@ export default {
 
     // Xử lí lỗi
     async handleValidateError(res) {
-      console.log(res);
       // có bản ghi xóa được
       if (res.length < this.selected.length) {
         // Cập nhật lại List bên ngoài

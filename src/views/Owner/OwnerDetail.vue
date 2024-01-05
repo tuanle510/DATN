@@ -170,18 +170,18 @@ export default defineComponent({
                 <TheInput
                   class="flex1"
                   label="Tên ngân hàng"
-                  v-model="model.paper_number"
+                  v-model="model.bank_account_name"
                 ></TheInput>
                 <TheInput
                   class="flex1"
                   label="Số tài khoản"
-                  v-model="model.paper_number"
+                  v-model="model.bank_account_number"
                 ></TheInput>
 
                 <TheInput
                   class="flex1"
                   label="Chi nhánh"
-                  v-model="model.paper_place"
+                  v-model="model.bank_account_location"
                 ></TheInput>
               </div>
               <TheTextArea label="Ghi chú" v-model="model.note"></TheTextArea>

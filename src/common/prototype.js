@@ -4,8 +4,8 @@ export default {
     Date.prototype.getDateOnly =
       Date.prototype.getDateOnly ||
       function () {
-        let e = new Date();
-        return e.setHours(0, 0, 0, 0);
+        let e = new Date(this);
+        return new Date(e.setHours(0, 0, 0, 0));
       };
   },
 };

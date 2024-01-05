@@ -18,6 +18,14 @@ export default {
     },
   },
 
+  computed: {
+    count() {
+      return this.data
+        ? this.data.filter((x) => x.state != "delete").length
+        : 0;
+    },
+  },
+
   methods: {
     // Gen css cho header table
     genHeaderCss(item, index) {
@@ -215,12 +223,6 @@ export default {
         row: null,
         column: null,
       };
-      if (
-        this.disabled ||
-        this.data.filter((x) => x.state != "delete").length == 1
-      ) {
-        return;
-      }
       // nếu trang thái đang là thêm thì bỏ luôn đi
       if ((row.state && row.state == "insert") || row.emptyRow) {
         let datax = this.data.filter(
@@ -320,7 +322,7 @@ export default {
     </div>
     <div class="m-footer-container" v-if="showFooter">
       <div class="m-footer-total">
-        Tổng số: &nbsp; <strong>{{ data.length }}</strong> &nbsp;bản ghi
+        Tổng số: &nbsp; <strong>{{ count }}</strong> &nbsp;bản ghi
       </div>
     </div>
   </div>

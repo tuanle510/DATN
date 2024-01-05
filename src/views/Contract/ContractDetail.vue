@@ -49,7 +49,9 @@ export default defineComponent({
      * @param {*} desired
      */
     const handleService = (desired) => {
-      var arr = proxy.serviceList.filter((x) => x.state != "empty");
+      var arr = proxy.serviceList.filter(
+        (x) => x.state != "empty" && x.state != "delete"
+      );
       var allPayment = [];
       arr.forEach((item) => {
         const paymentDates = generatePaymentDates(
@@ -71,11 +73,14 @@ export default defineComponent({
         });
         allPayment = [...allPayment, ...paymentDates];
       });
-      //
+
       if (proxy.serviceDetail && proxy.serviceDetail.length > 0) {
-        proxy.serviceDetail.forEach((x) => {
-          x.state = "delete";
-        });
+        proxy.serviceDetail = proxy.serviceDetail
+          .filter((x) => x.state != "insert")
+          .map((x) => {
+            x.state = "delete";
+            return x;
+          });
       }
       allPayment.sort(commonFn.dynamicSort("start_date"));
       proxy.serviceDetail = [...proxy.serviceDetail, ...allPayment];
@@ -102,9 +107,12 @@ export default defineComponent({
         x.amount = proxy.model.payment_period * proxy.model.unit_price;
       });
       if (proxy.modelDetail && proxy.modelDetail.length > 0) {
-        proxy.modelDetail.forEach((e) => {
-          e.state = "delete";
-        });
+        proxy.modelDetail = proxy.modelDetail
+          .filter((x) => x.state != "insert")
+          .map((x) => {
+            x.state = "delete";
+            return x;
+          });
       }
       // Gán vào entity riêng để gửi lên BE
       proxy.modelDetail = [...proxy.modelDetail, ...paymentDates];
@@ -119,20 +127,23 @@ export default defineComponent({
      */
     const generatePaymentDates = (startDate, endDate, interval, desired) => {
       const paymentPeriods = [];
-      let currentDate = new Date(startDate);
+      let currentDate = new Date(startDate).getDateOnly();
       // Xử lí ngày dự tính thanh toán
       desired = desired < 0 ? currentDate.getDate() + desired : desired;
 
-      while (currentDate <= new Date(endDate)) {
+      while (currentDate <= new Date(endDate).getDateOnly()) {
         // Ngày bắt đầu kì
-        const periodStart = currentDate.toISOString();
+        const periodStart = new Date(currentDate);
         // Cộng thêm số tháng theo Kỳ thanh toán
         currentDate.setMonth(currentDate.getMonth() + interval);
         // Ngày kết thúc kì thanh toán
-        var periodEnd = new Date(currentDate);
-        periodEnd = new Date(
-          periodEnd.setDate(periodEnd.getDate() - 1)
-        ).toISOString();
+        var periodEnd = new Date();
+        if (currentDate > endDate) {
+          periodEnd = new Date(endDate);
+        } else {
+          periodEnd = new Date(currentDate);
+          periodEnd = new Date(periodEnd.setDate(periodEnd.getDate() - 1));
+        }
 
         // Đặt ngày cuối của tháng trước
         var daysInMonth = new Date(currentDate);
@@ -145,7 +156,7 @@ export default defineComponent({
           paymentPeriods.push({
             start_date: periodStart,
             end_date: periodEnd,
-            expected_payment_date: paymentDate.toISOString(),
+            expected_payment_date: paymentDate,
           });
         }
       }
@@ -165,12 +176,12 @@ export default defineComponent({
       }
 
       // Fake data
-      data.payment_period = 1;
-      data.start_date = new Date();
-      data.end_date = new Date(
-        new Date().setFullYear(new Date().getFullYear() + 1)
-      );
-      data.unit_price = 120000000;
+      // data.payment_period = 1;
+      // data.start_date = new Date();
+      // data.end_date = new Date(
+      //   new Date().setFullYear(new Date().getFullYear() + 1)
+      // );
+      // data.unit_price = 120000000;
 
       // Tạo dòng Dịch vụ mặc định
       if (proxy.serviceList.length == 0) {
@@ -185,29 +196,10 @@ export default defineComponent({
       }
     };
 
-    /**
-     * Trước khi lưu
-     */
-    const beforeSave = () => {
-      var sort = 0;
-      for (let i = 0; i < proxy.modelDetail.length; i++) {
-        proxy.modelDetail[i].contract_id = proxy.model.contract_id;
-        if (proxy.modelDetail[i].state != "delete") {
-          proxy.modelDetail[i].sort_order = sort;
-          proxy.modelDetail[i].state =
-            proxy.modelDetail[i].state == "insert" ? "insert" : "update";
-          sort++;
-        }
-      }
-    };
-
     // overide hàm save
     const save = async () => {
       try {
-        commonFn.standardizedParam(proxy.model);
-        commonFn.standardizedParam(proxy.modelDetail);
-        commonFn.standardizedParam(proxy.serviceDetail);
-        commonFn.standardizedParam(proxy.serviceList);
+        proxy.handleParam();
         var param = {
           master: proxy.model,
           details: proxy.modelDetail,
@@ -229,13 +221,7 @@ export default defineComponent({
     // overide hàm edit
     const edit = async () => {
       try {
-        commonFn.standardizedParam(proxy.model);
-        commonFn.standardizedParam(proxy.modelDetail);
-        commonFn.standardizedParam(proxy.serviceDetail);
-        // proxy.serviceList = proxy.serviceList.forEach(
-        //   (x) => (x.contract_id = proxy.model.contract_id)
-        // );
-        commonFn.standardizedParam(proxy.serviceList);
+        proxy.handleParam();
         var param = {
           master: proxy.model,
           details: proxy.modelDetail,
@@ -292,12 +278,46 @@ export default defineComponent({
         );
         proxy.data = res.data.master;
         proxy.dataDetail = res.data.details;
-        proxy.beforeBindData(proxy.data, proxy.dataDetail);
+        // Phàn dịch vụ
+        proxy.serviceList = res.data.service || [];
+        proxy.serviceDetail = res.data.detailsService || [];
+        //
+        proxy.beforeBindData(proxy.data);
         proxy.bindData(proxy.data, proxy.dataDetail);
         window._listDetail = proxy;
       } catch (error) {
         console.log(error);
       }
+    };
+
+    /**
+     * Xử lí chung param
+     */
+    const handleParam = () => {
+      proxy.modelDetail = proxy.modelDetail
+        .filter((x) => x.state != "none" || x.state != "empty")
+        .map((x) => {
+          x.contract_id = proxy.model.contract_id;
+          commonFn.standardizedParam(x);
+          return x;
+        });
+
+      proxy.serviceDetail = proxy.serviceDetail
+        .filter((x) => x.state != "none" || x.state != "empty")
+        .map((x) => {
+          x.contract_id = proxy.model.contract_id;
+          commonFn.standardizedParam(x);
+          return x;
+        });
+
+      proxy.serviceList = proxy.serviceList
+        .filter((x) => x.state != "none" || x.state != "empty")
+        .map((x) => {
+          x.contract_id = proxy.model.contract_id;
+          commonFn.standardizedParam(x);
+          return x;
+        });
+      commonFn.standardizedParam(proxy.model);
     };
 
     return {
@@ -322,9 +342,9 @@ export default defineComponent({
       changeUpperTab,
       changeUnderTab,
       reloadDetail,
-      beforeSave,
       handlePayment,
       handleService,
+      handleParam,
     };
   },
 });
@@ -401,13 +421,18 @@ export default defineComponent({
               </div>
               <div class="modal-row">
                 <div class="m-label-text">Phụ trách</div>
-                <TheComboBox
+                <!-- <TheComboBox
                   class="flex1"
                   valueField="id"
                   displayField="name"
                   v-model="model.purchaser_name"
                   :disabled="isView"
-                ></TheComboBox>
+                ></TheComboBox> -->
+                <TheInput
+                  class="flex1"
+                  v-model="model.purchaser_name"
+                  :disabled="isView"
+                ></TheInput>
               </div>
             </div>
           </div>

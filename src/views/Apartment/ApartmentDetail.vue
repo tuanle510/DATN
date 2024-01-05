@@ -75,7 +75,7 @@ export default defineComponent({
       dataTab.value = tabList[index]?.data || [];
     };
 
-    const beforebindData = (data) => {
+    const beforeBindData = (data) => {
       if (proxy._formParam.isFromBuilding) {
         var master = proxy._formParam.data;
         data.building_id = master.building_id;
@@ -93,7 +93,7 @@ export default defineComponent({
       buildingColumns,
       loadOwnerData,
       loadBuildingData,
-      beforebindData,
+      beforeBindData,
       onTabClick,
       isFromBuilding,
     };
