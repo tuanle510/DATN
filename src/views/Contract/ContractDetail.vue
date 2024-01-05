@@ -21,6 +21,18 @@ export default defineComponent({
     const { loadClientData, loadContractGroupData } = comboboxLoadData();
     const upperTab = ref(0);
     const underTab = ref(0);
+    const propsData = ref({
+      status: {
+        data: [
+          { value: "Đã trả" },
+          { value: "Cần xử lý" },
+          { value: "Có sự cố" },
+        ],
+        valueField: "value",
+        displayField: "value",
+        freeText: true,
+      },
+    });
     /**
      * Hiển thị form nhập ngày thanh toán
      */
@@ -174,14 +186,8 @@ export default defineComponent({
         data.apartment_id = obj.apartment_id;
         data.apartment_name = obj.apartment_name;
       }
-
-      // Fake data
-      // data.payment_period = 1;
-      // data.start_date = new Date();
-      // data.end_date = new Date(
-      //   new Date().setFullYear(new Date().getFullYear() + 1)
-      // );
-      // data.unit_price = 120000000;
+      // Mặc định
+      data.contract_type = 1;
 
       // Tạo dòng Dịch vụ mặc định
       if (proxy.serviceList.length == 0) {
@@ -206,7 +212,6 @@ export default defineComponent({
           detailsService: proxy.serviceDetail,
           service: proxy.serviceList,
         };
-        console.log(param);
         const res = await proxy.$axios.post(`${proxy.module}/custom`, param);
         if (res.statusText == "Created") {
           commonFn.toastSuccess("Cất pthành công");
@@ -228,7 +233,6 @@ export default defineComponent({
           detailsService: proxy.serviceDetail,
           service: proxy.serviceList,
         };
-        console.log(param);
         const res = await proxy.$axios.put(`${proxy.module}/custom`, param);
         if (res.statusText == "OK") {
           commonFn.toastSuccess("Sửa thành công");
@@ -332,6 +336,7 @@ export default defineComponent({
       isDetailMaster,
       upperTab,
       underTab,
+      propsData,
       genPayment,
       choseDesired,
       beforeBindData,
@@ -566,12 +571,7 @@ export default defineComponent({
               <div class="modal-row">
                 <div class="d-flex flex1">
                   <div class="m-label-text">Tình trạng</div>
-                  <TheComboBox
-                    valueField="id"
-                    displayField="name"
-                    v-model="model.status"
-                    :disabled="isView"
-                  ></TheComboBox>
+                  <TheInput v-model="model.status" :disabled="true"></TheInput>
                 </div>
                 <div class="d-flex flex1">
                   <div class="m-label-text pl-10">
@@ -621,6 +621,7 @@ export default defineComponent({
               :disabled="isView"
               v-model:list="modelDetail"
               :idField="'payment_transaction_id'"
+              :propsData="propsData"
             ></GridEditor>
           </div>
           <div class="grids-tab-container" v-show="underTab == 1">
@@ -630,6 +631,7 @@ export default defineComponent({
               :disabled="isView"
               v-model:list="serviceDetail"
               :idField="'payment_service_id'"
+              :propsData="propsData"
             ></GridEditor>
           </div>
         </div>

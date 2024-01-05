@@ -16,6 +16,9 @@ export default {
     showFooter: {
       default: true,
     },
+    propsData: {
+      default: {},
+    },
   },
 
   computed: {
@@ -91,6 +94,9 @@ export default {
         case "currency":
           component = "TheNumber";
           break;
+        case "combobox":
+          component = "TheComboBox";
+          break;
         default:
           break;
       }
@@ -103,6 +109,10 @@ export default {
      * @param {*} cellIndex
      */
     startEditing(rowIndex, cellIndex) {
+      // Nêu đang edit thì dừng edit đã r tính tiếp
+      if (this.editingCell.row != null && this.editingCell.column != null) {
+        this.endEditing();
+      }
       if (!this.disabled) {
         this.editingCell = {
           row: rowIndex,
@@ -164,10 +174,8 @@ export default {
       const isLastColumn = cellIndex === this.columns.length - 1;
       const isLastRow = rowIndex === this.data.length - 1;
       if (isLastColumn && !isLastRow) {
-        this.beforeEndEdit();
         this.startEditing(rowIndex + 1, 0); // Di chuyển sang ô đầu tiên của hàng mới
       } else if (!isLastColumn) {
-        this.beforeEndEdit();
         this.startEditing(rowIndex, cellIndex + 1); // Di chuyển sang ô bên cạnh
       } else if (isLastColumn && isLastRow) {
         this.endEditing(); // Kết thúc chỉnh sửa nếu ở ô cuối cùng của bảng
@@ -193,8 +201,10 @@ export default {
       if (
         this.editingCell.row != null &&
         this.editingCell.column != null &&
-        (!document.querySelector(".dp__menu") ||
-          !document.querySelector(".dp__menu").contains(event.relatedTarget))
+        (!document.querySelector(".hust-no-click-out") ||
+          !document
+            .querySelector(".hust-no-click-out")
+            .contains(event.relatedTarget))
       ) {
         this.endEditing();
       }
@@ -236,6 +246,21 @@ export default {
       if (this.data.filter((x) => x.state != "delete").length == 0) {
         this.addRow(-1);
       }
+    },
+
+    getPropsData(component, value, dataField) {
+      var attr = {};
+      switch (component) {
+        case "TheComboBox":
+          attr = {
+            ...this.propsData[dataField],
+            initValue: value,
+          };
+          break;
+        default:
+          break;
+      }
+      return attr;
     },
   },
   data() {
@@ -298,6 +323,13 @@ export default {
                   editingCell.row === rowIndex &&
                   editingCell.column === cellIndex &&
                   !disabled
+                "
+                v-bind="
+                  getPropsData(
+                    getComponent(column.type),
+                    row[column.dataField],
+                    column.dataField
+                  )
                 "
                 :is="getComponent(column.type)"
                 v-model="row[column.dataField]"

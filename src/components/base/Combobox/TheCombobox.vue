@@ -37,7 +37,7 @@
     </div>
     <Teleport to="body">
       <div
-        class="m-option-list"
+        class="m-option-list hust-no-click-out"
         :style="optionPos"
         v-if="isOptionShow"
         ref="optionList"
@@ -178,6 +178,9 @@ export default defineComponent({
     quickAddForm: {
       default: null,
     },
+    freeText: {
+      default: false,
+    },
   },
   mounted() {
     const me = this;
@@ -204,9 +207,18 @@ export default defineComponent({
      * Created by: Lê Thiện Tuấn - MF1118
      * Created date: 23:56 28/05/2022
      */
-    isFocus: function (newValue) {
+    isFocus: async function (newValue) {
       if (newValue == false) {
         this.$refs.input.classList.remove("input-focus");
+        // Nếu không freeText thì gán giá trị về null
+        if (!this.modelValue && !this.freeText) {
+          this.displayValue = "";
+        }
+        // Nếu là freeText thì gán luôn bằng giá trị text
+        if (this.freeText && this.displayValue) {
+          await this.$emit("update:modelValue", this.displayValue);
+          await this.$emit("update:display", this.displayValue);
+        }
         this.validate();
       } else {
         this.$refs.input.classList.add("input-focus");
@@ -319,6 +331,7 @@ export default defineComponent({
         this.setFocus();
       }
     },
+
     /**
      * Mô tả : Lấy giá trị từ v-model bên cha
      * @param
@@ -381,6 +394,13 @@ export default defineComponent({
         this.matches = this.datax;
       }
       // this.$refs.input.select();
+    },
+
+    /**
+     * Cho hàm grid dùng
+     */
+    focus() {
+      this.$refs.input.focus();
     },
 
     /**
@@ -508,7 +528,9 @@ export default defineComponent({
         return;
       }
       this.isOptionShow = !this.isOptionShow;
-      this.$refs.input.focus();
+      if (this.$refs.input) {
+        this.$refs.input.focus();
+      }
     },
 
     /**

@@ -44,6 +44,7 @@ export const ContractDetailData = () => {
       width: 100,
       name: "Trạng thái",
       dataField: "status",
+      type: "combobox",
     },
     {
       width: 120,
@@ -140,6 +141,7 @@ export const ContractDetailData = () => {
       width: 100,
       name: "Trạng thái",
       dataField: "status",
+      type: "combobox",
     },
     {
       autoRezie: true,

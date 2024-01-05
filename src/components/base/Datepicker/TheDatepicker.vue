@@ -21,6 +21,7 @@
       @input="onInput"
       @keydown="onKeypress"
       :inputClassName="errorMessage ? 'm-input m-input-error' : 'm-input '"
+      menu-class-name="hust-no-click-out"
       :day-names="['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']"
       :teleport="true"
     >
@@ -103,9 +104,9 @@ export default defineComponent({
     },
 
     onKeypress(event) {
-      if (event.keyCode === 9) {
-        console.log(this.modelValue);
-      }
+      // if (event.keyCode === 9) {
+      //   console.log(this.modelValue);
+      // }
       if (event.keyCode === 8 || event.keyCode === 46) {
         // Kiểm tra phím xóa hoặc backspace
         let input = event.target.value;
