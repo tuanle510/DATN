@@ -23,6 +23,8 @@ import ApartmentDetail from "./views/Apartment/ApartmentDetail.vue";
 import BuildingDetail from "./views/Building/BuildingDetail.vue";
 import ClientDetail from "./views/Client/ClientDetail.vue";
 import ContractDetail from "./views/Contract/ContractDetail.vue";
+import ContractDetailCtyChu from "./views/Contract/ContractDetailCtyChu.vue";
+import ContractDetailCtyKhach from "./views/Contract/ContractDetailCtyKhach.vue";
 import ContractGroupDetail from "./views/ContractGroup/ContractGroupDetail.vue";
 // Param
 import DesiredQuestion from "./views/Contract/DesiredQuestion.vue";
@@ -69,6 +71,8 @@ app.component("ApartmentDetail", ApartmentDetail);
 app.component("BuildingDetail", BuildingDetail);
 app.component("ClientDetail", ClientDetail);
 app.component("ContractDetail", ContractDetail);
+app.component("ContractDetailCtyChu", ContractDetailCtyChu);
+app.component("ContractDetailCtyKhach", ContractDetailCtyKhach);
 app.component("ContractGroupDetail", ContractGroupDetail);
 // Param
 app.component("DesiredQuestion", DesiredQuestion);

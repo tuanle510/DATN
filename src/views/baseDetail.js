@@ -291,6 +291,7 @@ export default {
           this.afterSaveSuccess();
         }
       } catch (error) {
+        commonFn.toastError("Đã có lỗi xảy ra");
         console.log(error);
       }
     },
@@ -309,6 +310,7 @@ export default {
           this.afterSaveSuccess();
         }
       } catch (error) {
+        commonFn.toastError("Đã có lỗi xảy ra");
         console.log(error);
       }
     },

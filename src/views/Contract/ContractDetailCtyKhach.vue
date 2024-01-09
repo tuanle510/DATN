@@ -187,7 +187,7 @@ export default defineComponent({
         data.apartment_name = obj.apartment_name;
       }
       // Mặc định
-      data.contract_type = proxy.$constants.contractType.CK;
+      data.contract_type = proxy.$constants.contractType.CTK;
       console.log(data.contract_type);
 
       // Tạo dòng Dịch vụ mặc định
@@ -362,7 +362,7 @@ export default defineComponent({
 <template>
   <DynamicModal
     ref="ContactDetail"
-    :title="`Hợp đồng thuê chủ - khách`"
+    :title="`Hợp đồng thuê công ty - khách`"
     class="contact-detail"
     position="full"
     @beforeOpen="beforeOpen($event, close)"
@@ -412,7 +412,15 @@ export default defineComponent({
                 ></TheComboBox>
               </div>
               <div class="modal-row">
-                <div class="m-label-text">Khách thuê</div>
+                <div class="m-label-text">C.ty cho thuê</div>
+                <TheInput
+                  class="flex1"
+                  v-model="model.company_name"
+                  :disabled="isView"
+                ></TheInput>
+              </div>
+              <div class="modal-row">
+                <div class="m-label-text">Khách thuê lại</div>
                 <TheComboBox
                   class="flex1"
                   valueField="client_id"
@@ -489,7 +497,7 @@ export default defineComponent({
                   class="flex1"
                   v-model="model.extension_condition"
                   :disabled="isView"
-                  :rows="5"
+                  :rows="8"
                 ></TheTextArea>
               </div>
             </div>
@@ -566,11 +574,12 @@ export default defineComponent({
               </div>
               <div class="modal-row">
                 <div class="m-label-text">Ghi chú</div>
-                <TheInput
+                <TheTextArea
                   class="flex1"
                   v-model="model.note"
                   :disabled="isView"
-                ></TheInput>
+                  :rows="3"
+                ></TheTextArea>
               </div>
               <div class="modal-row">
                 <div class="d-flex flex1">

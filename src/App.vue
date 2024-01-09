@@ -14,7 +14,8 @@ export default defineComponent({
 
 <template>
   <div>
-    <MainLayout></MainLayout>
+    <RouterView></RouterView>
+    <!-- <MainLayout></MainLayout> -->
     <ModalsContainer />
     <TheLoading id="mloading"></TheLoading>
     <DialogWrapper />

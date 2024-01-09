@@ -21,7 +21,8 @@
     "vue-router": "^4.2.4",
     "vue-toastification": "^2.0.0-rc.5",
     "vue3-promise-dialog": "^0.3.4",
-    "vuejs-paginate-next": "^1.0.2"
+    "vuejs-paginate-next": "^1.0.2",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.3.4",

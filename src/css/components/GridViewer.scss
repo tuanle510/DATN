@@ -94,12 +94,36 @@ $background-color_5: #b8bcc3;
         border-right: 1px solid #e0e0e0;
       }
       th {
-        height: 38px;
         background-color: $background-color_2;
         border-bottom: 1px solid #e0e0e0;
-        padding: 0 10px;
         border-left: none;
+        .th-filter {
+          width: 100%;
+          display: flex;
+          .th-filter-icon {
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: #fff;
+            border-right: 1px solid #e0e0e0;
+            border-top: 1px solid #e0e0e0;
+          }
+          .th-filter-input {
+            flex: 1;
+            border-top: 1px solid #e0e0e0;
+          }
+        }
         .th-content {
+          .th-title {
+            padding: 0 10px;
+            height: 30px !important;
+            width: 100%;
+            display: flex;
+            align-items: center;
+          }
           .th-resize {
             // cursor: col-resize;
             height: 100%;

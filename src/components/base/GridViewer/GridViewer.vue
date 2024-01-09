@@ -278,10 +278,30 @@ export default {
               :style="genHeaderCss(column, index)"
             >
               <div class="th-content">
-                <span class="th-title">
+                <div class="th-title">
                   {{ column.name }}
-                </span>
+                </div>
               </div>
+              <!-- Lọc -->
+              <div class="th-filter">
+                <div class="th-filter-icon">
+                  <div
+                    :class="[column.type == 'date' ? 'op-equal' : 'op-contain']"
+                  ></div>
+                </div>
+                <TheDatepicker
+                  v-if="column.type == 'date'"
+                  class="th-filter-input"
+                  v-model="column.filterValue"
+                >
+                </TheDatepicker>
+                <TheInput
+                  v-else
+                  class="th-filter-input"
+                  v-model="column.filterValue"
+                ></TheInput>
+              </div>
+              <!-- Hết lọc -->
             </th>
             <th class="m-th-action" v-if="isMulti">
               <div class="th-content">

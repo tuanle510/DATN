@@ -187,7 +187,7 @@ export default defineComponent({
         data.apartment_name = obj.apartment_name;
       }
       // Mặc định
-      data.contract_type = proxy.$constants.contractType.CK;
+      data.contract_type = proxy.$constants.contractType.CCT;
       console.log(data.contract_type);
 
       // Tạo dòng Dịch vụ mặc định
@@ -362,7 +362,7 @@ export default defineComponent({
 <template>
   <DynamicModal
     ref="ContactDetail"
-    :title="`Hợp đồng thuê chủ - khách`"
+    :title="`Hợp đồng thuê chủ nhà - công ty`"
     class="contact-detail"
     position="full"
     @beforeOpen="beforeOpen($event, close)"
@@ -412,8 +412,13 @@ export default defineComponent({
                 ></TheComboBox>
               </div>
               <div class="modal-row">
-                <div class="m-label-text">Khách thuê</div>
-                <TheComboBox
+                <div class="m-label-text">Công ty thuê</div>
+                <TheInput
+                  class="flex1"
+                  v-model="model.company_name"
+                  :disabled="isView"
+                ></TheInput>
+                <!-- <TheComboBox
                   class="flex1"
                   valueField="client_id"
                   displayField="client_name"
@@ -426,7 +431,7 @@ export default defineComponent({
                   :loadComboboxData="loadClientData"
                   :rules="[{ name: 'required' }]"
                   :disabled="isView"
-                ></TheComboBox>
+                ></TheComboBox> -->
               </div>
               <div class="modal-row">
                 <div class="m-label-text">Phụ trách</div>

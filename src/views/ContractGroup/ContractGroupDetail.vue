@@ -135,8 +135,10 @@ export default defineComponent({
           popupUtil.show("ContractDetail", param);
           break;
         case 1:
+          popupUtil.show("ContractDetailCtyChu", param);
           break;
         case 2:
+          popupUtil.show("ContractDetailCtyKhach", param);
           break;
       }
     };
@@ -178,8 +180,8 @@ export default defineComponent({
       isAddContract,
       contractType,
       isDetailMaster,
-      selectApartment,
       loadApartmentData,
+      selectApartment,
       addContract,
       validateBeforeSave,
       buildMes,
@@ -197,7 +199,7 @@ export default defineComponent({
 <template>
   <DynamicModal
     ref="ContactDetail"
-    :title="`Thêm Hợp đồng`"
+    :title="`Hợp đồng`"
     class="contact-group-detail"
     position="full"
     @beforeOpen="beforeOpen($event, close)"

@@ -81,7 +81,7 @@ export default defineComponent({
 <template>
   <DynamicModal
     ref="CanHoDetail"
-    :title="`Thêm Khách hàng`"
+    :title="`Khách hàng`"
     width="900px"
     position="right"
     @beforeOpen="beforeOpen($event, close)"

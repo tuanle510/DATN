@@ -16,12 +16,12 @@ export default {
       },
       {
         path: "/owner",
-        icon: "setting",
+        icon: "owner",
         name: "Chủ nhà",
       },
       {
         path: "/building",
-        icon: "setting",
+        icon: "building",
         name: "Tòa nhà",
       },
       {
@@ -41,7 +41,7 @@ export default {
       // },
       {
         path: "/contractgroup",
-        icon: "setting",
+        icon: "contract",
         name: "Bộ hồ sơ",
       },
     ]);

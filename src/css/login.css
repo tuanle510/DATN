@@ -1,0 +1,91 @@
+.m-login {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f2f3f5;
+}
+
+.m-login .grip-login {
+  width: 770px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 16px 30px rgb(0 0 0 / 16%);
+  overflow: hidden;
+  position: absolute;
+  height: 400px;
+}
+
+.m-login .grip-login .half-ctn {
+  width: 50% !important;
+  text-align: center;
+}
+
+.m-login .grip-login .left-grip {
+  display: flex;
+  flex-direction: column;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  background-image: url(/src/assets/img/logo.png);
+  width: 100%;
+  height: 100%;
+  padding-top: 20px;
+}
+
+.m-login .grip-login .left-grip .name-left-text {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.main-login-ctn {
+  margin: 40px;
+}
+
+.grid-login-normal {
+  text-align: center;
+}
+
+.grid-login-normal .m-input {
+  height: 40px !important;
+}
+
+.button {
+  width: 100%;
+  height: 44px;
+  border-radius: 4px;
+  font-size: 16px !important;
+  outline: none;
+  border: none;
+  background-color: #1a73e8;
+  color: #fff;
+  cursor: pointer;
+}
+
+.logo {
+  margin: 0px auto;
+  background-repeat: no-repeat;
+  height: 60px;
+  width: 100px;
+  background-size: cover;
+  background-image: url(/src/assets/icon/MISA_VN.svg);
+  background-size: contain;
+}
+
+.logo-text {
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.input-login {
+  margin-bottom: 10px;
+}

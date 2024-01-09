@@ -180,6 +180,22 @@ export default defineComponent({
   transition: none;
 }
 
+.th-filter-input input.dp__input {
+  height: 25px;
+  border: none;
+}
+
+.th-filter-input input.dp__input:focus,
+.th-filter-input input.dp__input:hover {
+  height: 25px;
+  border: none;
+}
+
+.th-filter-input input.dp__input {
+  height: 25px;
+  border: none;
+}
+
 input.m-input:focus {
   border: 1px solid #22a7ca;
 }

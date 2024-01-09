@@ -13,6 +13,11 @@ input.m-input {
   padding: 0px 10px;
 }
 
+.th-filter input.m-input {
+  border: none !important;
+  height: 25px;
+}
+
 input.m-input:focus {
   border: 1px solid #22a7ca;
 }

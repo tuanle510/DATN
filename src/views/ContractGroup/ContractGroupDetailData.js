@@ -1,10 +1,10 @@
 export const ContractGroupDetailData = () => {
   const columns = [
-    {
-      width: 150,
-      name: "Mã HĐ",
-      dataField: "payment_batch",
-    },
+    // {
+    //   width: 150,
+    //   name: "Mã HĐ",
+    //   dataField: "payment_batch",
+    // },
     {
       width: 200,
       name: "Tên căn hộ",
@@ -38,7 +38,7 @@ export const ContractGroupDetailData = () => {
     {
       width: 250,
       name: "Kiểu hợp đồng",
-      dataField: "status",
+      dataField: "contract_type",
     },
   ];
 

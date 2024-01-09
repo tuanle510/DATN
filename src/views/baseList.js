@@ -35,6 +35,7 @@ export default {
         this.data = res.data.Data;
         this.total = res.data.Sum;
       } catch (error) {
+        commonFn.toastError("Đã có lỗi xảy ra");
         console.log(error);
       } finally {
         this.tableLoading = false;

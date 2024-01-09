@@ -15,6 +15,12 @@ export default defineComponent({
     disabled: {
       default: false,
     },
+    type: {
+      default: null,
+    },
+    autocomplete: {
+      default: false,
+    },
     rules: {
       type: Array,
       default: () => [],
@@ -98,6 +104,8 @@ export default defineComponent({
       :value="modelValue"
       :disabled="disabled"
       :placeholder="placeholder"
+      :type="type"
+      :autocomplete="autocomplete"
       @input="onChangeHandler"
       v-on="listeners"
     />
