@@ -64,7 +64,7 @@ export default defineComponent({
     <div class="m-container">
       <div class="m-container-toolbar">
         <div class="toolbar-field">
-          <TheInput placeholder="Tìm kiếm căn hộ" />
+          <!-- <TheInput placeholder="Tìm kiếm căn hộ" /> -->
         </div>
         <div class="toolbar-right">
           <div

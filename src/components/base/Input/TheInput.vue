@@ -26,7 +26,7 @@ export default defineComponent({
       default: () => [],
     },
   },
-  emits: ["update:modelValue"],
+  emits: ["update:modelValue", "onKeyup"],
   mounted() {
     const me = this;
     if (me.$el && !me.$el.getVueInstance) {
@@ -43,6 +43,10 @@ export default defineComponent({
     async onChangeHandler($event) {
       await this.$emit("update:modelValue", $event.target.value);
       this.validate();
+    },
+
+    onKeyup($event) {
+      this.$emit("onKeyup", $event.target.value);
     },
   },
 
@@ -107,6 +111,7 @@ export default defineComponent({
       :type="type"
       :autocomplete="autocomplete"
       @input="onChangeHandler"
+      @keyup="onKeyup"
       v-on="listeners"
     />
     <div class="m-error-text" v-if="errorMessage">

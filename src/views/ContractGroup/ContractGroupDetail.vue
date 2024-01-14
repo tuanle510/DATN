@@ -155,7 +155,17 @@ export default defineComponent({
         mode: proxy.$constants.formMode.View,
         id: row.contract_id,
       };
-      popupUtil.show("ContractDetail", param);
+      switch (row.contract_type) {
+        case proxy.$constants.contractType.CK:
+          popupUtil.show("ContractDetail", param);
+          break;
+        case proxy.$constants.contractType.CTK:
+          popupUtil.show("ContractDetailCtyKhach", param);
+          break;
+        case proxy.$constants.contractType.CCT:
+          popupUtil.show("ContractDetailCtyChu", param);
+          break;
+      }
     };
 
     // Load lại trang
@@ -199,7 +209,7 @@ export default defineComponent({
 <template>
   <DynamicModal
     ref="ContactDetail"
-    :title="`Hợp đồng`"
+    :title="`Bộ hồ sơ`"
     class="contact-group-detail"
     position="full"
     @beforeOpen="beforeOpen($event, close)"

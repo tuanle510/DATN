@@ -1,20 +1,18 @@
 <script>
-import { ref } from "vue";
-import { mapActions } from "vuex";
-
+import commonFn from "@/common/commonFn";
 export default {
   props: {},
-  // computed: {
-  //   ...mapGetters(["user"]),
-  // },
   methods: {
-    ...mapActions(["setUser"]),
     async onLoginClick() {
       try {
         const res = await this.$axios.post(`${this.module}/login`, this.model);
         if (res.status == 200) {
-          // this.$router.push("/asset");
-          this.setUser(res.data);
+          //Lưu vào localStorage
+          localStorage.setItem("token", res.data);
+          // Hiển thị thông báo đăng nhập thành công
+          commonFn.toastSuccess("Đăng nhập thành công");
+          // Chuyển hướng
+          this.$router.push("/");
         }
       } catch (error) {
         console.log(error);
@@ -24,8 +22,8 @@ export default {
   data() {
     return {
       model: {
-        email: "user@mail",
-        password: "12345",
+        email: "string",
+        password: "string",
       },
       module: "auth",
     };

@@ -15,7 +15,7 @@ export default defineComponent({
         align: "left",
       },
       {
-        width: 100,
+        width: 120,
         name: "Ngày sinh",
         dataField: "birthdate",
         align: "center",
@@ -73,7 +73,7 @@ export default defineComponent({
     <div class="m-container">
       <div class="m-container-toolbar">
         <div class="toolbar-field">
-          <TheInput placeholder="Tìm kiếm chủ nhà" />
+          <!-- <TheInput placeholder="Tìm kiếm chủ nhà" /> -->
         </div>
         <div class="toolbar-right">
           <div
@@ -101,6 +101,7 @@ export default defineComponent({
           :data="data"
           @onDbClick="edit"
           @onPaginate="onPaginate"
+          @filterHeader="filterHeader"
           :loading="tableLoading"
           :total="total"
         >

@@ -20,6 +20,7 @@
       @update:modelValue="handleDate"
       @input="onInput"
       @keydown="onKeypress"
+      :text-input="textInputOptions"
       :inputClassName="errorMessage ? 'm-input m-input-error' : 'm-input '"
       menu-class-name="hust-no-click-out"
       :day-names="['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']"
@@ -56,6 +57,11 @@ export default defineComponent({
     },
     minDate: {},
     maxDate: {},
+    textInputOptions: {
+      default: {
+        openMenu: true,
+      },
+    },
   },
   mounted() {
     const me = this;
@@ -92,28 +98,52 @@ export default defineComponent({
   methods: {
     onInput(event) {
       let input = event.target.value;
-
+      if (input == null || input == "") {
+        this.handleDate();
+      }
       if (input.length >= 2 && input.charAt(2) !== "/") {
         input = input.slice(0, 2) + "/" + input.slice(2);
       }
       if (input.length >= 5 && input.charAt(5) !== "/") {
         input = input.slice(0, 5) + "/" + input.slice(5);
       }
-
       event.target.value = input;
+      if (input && input.length == 10) {
+        const [day, month, year] = input.split("/").map(Number);
+        const dateObject = new Date(year, month - 1, day);
+        this.handleDate(dateObject);
+      }
     },
 
     onKeypress(event) {
-      // if (event.keyCode === 9) {
-      //   console.log(this.modelValue);
-      // }
-      if (event.keyCode === 8 || event.keyCode === 46) {
+      // Lấy mã phím
+      const keyCode = event.keyCode;
+      const isCtrlPressed = event.ctrlKey || event.metaKey; // Kiểm tra xem Ctrl hoặc Command (Mac) đã được nhấn
+      const input = event.target.value;
+      console.log(input);
+      if (
+        !(
+          (
+            (keyCode >= 48 && keyCode <= 57 && input.length < 10) ||
+            (keyCode >= 96 && keyCode <= 105 && input.length < 10) ||
+            [8, 9, 37, 39, 46].includes(keyCode) || // Phím Backspace, Tab, Left/Right Arrow, Delete
+            (isCtrlPressed && [65, 67, 86].includes(keyCode))
+          ) // Phím tắt Ctrl + A, Ctrl + C, Ctrl + V
+        )
+      ) {
+        event.preventDefault();
+      }
+      if (keyCode === 8 || keyCode === 46) {
         // Kiểm tra phím xóa hoặc backspace
         let input = event.target.value;
         if (input.charAt(input.length - 1) === "/") {
           event.target.value = input.slice(0, -1); // Xóa chữ trước dấu '/'
         }
       }
+    },
+
+    onKeyup(value) {
+      this.$emit("onKeyup", value);
     },
     /**
      * Mô tả : câp nhât giá trị v-model
@@ -126,7 +156,10 @@ export default defineComponent({
       if (value) {
         value = new Date(value).getDateOnly();
         await this.$emit("update:modelValue", value);
+      } else {
+        await this.$emit("update:modelValue", null);
       }
+      this.onKeyup(value);
       this.validate();
     },
 
@@ -208,13 +241,14 @@ input.m-input:hover {
 }
 
 /* Trong trường hợp grid editor  */
-tr td .dp__input {
-  --dp-input-icon-padding: 0px;
+tr td .dp__input,
+tr th .dp__input {
+  --dp-input-icon-padding: 10px;
   --dp-input-padding: 0;
   border-color: transparent !important;
-  text-align: center;
 }
-tr td .dp__icon {
+tr td .dp__icon,
+tr th .dp__icon {
   display: none;
 }
 tr td .dp__input:focus {

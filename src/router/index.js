@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-// import store from "../store/index.js";
+import store from "../store/index.js";
 
 import DashBoard from "@/views/DashBoard/DashBoardView.vue";
 import OwnerList from "@/views/Owner/OwnerList.vue";
@@ -71,7 +71,7 @@ const router = createRouter({
 
 // Chặn
 router.beforeEach((to, from, next) => {
-  let isAuthenticated = true;
+  let isAuthenticated = !!localStorage.getItem("token");
   if (to.name !== "Login" && !isAuthenticated) next({ name: "Login" });
   else next();
 });

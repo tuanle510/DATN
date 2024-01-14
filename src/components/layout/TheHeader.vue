@@ -1,14 +1,21 @@
 <script>
-import { ref } from "vue";
-export default {
+import { ref, getCurrentInstance, defineComponent } from "vue";
+export default defineComponent({
   props: {},
   setup() {
+    const { proxy } = getCurrentInstance();
     const year = ref(new Date().getFullYear());
+    const logout = () => {
+      localStorage.clear();
+      // Chuyển hướng về trang login
+      proxy.$router.push("/login");
+    };
     return {
       year,
+      logout,
     };
   },
-};
+});
 </script>
 
 <template>
@@ -25,7 +32,6 @@ export default {
           <div class="down"></div>
         </div>
       </div> -->
-      <!--  -->
       <div class="header-icon">
         <div class="bell"></div>
       </div>
@@ -39,7 +45,16 @@ export default {
         <div class="header-icon">
           <div class="user-logo"></div>
         </div>
-        <div class="down"></div>
+        <TheMenuWrapper>
+          <template #toggle-button="{ toggle }">
+            <div class="icon-box-24" @click="toggle">
+              <div class="down"></div>
+            </div>
+          </template>
+          <template #default>
+            <TheMenuItem @click="logout">Đăng xuất</TheMenuItem>
+          </template>
+        </TheMenuWrapper>
       </div>
     </div>
   </div>

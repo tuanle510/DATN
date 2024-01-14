@@ -2,6 +2,7 @@ import { useToast } from "vue-toastification";
 import iconSuccess from "@/components/icons/IconSuccess.vue";
 import iconError from "@/components/icons/IconError.vue";
 import dayjs from "dayjs";
+import { confirmYes } from "@/common/dialogFn";
 class commonFn {
   findLoading() {
     const el = document.getElementById("mloading");
@@ -156,6 +157,26 @@ class commonFn {
           }
         }
       });
+    }
+  }
+
+  /**
+   * Xử lí lỗi
+   */
+  handleError(res, router) {
+    if (res && res.response && res.response.status == "401") {
+      confirmYes(
+        "Thông báo",
+        "Phiên làm việc đã kết thúc. Vui lòng đăng nhập lại"
+      ).then((answer) => {
+        if (answer) {
+          localStorage.clear();
+          router.push("/");
+        }
+      });
+    } else {
+      this.toastError("Đã có lỗi xảy ra");
+      console.log(res);
     }
   }
 }

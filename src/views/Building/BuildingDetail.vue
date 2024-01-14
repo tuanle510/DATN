@@ -114,8 +114,45 @@ export default defineComponent({
                   v-model="model.building_address"
                 ></TheInput>
               </div>
+
+              <div class="modal-row">
+                <TheComboBox
+                  label="Tỉnh/TP"
+                  class="flex1"
+                  :data="defaultData"
+                  valueField="value"
+                  displayField="value"
+                  v-model="pageSize"
+                  :initValue="pageSize"
+                  @selectItem="changePageSize"
+                ></TheComboBox>
+                <TheComboBox
+                  label="Quận/Huyện"
+                  class="flex1"
+                  :data="defaultData"
+                  valueField="value"
+                  displayField="value"
+                  v-model="pageSize"
+                  :initValue="pageSize"
+                  @selectItem="changePageSize"
+                ></TheComboBox>
+              </div>
+              <div class="modal-row">
+                <TheComboBox
+                  label="Xã/Phường"
+                  class="flex1"
+                  :data="defaultData"
+                  valueField="value"
+                  displayField="value"
+                  v-model="pageSize"
+                  :initValue="pageSize"
+                  @selectItem="changePageSize"
+                ></TheComboBox>
+                <div class="flex1"></div>
+              </div>
             </div>
           </div>
+
           <div class="grids-tab-container" v-else>
             <GridViewer :data="[]" :columns="columnTab"></GridViewer>
           </div>

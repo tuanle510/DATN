@@ -26,12 +26,12 @@ export default {
       },
       {
         path: "/apartment",
-        icon: "setting",
+        icon: "apartment",
         name: "Căn hộ",
       },
       {
         path: "/client",
-        icon: "setting",
+        icon: "client",
         name: "Khách hàng",
       },
       // {

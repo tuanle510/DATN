@@ -129,7 +129,7 @@ export default {
           this.data = res.data;
         }
       } catch (error) {
-        console.log(error);
+        commonFn.handleError(error, this.$router);
       }
     },
 
@@ -291,8 +291,7 @@ export default {
           this.afterSaveSuccess();
         }
       } catch (error) {
-        commonFn.toastError("Đã có lỗi xảy ra");
-        console.log(error);
+        commonFn.handleError(error, this.$router);
       }
     },
 
@@ -310,8 +309,7 @@ export default {
           this.afterSaveSuccess();
         }
       } catch (error) {
-        commonFn.toastError("Đã có lỗi xảy ra");
-        console.log(error);
+        commonFn.handleError(error, this.$router);
       }
     },
 

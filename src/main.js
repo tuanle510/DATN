@@ -44,11 +44,16 @@ import PrototypeExtensions from "./common/prototype.js";
 // Constants
 import constants from "./constant";
 
-// Axios
-
 const app = createApp(App);
 app.use(PrototypeExtensions);
 axios.defaults.baseURL = "http://localhost:5002/api/";
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 app.config.globalProperties.$axios = axios;
 // base component
 app.component("MainLayout", MainLayout);

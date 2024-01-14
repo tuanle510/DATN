@@ -2,10 +2,17 @@
 import { getCurrentInstance, ref } from "vue";
 import moment from "moment";
 import commonFn from "@/common/commonFn";
+import dayjs from "dayjs";
 import ThePaginate from "../Paginate/ThePaginate.vue";
 export default {
   components: { ThePaginate },
-  emits: ["update:selected", "onPaginate", "onClickAciton", "onDbClick"],
+  emits: [
+    "update:selected",
+    "onPaginate",
+    "onClickAciton",
+    "onDbClick",
+    "filterHeader",
+  ],
   props: {
     // Danh sách cột
     columns: Array,
@@ -96,8 +103,6 @@ export default {
 
     /**
      * Kiểm tra xem tất cả dữ liệu có đang được check hay không
-     * created by LTDAT 25.06.2020
-     * modify by nnlam 05/05/2021
      */
     isCheckedMultiple(selected) {
       const me = this;
@@ -237,6 +242,30 @@ export default {
       }
       return false;
     },
+
+    // Tìm kiếm trên thanh header
+    filterHeader() {
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+      this.timer = setTimeout(async () => {
+        var filter = this.columnx.filter((x) => x.filterValue);
+        var filterParam = [];
+        filter.forEach((item) => {
+          filterParam.push({
+            field: item.dataField,
+            value:
+              item.type == "date"
+                ? dayjs(item.filterValue).format("YYYY-MM-DDTHH:mm:ssZ")
+                : item.filterValue,
+            op: item.type == "date" ? "=" : "*",
+          });
+        });
+        // console.log(filterParam);
+        await this.$emit("filterHeader", filterParam);
+      }, 500);
+    },
   },
   data() {
     return {
@@ -284,7 +313,10 @@ export default {
               </div>
               <!-- Lọc -->
               <div class="th-filter">
-                <div class="th-filter-icon">
+                <div
+                  class="th-filter-icon"
+                  :title="column.type == 'date' ? 'Bằng' : 'Chứa'"
+                >
                   <div
                     :class="[column.type == 'date' ? 'op-equal' : 'op-contain']"
                   ></div>
@@ -293,12 +325,15 @@ export default {
                   v-if="column.type == 'date'"
                   class="th-filter-input"
                   v-model="column.filterValue"
+                  :textInputOptions="{ openMenu: false }"
+                  @onKeyup="filterHeader"
                 >
                 </TheDatepicker>
                 <TheInput
                   v-else
                   class="th-filter-input"
                   v-model="column.filterValue"
+                  @onKeyup="filterHeader"
                 ></TheInput>
               </div>
               <!-- Hết lọc -->

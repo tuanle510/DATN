@@ -173,12 +173,12 @@ export default defineComponent({
                 ></TheComboBox>
                 <div class="flex1"></div>
                 <div class="flex1"></div>
-              </div>
-              <div class="modal-row">
+            </div>
+              <!-- <div class="modal-row">
                 <TheInput class="flex1" label="Mẫ KH điện lực"></TheInput>
                 <TheInput class="flex1" label="Mẫ KH internet"></TheInput>
                 <TheInput class="flex1" label="Mật khẩu"></TheInput>
-              </div>
+              </div> -->
               <div class="modal-row">
                 <TheInput
                   class="flex1"

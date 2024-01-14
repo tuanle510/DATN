@@ -35,8 +35,7 @@ export default {
         this.data = res.data.Data;
         this.total = res.data.Sum;
       } catch (error) {
-        commonFn.toastError("Đã có lỗi xảy ra");
-        console.log(error);
+        commonFn.handleError(error, this.$router);
       } finally {
         this.tableLoading = false;
       }
@@ -57,13 +56,25 @@ export default {
           this.data = res.data.Data;
           this.total = res.data.Sum;
         } catch (error) {
-          console.log(error);
+          commonFn.handleError(error, this.$router);
         } finally {
           this.tableLoading = false;
         }
       } else {
         this.loadData();
       }
+    },
+
+    /**
+     * Load lại danh sách theo tìm kiếm header
+     */
+    async filterHeader(filter) {
+      const payload = {
+        filter: filter,
+        take: 20,
+        skip: 0,
+      };
+      this.loadData(payload);
     },
 
     /**
@@ -202,7 +213,7 @@ export default {
         // Gán lại danh sách đã chọn
         this.selected = [];
       } catch (error) {
-        commonFn.toastError("Xóa dữ liệu không thành công");
+        commonFn.handleError(error, this.$router);
       } finally {
         commonFn.unMask();
       }
