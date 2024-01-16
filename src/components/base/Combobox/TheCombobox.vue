@@ -181,7 +181,17 @@ export default defineComponent({
     freeText: {
       default: false,
     },
+    reload: {
+      default: false,
+    },
   },
+
+  computed: {
+    forceReload() {
+      return this.reloadData || this.reload;
+    },
+  },
+
   mounted() {
     const me = this;
     if (me.data) {
@@ -238,7 +248,7 @@ export default defineComponent({
     isOptionShow: async function (newValue) {
       if (newValue == true) {
         // Load remote
-        if (this.queryMode == "remote" && (!this.datax || this.reloadData)) {
+        if (this.queryMode == "remote" && (!this.datax || this.forceReload)) {
           this.loading = true;
           this.datax = await this.loadComboboxData();
           this.reloadData = false;
@@ -255,9 +265,7 @@ export default defineComponent({
     },
 
     initValue: function (newValue) {
-      if (newValue) {
-        this.displayValue = newValue;
-      }
+      this.displayValue = newValue;
     },
   },
 
@@ -424,6 +432,7 @@ export default defineComponent({
      * Created date: 12:32 22/05/2022
      */
     async selectItem() {
+      var oldValue = this.modelValue;
       // Chọn theo index của matches list:
       // Lấy obj đã ch gán vào selectedItem
       this.selecedItem = this.matches[this.selecedIndex];
@@ -439,6 +448,7 @@ export default defineComponent({
 
       var param = {
         value: this.modelValue, // giá trị của model
+        oldValue: oldValue, // giá trị cũ của model
         obj: this.selecedItem, // cả obj nếu cần gán cho trường khác
       };
       //  truyền cả obj lên cho component cha:

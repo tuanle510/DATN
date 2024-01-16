@@ -244,7 +244,7 @@ export default {
     },
 
     // Tìm kiếm trên thanh header
-    filterHeader() {
+    filterHeader(value) {
       if (this.timer) {
         clearTimeout(this.timer);
         this.timer = null;

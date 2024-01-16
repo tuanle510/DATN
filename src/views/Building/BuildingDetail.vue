@@ -1,12 +1,15 @@
 <script>
 import { ref, onMounted, getCurrentInstance, defineComponent } from "vue";
 import baseDetail from "@/views/baseDetail";
+import { comboboxLoadData } from "@/common/comboboxLoadData";
 export default defineComponent({
   extends: baseDetail,
   name: "KhachHangDetail",
   props: {},
   setup() {
     const { proxy } = getCurrentInstance();
+    const { loadProvinceData, loadDistrictData, loadWardData } =
+      comboboxLoadData();
     const module = "Building";
     // Mặd định vào tab đầu tiên
     const activeTab = ref(0);
@@ -61,13 +64,32 @@ export default defineComponent({
       dataTab.value = tabList[index]?.data || [];
     };
 
+    const changeProvince = (param) => {
+      if (param.value != param.oldValue) {
+        (proxy.model.district_code = null),
+          (proxy.model.district_name = null),
+          (proxy.model.ward_code = null),
+          (proxy.model.ward_name = null);
+      }
+    };
+    const changeDistrict = (param) => {
+      if (param.value != param.oldValue) {
+        (proxy.model.ward_code = null), (proxy.model.ward_name = null);
+      }
+    };
+
     return {
       tabList,
       activeTab,
       columnTab,
       dataTab,
       module,
+      loadProvinceData,
+      loadDistrictData,
+      loadWardData,
       onTabClick,
+      changeProvince,
+      changeDistrict,
     };
   },
 });
@@ -119,34 +141,43 @@ export default defineComponent({
                 <TheComboBox
                   label="Tỉnh/TP"
                   class="flex1"
-                  :data="defaultData"
-                  valueField="value"
-                  displayField="value"
-                  v-model="pageSize"
-                  :initValue="pageSize"
-                  @selectItem="changePageSize"
+                  valueField="province_code"
+                  displayField="province_full_name"
+                  :queryMode="'remote'"
+                  v-model="model.province_code"
+                  v-model:display="model.province_name"
+                  :initValue="model.province_name"
+                  :loadComboboxData="loadProvinceData"
+                  @selectItem="changeProvince"
                 ></TheComboBox>
                 <TheComboBox
                   label="Quận/Huyện"
                   class="flex1"
-                  :data="defaultData"
-                  valueField="value"
-                  displayField="value"
-                  v-model="pageSize"
-                  :initValue="pageSize"
-                  @selectItem="changePageSize"
+                  valueField="district_code"
+                  displayField="district_full_name"
+                  :queryMode="'remote'"
+                  v-model="model.district_code"
+                  v-model:display="model.district_name"
+                  :initValue="model.district_name"
+                  :loadComboboxData="
+                    () => loadDistrictData(model.province_code)
+                  "
+                  :reload="true"
+                  @selectItem="changeDistrict"
                 ></TheComboBox>
               </div>
               <div class="modal-row">
                 <TheComboBox
                   label="Xã/Phường"
                   class="flex1"
-                  :data="defaultData"
-                  valueField="value"
-                  displayField="value"
-                  v-model="pageSize"
-                  :initValue="pageSize"
-                  @selectItem="changePageSize"
+                  valueField="ward_code"
+                  displayField="ward_full_name"
+                  :queryMode="'remote'"
+                  v-model="model.ward_code"
+                  v-model:display="model.ward_name"
+                  :initValue="model.ward_name"
+                  :loadComboboxData="() => loadWardData(model.district_code)"
+                  :reload="true"
                 ></TheComboBox>
                 <div class="flex1"></div>
               </div>

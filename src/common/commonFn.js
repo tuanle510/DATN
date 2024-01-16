@@ -171,7 +171,7 @@ class commonFn {
       ).then((answer) => {
         if (answer) {
           localStorage.clear();
-          router.push("/");
+          router.push("/login");
         }
       });
     } else {

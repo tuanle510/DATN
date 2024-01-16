@@ -21,6 +21,24 @@ export default defineComponent({
         dataField: "building_address",
         align: "left",
       },
+      {
+        width: 200,
+        name: "Xã/Phường",
+        dataField: "ward_name",
+        align: "left",
+      },
+      {
+        width: 200,
+        name: "Quận/Huyện",
+        dataField: "district_name",
+        align: "left",
+      },
+      {
+        width: 200,
+        name: "Tỉnh/TP",
+        dataField: "province_name",
+        align: "left",
+      },
     ]);
     const formDetailName = "BuildingDetail";
     const module = "Building";
@@ -92,6 +110,7 @@ export default defineComponent({
           :data="data"
           @onDbClick="edit"
           @onPaginate="onPaginate"
+          @filterHeader="filterHeader"
           :loading="tableLoading"
           :total="total"
         >

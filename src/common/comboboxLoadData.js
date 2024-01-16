@@ -60,6 +60,54 @@ export const comboboxLoadData = () => {
   };
 
   /**
+   * Combo tòa nhà
+   * @returns
+   */
+  const loadProvinceData = async () => {
+    let payload = {
+      columns: "province_code, province_name, province_full_name",
+    };
+    let module = "province";
+    return await loadData(module, payload);
+  };
+
+  const loadDistrictData = async (province_code) => {
+    let payload = {
+      columns: "district_code, district_name, district_full_name",
+    };
+    let module = "district";
+    // Nếu có mã TP thì mới load
+    if (province_code) {
+      payload.filter = [
+        {
+          field: "province_code",
+          value: province_code,
+          op: "=",
+        },
+      ];
+      return await loadData(module, payload);
+    }
+  };
+
+  const loadWardData = async (district_code) => {
+    let payload = {
+      columns: "ward_code, ward_name, ward_full_name",
+    };
+    let module = "ward";
+    // Nếu có mã phường thì mới load
+    if (district_code) {
+      payload.filter = [
+        {
+          field: "district_code",
+          value: district_code,
+          op: "=",
+        },
+      ];
+      return await loadData(module, payload);
+    }
+  };
+
+  /**
    * Gọi api
    * @param {*} module
    * @param {*} payload
@@ -84,5 +132,8 @@ export const comboboxLoadData = () => {
     loadOwnerData,
     loadData,
     loadBuildingData,
+    loadProvinceData,
+    loadDistrictData,
+    loadWardData,
   };
 };
