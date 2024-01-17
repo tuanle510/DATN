@@ -119,20 +119,21 @@ export default {
       // Load Data
       try {
         const res = await this.$axios.get(`${this.module}/${param.id}`);
+        this.data = res.data.master;
+        this.customView(res.data);
         if (this.isDetailMaster) {
-          this.data = res.data.master;
           this.dataDetail = res.data.details || [];
           // Phàn dịch vụ
           this.serviceList = res.data.service || [];
           this.serviceDetail = res.data.detailsService || [];
-        } else {
-          this.data = res.data;
         }
       } catch (error) {
         commonFn.handleError(error, this.$router);
       }
     },
 
+    // Gán thêm gì thì gán
+    customView(data) {},
     /**
      * Gán thêm dữ liệu trc khi binddata nếu cần
      * @param {*} data

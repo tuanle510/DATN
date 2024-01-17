@@ -1,5 +1,5 @@
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { defineComponent } from "vue";
 import { DoughnutChart, BarChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
@@ -8,6 +8,9 @@ export default defineComponent({
   name: "Home",
   components: { DoughnutChart, BarChart },
   setup() {
+    onMounted(() => {
+      //Gọi api load dữ liệu
+    });
     const rightData = {
       labels: ["HĐ Chủ - khách", "HĐ Chủ - C.ty", "HĐ C.ty - khách"],
       datasets: [

@@ -81,6 +81,8 @@ export default defineComponent({
           :columns="columns"
           :data="data"
           @onDbClick="view"
+          :isFilterHeader="true"
+          @filterHeader="filterHeader"
           @onPaginate="onPaginate"
           :loading="tableLoading"
           :total="total"

@@ -109,8 +109,9 @@ export default defineComponent({
           :columns="columns"
           :data="data"
           @onDbClick="edit"
-          @onPaginate="onPaginate"
+          :isFilterHeader="true"
           @filterHeader="filterHeader"
+          @onPaginate="onPaginate"
           :loading="tableLoading"
           :total="total"
         >

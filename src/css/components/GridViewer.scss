@@ -117,12 +117,12 @@ $background-color_5: #b8bcc3;
           }
         }
         .th-content {
+          padding: 0 10px;
+          height: 30px !important;
+          width: 100%;
+          display: flex;
+          align-items: center;
           .th-title {
-            padding: 0 10px;
-            height: 30px !important;
-            width: 100%;
-            display: flex;
-            align-items: center;
           }
           .th-resize {
             // cursor: col-resize;
@@ -205,7 +205,20 @@ $background-color_5: #b8bcc3;
     }
   }
 }
-// .m-table-container:hover
+.m-table-no-data {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  background-image: url(../../assets/img/no-data.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  .no-data-text {
+    color: #c6c6c6;
+    font-family: Italic;
+  }
+}
 
 .text-limit {
   white-space: nowrap;

@@ -101,6 +101,7 @@ export default defineComponent({
           :data="data"
           @onDbClick="edit"
           @onPaginate="onPaginate"
+          :isFilterHeader="true"
           @filterHeader="filterHeader"
           :loading="tableLoading"
           :total="total"

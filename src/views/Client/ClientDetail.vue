@@ -10,6 +10,7 @@ export default defineComponent({
     const module = "Client";
     // Mặd định vào tab đầu tiên
     const activeTab = ref(0);
+    const tab1 = ref([]);
 
     const tabList = [
       {
@@ -46,33 +47,71 @@ export default defineComponent({
         ],
       },
     ];
-    const columnTab = ref(tabList[1].columns);
-    const dataTab = ref([
+    const columnTab = ref([
       {
-        ten_chu_nha: "Tuấn lê",
-        so_dien_thoai: "012314124124",
+        name: "Tên bộ hồ sơ",
+        dataField: "contract_group_name",
+      },
+      {
+        width: 100,
+        name: "Tên căn hộ",
+        dataField: "apartment_name",
+      },
+      {
+        width: 120,
+        name: "Giá thuê",
+        dataField: "unit_price",
+        type: "currency",
+      },
+      {
+        width: 100,
+        name: "Ngày bắt đầu",
+        dataField: "start_date",
+        align: "center",
+        type: "date",
+      },
+      {
+        width: 100,
+        name: "Ngày kết thúc",
+        dataField: "end_date",
+        align: "center",
+        type: "date",
+      },
+      {
+        width: 100,
+        name: "Tình trạng",
+        dataField: "status",
+      },
+      {
+        width: 150,
+        name: "Kiểu hợp đồng",
+        dataField: "contract_type",
       },
     ]);
-    onMounted(() => {
-      columnTab.value = tabList[0].columns;
-    });
 
     const onTabClick = (index) => {
       activeTab.value = index;
       if (activeTab.value === 0) {
         proxy.opened();
       }
-      columnTab.value = tabList[index]?.columns || [];
-      dataTab.value = tabList[index]?.data || [];
+    };
+
+    /**
+     * Gán giá trị cho tab1
+     * lttuan1
+     */
+    const customView = (data) => {
+      tab1.value = data.tab1 || [];
     };
 
     return {
       tabList,
       activeTab,
       columnTab,
-      dataTab,
+      tab1,
       module,
       onTabClick,
+      customView,
     };
   },
 });
@@ -128,6 +167,24 @@ export default defineComponent({
                   v-model="model.email"
                   :rules="[{ name: 'required' }]"
                 ></TheInput>
+              </div>
+              <div class="modal-row">
+                <TheInput
+                  class="flex1"
+                  label="Số CMT/CCCD"
+                  v-model="model.paper_number"
+                ></TheInput>
+                <TheDatepicker
+                  class="flex1"
+                  label="Ngày cấp"
+                  v-model="model.paper_date"
+                ></TheDatepicker>
+                <TheInput
+                  class="flex1"
+                  label="Nơi cấp"
+                  v-model="model.paper_place"
+                ></TheInput>
+                <div class="flex1"></div>
               </div>
 
               <div class="modal-row">
@@ -191,24 +248,6 @@ export default defineComponent({
               </div>
 
               <div class="modal-row">
-                <TheInput
-                  class="flex1"
-                  label="Số CMT/CCCD"
-                  v-model="model.paper_number"
-                ></TheInput>
-                <TheDatepicker
-                  class="flex1"
-                  label="Ngày cấp"
-                  v-model="model.paper_date"
-                ></TheDatepicker>
-                <TheInput
-                  class="flex1"
-                  label="Nơi cấp"
-                  v-model="model.paper_place"
-                ></TheInput>
-                <div class="flex1"></div>
-              </div>
-              <div class="modal-row">
                 <TheTextArea
                   class="flex1"
                   label="Ghi chú"
@@ -218,7 +257,7 @@ export default defineComponent({
             </div>
           </div>
           <div class="grids-tab-container" v-else>
-            <GridViewer :data="[]" :columns="columnTab"></GridViewer>
+            <GridViewer :data="tab1" :columns="columnTab"></GridViewer>
           </div>
         </div>
       </div>

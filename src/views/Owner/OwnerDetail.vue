@@ -10,6 +10,11 @@ export default defineComponent({
     const module = "Owner";
     // Mặd định vào tab đầu tiên
     const activeTab = ref(0);
+    const tab1 = ref([]);
+    const tab2 = ref([]);
+    const tab3 = ref([]);
+    const dataTab = ref([]);
+
     const tabList = [
       {
         tabTitle: "Thông tin chung",
@@ -20,54 +25,85 @@ export default defineComponent({
           {
             width: 100,
             name: "Tên căn hộ",
-            dataField: "ten_chu_nha",
-          },
-          {
-            width: 100,
-            name: "Tên tòa nhà",
-            dataField: "so_dien_thoai",
+            dataField: "apartment_name",
           },
           {
             width: 150,
             name: "Địa chỉ",
-            dataField: "email",
+            dataField: "apartment_address",
           },
           {
-            width: 150,
-            name: "Giấy chứng nhận số",
-            dataField: "chung_minh_thu",
-          },
-          {
-            width: 150,
-            name: "Giấy chứng nhận",
-            dataField: "Giấy chứng nhận",
-          },
-          {
-            width: 150,
-            name: "Giấy chứng nhận ngày cấp",
-            dataField: "ngay_sinh",
+            width: 100,
+            name: "Tên tòa nhà",
+            dataField: "building_name",
           },
           {
             width: 150,
             name: " Mô tả",
-            dataField: "dia_chi",
+            dataField: "description",
           },
         ],
       },
       {
-        tabTitle: "Bộ hợp đồng",
+        tabTitle: "Bộ hồ sơ",
+        columns: [
+          {
+            name: "Tên bộ hồ sơ",
+            dataField: "contract_group_name",
+          },
+          {
+            width: 250,
+            name: "Tên căn hộ",
+            dataField: "apartment_name",
+          },
+          {
+            width: 250,
+            name: "Chủ nhà",
+            dataField: "owner_name",
+          },
+        ],
       },
       {
         tabTitle: "Hợp đồng",
+        columns: [
+          {
+            width: 100,
+            name: "Tên căn hộ",
+            dataField: "apartment_name",
+          },
+          {
+            width: 150,
+            name: "Bên cho thuê",
+            dataField: "owner_name",
+          },
+          {
+            width: 150,
+            name: "Bên thuê",
+            dataField: "client_name",
+          },
+          {
+            width: 150,
+            name: "Ngày bắt đầu",
+            dataField: "start_date",
+            align: "center",
+            type: "date",
+          },
+          {
+            width: 150,
+            name: "Ngày kết thúc",
+            dataField: "end_date",
+            align: "center",
+            type: "date",
+          },
+          {
+            width: 150,
+            name: "Kiểu hợp đồng",
+            dataField: "contract_type",
+          },
+        ],
       },
     ];
-    const columnTab = ref(tabList[1].columns);
-    const dataTab = ref([
-      {
-        ten_chu_nha: "Tuấn lê",
-        so_dien_thoai: "012314124124",
-      },
-    ]);
+    const columnTab = ref([]);
     onMounted(() => {
       columnTab.value = tabList[0].columns;
     });
@@ -78,16 +114,40 @@ export default defineComponent({
         proxy.opened();
       }
       columnTab.value = tabList[index]?.columns || [];
-      dataTab.value = tabList[index]?.data || [];
+      switch (index) {
+        case 1:
+          dataTab.value = tab1.value;
+          break;
+        case 2:
+          dataTab.value = tab2.value;
+          break;
+        case 3:
+          dataTab.value = tab3.value;
+          break;
+      }
+    };
+
+    /**
+     * Gán giá trị cho tab1
+     * lttuan1
+     */
+    const customView = (data) => {
+      tab1.value = data.tab1 || [];
+      tab2.value = data.tab2 || [];
+      tab3.value = data.tab3 || [];
     };
 
     return {
       tabList,
       activeTab,
       columnTab,
-      dataTab,
       module,
       onTabClick,
+      tab1,
+      tab2,
+      tab3,
+      dataTab,
+      customView,
     };
   },
 });

@@ -12,6 +12,8 @@ export default defineComponent({
     const module = "Apartment";
     // Mặd định vào tab đầu tiên
     const activeTab = ref(0);
+    const tab1 = ref([]);
+    const tab2 = ref([]);
     const { ownerColumns, buildingColumns } = comboboxColumns();
     const { loadOwnerData, loadBuildingData } = comboboxLoadData();
 
@@ -20,46 +22,66 @@ export default defineComponent({
         tabTitle: "Thông tin chung",
       },
       {
-        tabTitle: "Bộ hợp đồng",
+        tabTitle: "Bộ hồ sơ",
         columns: [
           {
-            width: 100,
+            name: "Tên bộ hồ sơ",
+            dataField: "contract_group_name",
+          },
+          {
+            width: 250,
             name: "Tên căn hộ",
-            dataField: "ten_chu_nha",
+            dataField: "apartment_name",
           },
           {
-            width: 100,
-            name: "Mã",
-            dataField: "so_dien_thoai",
-          },
-          {
-            width: 150,
-            name: "Tên căn hộ",
-            dataField: "email",
-          },
-          {
-            width: 150,
-            name: "Mã căn hộ",
-            dataField: "chung_minh_thu",
-          },
-          {
-            width: 150,
+            width: 250,
             name: "Chủ nhà",
-            dataField: "Giấy chứng nhận",
+            dataField: "owner_name",
           },
         ],
       },
       {
         tabTitle: "Hợp đồng",
+        columns: [
+          {
+            width: 100,
+            name: "Tên căn hộ",
+            dataField: "apartment_name",
+          },
+          {
+            width: 150,
+            name: "Bên cho thuê",
+            dataField: "owner_name",
+          },
+          {
+            width: 150,
+            name: "Bên thuê",
+            dataField: "client_name",
+          },
+          {
+            width: 150,
+            name: "Ngày bắt đầu",
+            dataField: "start_date",
+            align: "center",
+            type: "date",
+          },
+          {
+            width: 150,
+            name: "Ngày kết thúc",
+            dataField: "end_date",
+            align: "center",
+            type: "date",
+          },
+          {
+            width: 150,
+            name: "Kiểu hợp đồng",
+            dataField: "contract_type",
+          },
+        ],
       },
     ];
-    const columnTab = ref(tabList[1].columns);
-    const dataTab = ref([
-      {
-        ten_chu_nha: "Tuấn lê",
-        so_dien_thoai: "012314124124",
-      },
-    ]);
+    const columnTab = ref([]);
+    const dataTab = ref([]);
     const isFromBuilding = ref(false);
     onMounted(() => {
       columnTab.value = tabList[0].columns;
@@ -72,7 +94,14 @@ export default defineComponent({
         proxy.opened();
       }
       columnTab.value = tabList[index]?.columns || [];
-      dataTab.value = tabList[index]?.data || [];
+      switch (index) {
+        case 1:
+          dataTab.value = tab1.value;
+          break;
+        case 2:
+          dataTab.value = tab2.value;
+          break;
+      }
     };
 
     const beforeBindData = (data) => {
@@ -81,6 +110,15 @@ export default defineComponent({
         data.building_id = master.building_id;
         data.building_name = master.building_name;
       }
+    };
+
+    /**
+     * Gán giá trị cho tab1
+     * lttuan1
+     */
+    const customView = (data) => {
+      tab1.value = data.tab1 || [];
+      tab2.value = data.tab2 || [];
     };
 
     return {
@@ -96,6 +134,7 @@ export default defineComponent({
       beforeBindData,
       onTabClick,
       isFromBuilding,
+      customView,
     };
   },
 });
@@ -173,7 +212,7 @@ export default defineComponent({
                 ></TheComboBox>
                 <div class="flex1"></div>
                 <div class="flex1"></div>
-            </div>
+              </div>
               <!-- <div class="modal-row">
                 <TheInput class="flex1" label="Mẫ KH điện lực"></TheInput>
                 <TheInput class="flex1" label="Mẫ KH internet"></TheInput>
@@ -204,7 +243,7 @@ export default defineComponent({
             </div>
           </div>
           <div class="grids-tab-container" v-else>
-            <GridViewer :data="[]" :columns="columnTab"></GridViewer>
+            <GridViewer :data="dataTab" :columns="columnTab"></GridViewer>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 export default {
-  CK: "Chủ - Khách",
-  CCT: "Chủ nhà - Công ty",
-  CTK: "Công ty - Khách",
+  CK: "THUÊ Chủ nhà - Khách",
+  CCT: "THUÊ Chủ nhà - Công ty",
+  CTK: "THUÊ Công ty - Khách",
 };

@@ -26,7 +26,7 @@ export default defineComponent({
         align: "left",
       },
       {
-        width: 150,
+        width: 200,
         name: "Email",
         dataField: "email",
         align: "left",
@@ -71,9 +71,7 @@ export default defineComponent({
     <!-- Phần nội dung -->
     <div class="m-container">
       <div class="m-container-toolbar">
-        <div class="toolbar-field">
-          <!-- <TheInput placeholder="Tìm kiếm căn hộ" /> -->
-        </div>
+        <div class="toolbar-field"></div>
         <div class="toolbar-right">
           <div
             class="toolbar-btn"
@@ -82,9 +80,6 @@ export default defineComponent({
           >
             <div class="refresh"></div>
           </div>
-          <!-- <div class="toolbar-btn">
-            <div class="excel"></div>
-          </div> -->
           <div class="toolbar-btn" @click="deleteMulti" v-tooltip="'Xóa nhiều'">
             <div class="remove"></div>
           </div>
@@ -100,6 +95,8 @@ export default defineComponent({
           :data="data"
           @onDbClick="edit"
           @onPaginate="onPaginate"
+          :isFilterHeader="true"
+          @filterHeader="filterHeader"
           :loading="tableLoading"
           :total="total"
         >

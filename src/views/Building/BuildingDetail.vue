@@ -13,57 +13,49 @@ export default defineComponent({
     const module = "Building";
     // Mặd định vào tab đầu tiên
     const activeTab = ref(0);
-
+    const tab1 = ref([]);
     const tabList = [
       {
         tabTitle: "Thông tin chung",
       },
       {
         tabTitle: "Căn hộ",
-        columns: [
-          {
-            width: 100,
-            name: "Tên căn hộ",
-            dataField: "ten_chu_nha",
-          },
-          {
-            width: 100,
-            name: "Chủ nhà",
-            dataField: "so_dien_thoai",
-          },
-          {
-            width: 150,
-            name: "Địa chỉ",
-            dataField: "email",
-          },
-          {
-            width: 150,
-            name: "Mô tả",
-            dataField: "chung_minh_thu",
-          },
-        ],
       },
     ];
-    const columnTab = ref(tabList[1].columns);
-    const dataTab = ref([
+    const columnTab = ref([
       {
-        ten_chu_nha: "Tuấn lê",
-        so_dien_thoai: "012314124124",
+        width: 100,
+        name: "Tên căn hộ",
+        dataField: "apartment_name",
+      },
+      {
+        width: 100,
+        name: "Chủ nhà",
+        dataField: "owner_name",
+      },
+      {
+        width: 150,
+        name: "Địa chỉ",
+        dataField: "apartment_address",
+      },
+      {
+        width: 150,
+        name: "Mô tả",
+        dataField: "description",
       },
     ]);
-    onMounted(() => {
-      columnTab.value = tabList[0].columns;
-    });
 
     const onTabClick = (index) => {
       activeTab.value = index;
       if (activeTab.value === 0) {
         proxy.opened();
       }
-      columnTab.value = tabList[index]?.columns || [];
-      dataTab.value = tabList[index]?.data || [];
     };
 
+    /**
+     * thay đổi giá trị combo TP
+     * lttuan1
+     */
     const changeProvince = (param) => {
       if (param.value != param.oldValue) {
         (proxy.model.district_code = null),
@@ -72,17 +64,29 @@ export default defineComponent({
           (proxy.model.ward_name = null);
       }
     };
+
+    /**
+     * thay đổi giá trị combo quận huyện
+     * lttuan1
+     */
     const changeDistrict = (param) => {
       if (param.value != param.oldValue) {
         (proxy.model.ward_code = null), (proxy.model.ward_name = null);
       }
     };
 
+    /**
+     * Gán giá trị cho tab1
+     * lttuan1
+     */
+    const customView = (data) => {
+      tab1.value = data.tab1 || [];
+    };
+
     return {
       tabList,
       activeTab,
       columnTab,
-      dataTab,
       module,
       loadProvinceData,
       loadDistrictData,
@@ -90,6 +94,8 @@ export default defineComponent({
       onTabClick,
       changeProvince,
       changeDistrict,
+      customView,
+      tab1,
     };
   },
 });
@@ -185,7 +191,7 @@ export default defineComponent({
           </div>
 
           <div class="grids-tab-container" v-else>
-            <GridViewer :data="[]" :columns="columnTab"></GridViewer>
+            <GridViewer :data="tab1" :columns="columnTab"></GridViewer>
           </div>
         </div>
       </div>

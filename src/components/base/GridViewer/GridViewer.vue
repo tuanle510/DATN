@@ -45,6 +45,10 @@ export default {
       type: Array,
       return: () => [],
     },
+    isFilterHeader: {
+      default: false,
+      type: Boolean,
+    },
   },
   watch: {
     columns(newValue) {
@@ -307,12 +311,12 @@ export default {
               :style="genHeaderCss(column, index)"
             >
               <div class="th-content">
-                <div class="th-title">
+                <span class="th-title">
                   {{ column.name }}
-                </div>
+                </span>
               </div>
               <!-- Lọc -->
-              <div class="th-filter">
+              <div class="th-filter" v-if="isFilterHeader">
                 <div
                   class="th-filter-icon"
                   :title="column.type == 'date' ? 'Bằng' : 'Chứa'"
@@ -349,6 +353,7 @@ export default {
         <div v-if="loading" class="m-table-loading">
           <div class="m-table-loading-icon"></div>
         </div>
+
         <!-- Body -->
         <tbody v-else>
           <tr
@@ -383,6 +388,12 @@ export default {
           </tr>
         </tbody>
       </table>
+      <div
+        v-if="(!data || data.length == 0) && !loading"
+        class="m-table-no-data"
+      >
+        <div class="no-data-text">Không có dữ liệu</div>
+      </div>
     </div>
     <div class="m-footer-container" v-if="isPaging">
       <div class="m-footer-total">

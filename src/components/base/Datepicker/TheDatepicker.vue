@@ -120,7 +120,6 @@ export default defineComponent({
       const keyCode = event.keyCode;
       const isCtrlPressed = event.ctrlKey || event.metaKey; // Kiểm tra xem Ctrl hoặc Command (Mac) đã được nhấn
       const input = event.target.value;
-      console.log(input);
       if (
         !(
           (
