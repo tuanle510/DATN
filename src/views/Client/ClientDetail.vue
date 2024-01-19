@@ -18,33 +18,6 @@ export default defineComponent({
       },
       {
         tabTitle: "Hợp đồng thuê",
-        columns: [
-          {
-            width: 100,
-            name: "Tên căn hộ",
-            dataField: "ten_chu_nha",
-          },
-          {
-            width: 100,
-            name: "Mã",
-            dataField: "so_dien_thoai",
-          },
-          {
-            width: 150,
-            name: "Tên căn hộ",
-            dataField: "email",
-          },
-          {
-            width: 150,
-            name: "Mã căn hộ",
-            dataField: "chung_minh_thu",
-          },
-          {
-            width: 150,
-            name: "Chủ nhà",
-            dataField: "Giấy chứng nhận",
-          },
-        ],
       },
     ];
     const columnTab = ref([
@@ -53,12 +26,12 @@ export default defineComponent({
         dataField: "contract_group_name",
       },
       {
-        width: 100,
+        width: 120,
         name: "Tên căn hộ",
         dataField: "apartment_name",
       },
       {
-        width: 120,
+        width: 100,
         name: "Giá thuê",
         dataField: "unit_price",
         type: "currency",
@@ -83,7 +56,7 @@ export default defineComponent({
         dataField: "status",
       },
       {
-        width: 150,
+        width: 120,
         name: "Kiểu hợp đồng",
         dataField: "contract_type",
       },
@@ -257,7 +230,11 @@ export default defineComponent({
             </div>
           </div>
           <div class="grids-tab-container" v-else>
-            <GridViewer :data="tab1" :columns="columnTab"></GridViewer>
+            <GridViewer
+              :data="tab1"
+              :columns="columnTab"
+              :isAction="false"
+            ></GridViewer>
           </div>
         </div>
       </div>

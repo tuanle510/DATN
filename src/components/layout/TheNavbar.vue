@@ -20,6 +20,11 @@ export default {
         name: "Chủ nhà",
       },
       {
+        path: "/client",
+        icon: "client",
+        name: "Khách hàng",
+      },
+      {
         path: "/building",
         icon: "building",
         name: "Tòa nhà",
@@ -28,11 +33,6 @@ export default {
         path: "/apartment",
         icon: "apartment",
         name: "Căn hộ",
-      },
-      {
-        path: "/client",
-        icon: "client",
-        name: "Khách hàng",
       },
       // {
       //   path: "/contract",

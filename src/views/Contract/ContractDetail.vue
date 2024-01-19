@@ -430,13 +430,6 @@ export default defineComponent({
               </div>
               <div class="modal-row">
                 <div class="m-label-text">Phụ trách</div>
-                <!-- <TheComboBox
-                  class="flex1"
-                  valueField="id"
-                  displayField="name"
-                  v-model="model.purchaser_name"
-                  :disabled="isView"
-                ></TheComboBox> -->
                 <TheInput
                   class="flex1"
                   v-model="model.purchaser_name"
@@ -642,19 +635,9 @@ export default defineComponent({
       </div>
     </template>
     <template #footer>
-      <div class="m-footer-container">
-        <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
-        <div class="m-footer-container-right">
-          <!-- <TheButton
-            class="outline-button"
-            v-if="mode == $constants.formMode.Edit"
-            @click="postpone()"
-            >Hoãn</TheButton
-          > -->
-          <TheButton @click="setModeEdit()" v-if="isView">Sửa</TheButton>
-          <TheButton @click="saveAction()" v-else>Cất</TheButton>
-        </div>
-      </div>
+      <TheButton class="outline-button" @click="hide()">Đóng</TheButton>
+      <TheButton @click="setModeEdit()" v-if="isView">Sửa</TheButton>
+      <TheButton @click="saveAction()" v-else>Lưu</TheButton>
     </template>
   </DynamicModal>
 </template>

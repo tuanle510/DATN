@@ -230,10 +230,36 @@ export default {
         commonFn.toastError("Xóa dữ liệu không thành công");
       }
       var length = res.length < 10 ? "0" + res.length : res.length;
-      const text =
-        '<span class="strong-text">{0} </span> bản ghi được chọn không thể xóa vì đã phát sinh hợp đồng. Vui lòng kiểm tra lại trước khi thực hiện xóa';
+      var text =
+        '<span class="strong-text">{0} </span> bản ghi được chọn không thể xóa vì đã phát sinh dữ liệu. Vui lòng kiểm tra lại trước khi thực hiện xóa.<br>';
+      if (res[0] && res[0].Data) {
+        var errs = res[0].Data;
+        console.log(errs);
+        for (let key in errs) {
+          if (errs[key] != 0) {
+            switch (key) {
+              case "apartment":
+                text += "Căn hộ: " + errs[key] + " bản ghi<br>";
+                break;
+              case "building":
+                text += "Tòa nhà: " + errs[key] + " bản ghi<br>";
+                break;
+              case "contract":
+                text += "Hợp đồng: " + errs[key] + " bản ghi<br>";
+                break;
+              case "contractGroup":
+                text += "Bộ hồ sơ: " + errs[key] + " bản ghi<br>";
+                break;
+
+              default:
+                break;
+            }
+          }
+        }
+      }
+      // console.log(text);
       var message = commonFn.replaceTextWithHTML(text, length);
-      confirmYes("Không hợp lệ", message).then((answer) => {
+      confirmYes("Xóa không thành công", message).then((answer) => {
         if (answer) {
           // chả làm gì
         }
@@ -248,7 +274,7 @@ export default {
         const text =
           'Vui lòng chọn <span class="strong-text"> ít nhất 1 bản ghi </span> để thực hiện được chức năng này.';
         var message = commonFn.replaceTextWithHTML(text);
-        confirmYes("Không hợp lệ", message).then((answer) => {
+        confirmYes("Xóa không thành công", message).then((answer) => {
           if (answer) {
             // chả làm gì
           }

@@ -191,7 +191,11 @@ export default defineComponent({
           </div>
 
           <div class="grids-tab-container" v-else>
-            <GridViewer :data="tab1" :columns="columnTab"></GridViewer>
+            <GridViewer
+              :data="tab1"
+              :columns="columnTab"
+              :isAction="false"
+            ></GridViewer>
           </div>
         </div>
       </div>

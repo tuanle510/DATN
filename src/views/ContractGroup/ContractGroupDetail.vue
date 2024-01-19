@@ -5,7 +5,7 @@ import { ContractGroupDetailData } from "./ContractGroupDetailData";
 import { comboboxColumns } from "@/common/comboboxColumns";
 import { comboboxLoadData } from "@/common/comboboxLoadData";
 import popupUtil from "@/components/base/DynamicModal/popupUtil";
-import { confirmYes } from "@/common/dialogFn";
+import { confirmYes, confirm } from "@/common/dialogFn";
 import commonFn from "@/common/commonFn";
 
 export default defineComponent({
@@ -183,6 +183,42 @@ export default defineComponent({
         console.log(error);
       }
     };
+
+    const onClickAciton = (row, action) => {
+      switch (action) {
+        case "Edit":
+          proxy.editDetail(row);
+          break;
+        case "Delete":
+          var title = "Xóa hợp đồng";
+          const message = "Bạn có muốn xóa hợp đồng không?";
+          confirm(title, message).then(async (answer) => {
+            if (answer) {
+              commonFn.mask();
+              //xóa & đóng
+              try {
+                const res = await proxy.$axios.delete(`contract`, {
+                  data: [row.contract_id],
+                });
+                if (res.data.length == 0) {
+                  // Cập nhật lại List bên ngoài
+                  await this.reloadDetail();
+                  //Hiển thị toast thành công
+                  commonFn.toastSuccess("Xóa dữ liệu thành công");
+                }
+              } catch (error) {
+                commonFn.handleError(error, proxy.$router);
+              } finally {
+                commonFn.unMask();
+              }
+            }
+          });
+          break;
+
+        default:
+          break;
+      }
+    };
     return {
       module,
       columns,
@@ -201,6 +237,7 @@ export default defineComponent({
       afterSave,
       editDetail,
       reloadDetail,
+      onClickAciton,
     };
   },
 });
@@ -299,7 +336,25 @@ export default defineComponent({
               :data="modelDetail"
               @onDbClick="editDetail"
               :columns="columns"
-            ></GridViewer>
+            >
+              <template #action="{ row }">
+                <span class="action-link" @click="onClickAciton(row, 'Edit')"
+                  >Xem/Sửa</span
+                >
+                <TheMenuWrapper>
+                  <template #toggle-button="{ toggle }">
+                    <div class="icon-box-24" @click="toggle">
+                      <div class="dropdown"></div>
+                    </div>
+                  </template>
+                  <template #default>
+                    <TheMenuItem @click="onClickAciton(row, 'Delete')"
+                      >Xóa</TheMenuItem
+                    >
+                  </template>
+                </TheMenuWrapper>
+              </template>
+            </GridViewer>
           </div>
         </div>
       </div>
@@ -394,6 +449,10 @@ export default defineComponent({
       .grids-tab-container {
         height: 100%;
       }
+    }
+    .action-link {
+      color: #0078d7;
+      font-weight: 600;
     }
   }
 }

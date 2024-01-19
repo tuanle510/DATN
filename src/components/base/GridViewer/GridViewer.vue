@@ -25,6 +25,11 @@ export default {
       default: false,
       type: Boolean,
     },
+    // Có chức năng không
+    isAction: {
+      default: true,
+      type: Boolean,
+    },
     // Có phân trang hay không
     isPaging: {
       default: false,
@@ -342,7 +347,7 @@ export default {
               </div>
               <!-- Hết lọc -->
             </th>
-            <th class="m-th-action" v-if="isMulti">
+            <th class="m-th-action" v-if="isAction">
               <div class="th-content">
                 <div class="th-title">Chức năng</div>
               </div>
@@ -382,7 +387,7 @@ export default {
                 }}</span>
               </div>
             </td>
-            <td class="m-tr-action d-flex-center" v-if="isMulti">
+            <td class="m-tr-action d-flex-center" v-if="isAction">
               <slot name="action" :row="row"></slot>
             </td>
           </tr>

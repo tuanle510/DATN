@@ -1,51 +1,82 @@
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, getCurrentInstance } from "vue";
 import { defineComponent } from "vue";
 import { DoughnutChart, BarChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
+import commonFn from "@/common/commonFn";
+
 Chart.register(...registerables);
 export default defineComponent({
   name: "Home",
   components: { DoughnutChart, BarChart },
   setup() {
-    onMounted(() => {
-      //Gọi api load dữ liệu
+    const { proxy } = getCurrentInstance();
+    const model = ref({
+      apartment_records: 0,
+      client_records: 0,
+      building_count: 0,
+      owner_count: 0,
     });
-    const rightData = {
-      labels: ["HĐ Chủ - khách", "HĐ Chủ - C.ty", "HĐ C.ty - khách"],
-      datasets: [
-        {
-          data: [30, 40, 60],
-          backgroundColor: ["#77CEFF", "#0079AF", "#123E6B"],
-        },
-      ],
-    };
 
-    const leftData = {
-      labels: [
-        "T1",
-        "T.2",
-        "T.3",
-        "T.4",
-        "T.5",
-        "T.6",
-        "T.7",
-        "T.8",
-        "T.9",
-        "T.10",
-        "T.11",
-        "T.12",
-      ],
-      datasets: [
-        {
-          label: "Tổng số hợp đồng",
-          data: [65, 59, 80, 81, 56, 55, 40],
-          backgroundColor: ["#77CEFF"],
-        },
-      ],
-    };
+    const leftData = ref({});
+    const rightData = ref({});
 
-    return { rightData, leftData };
+    onMounted(async () => {
+      commonFn.mask();
+      try {
+        //Gọi api load dữ liệu
+        const res = await proxy.$axios.get(
+          `ContractGroup/dashboard/${new Date().getFullYear()}`
+        );
+        console.log(res.data);
+        if (res.data) {
+          model.value.apartment_records =
+            res.data.dashBoard[0].apartment_records;
+          model.value.client_records = res.data.dashBoard[0].client_records;
+          model.value.building_count = res.data.dashBoard[0].building_count;
+          model.value.owner_count = res.data.dashBoard[0].owner_count;
+          leftData.value = {
+            labels: [
+              "T1",
+              "T.2",
+              "T.3",
+              "T.4",
+              "T.5",
+              "T.6",
+              "T.7",
+              "T.8",
+              "T.9",
+              "T.10",
+              "T.11",
+              "T.12",
+            ],
+            datasets: [
+              {
+                label: "Tổng số hợp đồng",
+                data: res.data.dashBoardChart.map((x) => x.total_records),
+                backgroundColor: ["#77CEFF"],
+              },
+            ],
+          };
+          rightData.value = {
+            // labels: ["HĐ Chủ - khách", "HĐ Chủ - C.ty", "HĐ C.ty - khách"],
+            labels: res.data.dashBoardCircle.map((x) => x.contract_type),
+            datasets: [
+              {
+                data: res.data.dashBoardCircle.map((x) => x.total_records),
+                backgroundColor: ["#77CEFF", "#0079AF", "#123E6B"],
+              },
+            ],
+          };
+        }
+      } catch (error) {
+        commonFn.handleError(error, proxy.$router);
+      }
+      // Xóa mask
+      commonFn.unMask();
+    });
+
+    return { rightData, leftData, model };
   },
 });
 </script>
@@ -62,28 +93,28 @@ export default defineComponent({
         <div class="m-dashboard-item">
           <div class="item-avatar client-bg"></div>
           <div class="d-flex-column">
-            <div class="m-dashboard-number">20</div>
+            <div class="m-dashboard-number">{{ model.client_records }}</div>
             <div class="m-dashboard-text">Khách thuê</div>
           </div>
         </div>
         <div class="m-dashboard-item">
           <div class="item-avatar owner-bg"></div>
           <div class="d-flex-column">
-            <div class="m-dashboard-number">30</div>
+            <div class="m-dashboard-number">{{ model.owner_count }}</div>
             <div class="m-dashboard-text">Chủ nhà</div>
           </div>
         </div>
         <div class="m-dashboard-item">
           <div class="item-avatar building-bg"></div>
           <div class="d-flex-column">
-            <div class="m-dashboard-number">10</div>
+            <div class="m-dashboard-number">{{ model.building_count }}</div>
             <div class="m-dashboard-text">Tòa nhà</div>
           </div>
         </div>
         <div class="m-dashboard-item">
           <div class="item-avatar apartment-bg"></div>
           <div class="d-flex-column">
-            <div class="m-dashboard-number">36</div>
+            <div class="m-dashboard-number">{{ model.apartment_records }}</div>
             <div class="m-dashboard-text">Căn hộ</div>
           </div>
         </div>

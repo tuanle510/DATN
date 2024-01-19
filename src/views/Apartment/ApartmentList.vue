@@ -15,6 +15,12 @@ export default defineComponent({
       },
       {
         width: 250,
+        name: "Chủ sở hữu",
+        dataField: "owner_name",
+        align: "left",
+      },
+      {
+        width: 250,
         name: "Tòa nhà",
         dataField: "building_name",
         align: "left",
