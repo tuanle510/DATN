@@ -1,7 +1,7 @@
 <script>
 import { ref, getCurrentInstance, defineComponent } from "vue";
 import baseDetail from "@/views/baseDetail";
-
+import { confirmYes } from "@/common/dialogFn";
 export default defineComponent({
   extends: baseDetail,
   name: "ContractDetail",
@@ -10,6 +10,17 @@ export default defineComponent({
     const { proxy } = getCurrentInstance();
     const number = ref(null);
     const submitForm = () => {
+      if (number.value > 31) {
+        confirmYes(
+          "Ngày không hợp lệ",
+          "Giá trị ngày không thỏa mãn. Vui lòng đọc hướng dẫn và nhập lại."
+        ).then((answer) => {
+          if (answer) {
+            // chả làm gì
+          }
+        });
+        return;
+      }
       if (
         proxy._formParam &&
         proxy._formParam.submit &&

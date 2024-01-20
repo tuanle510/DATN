@@ -179,5 +179,50 @@ class commonFn {
       console.log(res);
     }
   }
+
+  /**
+   * Tạo đợt thanh toán
+   * @param {*} startDate
+   * @param {*} endDate
+   * @param {*} interval
+   * @param {*} desired
+   */
+  generatePaymentDates(startDate, endDate, interval, desired) {
+    const paymentPeriods = [];
+    let currentDate = new Date(startDate).getDateOnly();
+    // Xử lí ngày dự tính thanh toán
+    desired = desired < 0 ? currentDate.getDate() + desired : desired;
+
+    while (currentDate <= new Date(endDate).getDateOnly()) {
+      // Ngày bắt đầu kì
+      const periodStart = new Date(currentDate);
+      // Cộng thêm số tháng theo Kỳ thanh toán
+      currentDate.setMonth(currentDate.getMonth() + interval);
+      // Ngày kết thúc kì thanh toán
+      var periodEnd = new Date();
+      if (currentDate > endDate) {
+        periodEnd = new Date(endDate);
+      } else {
+        periodEnd = new Date(currentDate);
+        periodEnd = new Date(periodEnd.setDate(periodEnd.getDate() - 1));
+      }
+
+      // Đặt ngày cuối của tháng trước
+      var daysInMonth = new Date(currentDate);
+      daysInMonth = new Date(daysInMonth.setDate(0)).getDate();
+      // Gán bằng ngày thực trả
+      let paymentDay = desired > daysInMonth ? daysInMonth : desired;
+      const paymentDate = new Date(new Date(periodStart).setDate(paymentDay));
+      // Nếu ngày thực trả nhỏ hơn ngày kết thúc kì thì thêm vào
+      if (paymentDate <= new Date(periodEnd)) {
+        paymentPeriods.push({
+          start_date: periodStart,
+          end_date: periodEnd,
+          expected_payment_date: paymentDate,
+        });
+      }
+    }
+    return paymentPeriods;
+  }
 }
 export default new commonFn();

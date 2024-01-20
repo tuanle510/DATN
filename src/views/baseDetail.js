@@ -327,7 +327,12 @@ export default {
         this._formParam.submit(this.model);
       }
       // List form cất xong thì không đóng mà  chuyển sang mode sửa
-      var listNotHide = ["ContractGroupDetail", "ContractDetail"];
+      var listNotHide = [
+        "ContractGroupDetail",
+        "ContractDetail",
+        "ContractDetailCtyChu",
+        "ContractDetailCtyKhach",
+      ];
       if (listNotHide.includes(this._popup.component)) {
         this.mode = this.$constants.formMode.View;
       } else {
