@@ -15,7 +15,7 @@ export default defineComponent({
     const tabList = [
       {
         tabTitle: "Thông tin chung",
-      },
+    },
       {
         tabTitle: "Hợp đồng thuê",
       },

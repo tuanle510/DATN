@@ -23,8 +23,9 @@ export default {
 
   computed: {
     count() {
+      var emp = ["delete", "empty"];
       return this.data
-        ? this.data.filter((x) => x.state != "delete").length
+        ? this.data.filter((x) => !emp.includes(x.state)).length
         : 0;
     },
   },
@@ -143,7 +144,6 @@ export default {
 
     // Check sự thay đổi giá trị
     beforeEndEdit() {
-
       // Lưu giá trị trước khi chuyển sang ô khác hoặc khong edit nữa
       var ref = `cell_${this.editingCell.row}-${this.editingCell.column}`;
 

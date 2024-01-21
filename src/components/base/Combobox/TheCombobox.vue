@@ -442,16 +442,25 @@ export default defineComponent({
      * Created date: 12:32 22/05/2022
      */
     async selectItem() {
-      var oldValue = this.modelValue;
-      // Chọn theo index của matches list:
-      // Lấy obj đã ch gán vào selectedItem
-      this.selecedItem = this.matches[this.selecedIndex];
-      // Cập nhật giá trị vào input
-      await this.$emit("update:modelValue", this.selecedItem[this.valueField]);
-      this.validate();
-      this.displayValue = this.selecedItem[this.displayField];
-      // Cập nhật giá trị display
-      await this.$emit("update:display", this.displayValue);
+      if (!this.freeText && this.matches.length == 0) {
+        await this.$emit("update:modelValue", null);
+        this.displayValue = null;
+        await this.$emit("update:display", null);
+      } else {
+        var oldValue = this.modelValue;
+        // Chọn theo index của matches list:
+        // Lấy obj đã ch gán vào selectedItem
+        this.selecedItem = this.matches[this.selecedIndex];
+        // Cập nhật giá trị vào input
+        await this.$emit(
+          "update:modelValue",
+          this.selecedItem[this.valueField]
+        );
+        this.validate();
+        this.displayValue = this.selecedItem[this.displayField];
+        // Cập nhật giá trị display
+        await this.$emit("update:display", this.displayValue);
+      }
 
       // Gán lại matches list thành data:
       this.matches = [...this.datax];
@@ -519,12 +528,7 @@ export default defineComponent({
      */
     onTab() {
       // Nếu đang mở dropdown tab là chọn luôn dòng đầu tiên
-      if (
-        this.selecedIndex != null &&
-        this.isOptionShow &&
-        this.matches &&
-        this.matches.length > 0
-      ) {
+      if (this.selecedIndex != null && this.isOptionShow) {
         this.selectItem();
       }
       this.isOptionShow = false;
@@ -609,7 +613,11 @@ export default defineComponent({
      */
     scrollToItem() {
       this.$nextTick(() => {
-        if (this.isOptionShow == true && this.selecedIndex != null) {
+        if (
+          this.isOptionShow == true &&
+          this.selecedIndex != null &&
+          this.$refs.optionList
+        ) {
           this.$refs.optionList.scrollTop = this.selecedIndex * 30;
         }
       });

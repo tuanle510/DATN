@@ -125,7 +125,13 @@ export default {
           this.dataDetail = res.data.details || [];
           // Phàn dịch vụ
           this.serviceList = res.data.service || [];
+          this.serviceList = this.serviceList.sort(
+            commonFn.dynamicSort("sort_order")
+          );
           this.serviceDetail = res.data.detailsService || [];
+          this.serviceDetail = this.serviceDetail.sort(
+            commonFn.dynamicSort("sort_order")
+          );
         }
       } catch (error) {
         commonFn.handleError(error, this.$router);

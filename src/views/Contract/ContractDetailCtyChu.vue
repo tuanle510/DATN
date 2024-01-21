@@ -22,6 +22,11 @@ export default defineComponent({
     const { loadClientData, loadContractGroupData } = comboboxLoadData();
     const upperTab = ref(0);
     const underTab = ref(0);
+    const statusData = ref([
+      { value: "Hoạt động" },
+      { value: "Hoãn" },
+      { value: "Kết thúc" },
+    ]);
     const propsData = ref({
       status: {
         data: [
@@ -32,6 +37,11 @@ export default defineComponent({
         valueField: "value",
         displayField: "value",
         freeText: true,
+      },
+    });
+    const servicePropsData = ref({
+      payment_period: {
+        format: "Number",
       },
     });
     /**
@@ -99,7 +109,10 @@ export default defineComponent({
           item.payment_period,
           desired
         );
-        var amount = item.payment_period * item.unit_price;
+        var amount = null;
+        if (item.unit_price && item.payment_period) {
+          amount = item.payment_period * item.unit_price;
+        }
         paymentDates.forEach((x) => {
           var date = new Date(x.start_date);
           x.payment_service_id = commonFn.genGuid();
@@ -272,7 +285,13 @@ export default defineComponent({
         proxy.dataDetail = res.data.details;
         // Phàn dịch vụ
         proxy.serviceList = res.data.service || [];
+        proxy.serviceList = proxy.serviceList.sort(
+          commonFn.dynamicSort("sort_order")
+        );
         proxy.serviceDetail = res.data.detailsService || [];
+        proxy.serviceDetail = proxy.serviceDetail.sort(
+          commonFn.dynamicSort("sort_order")
+        );
         //
         proxy.beforeBindData(proxy.data);
         proxy.bindData(proxy.data, proxy.dataDetail);
@@ -348,14 +367,20 @@ export default defineComponent({
     /**
      * Cập nhật trạng thái hợp đồng
      */
-     const setContractStatus = () => {
+    const setContractStatus = () => {
       var emp = ["delete", "empty"];
-      var isDetailDone = proxy.modelDetail.filter((x) => !emp.includes(x.state) && x.status == "Đã trả").length == proxy.modelDetail.filter((x) => !emp.includes(x.state)).length;
-      var isServicelDone = proxy.serviceDetail.filter((x) => !emp.includes(x.state) && x.status == "Đã trả").length == proxy.serviceDetail.filter((x) => !emp.includes(x.state)).length;
+      var isDetailDone =
+        proxy.modelDetail.filter(
+          (x) => !emp.includes(x.state) && x.status == "Đã trả"
+        ).length ==
+        proxy.modelDetail.filter((x) => !emp.includes(x.state)).length;
+      var isServicelDone =
+        proxy.serviceDetail.filter(
+          (x) => !emp.includes(x.state) && x.status == "Đã trả"
+        ).length ==
+        proxy.serviceDetail.filter((x) => !emp.includes(x.state)).length;
       if (isDetailDone && isServicelDone) {
         proxy.model.status = "Kết thúc";
-      } else {
-        proxy.model.status = "Hoạt động";
       }
     };
 
@@ -372,6 +397,7 @@ export default defineComponent({
       upperTab,
       underTab,
       propsData,
+      servicePropsData,
       genPayment,
       choseDesired,
       beforeBindData,
@@ -388,6 +414,7 @@ export default defineComponent({
       monthCount,
       updateRow,
       setContractStatus,
+      statusData,
     };
   },
 });
@@ -528,6 +555,7 @@ export default defineComponent({
                 :idField="'contract_service_id'"
                 :columns="columnsService"
                 :disabled="isView"
+                :propsData="servicePropsData"
               ></GridEditor>
             </div>
           </div>
@@ -567,6 +595,7 @@ export default defineComponent({
                     class="flex1"
                     v-model="model.payment_period"
                     :disabled="isView"
+                    :format="'Number'"
                   ></TheNumber>
                 </div>
                 <div class="d-flex flex1">
@@ -602,15 +631,18 @@ export default defineComponent({
               <div class="modal-row">
                 <div class="d-flex flex1">
                   <div class="m-label-text">Tình trạng</div>
-                  <TheInput v-model="model.status" :disabled="true"></TheInput>
+                  <TheComboBox
+                    :data="statusData"
+                    displayField="value"
+                    valueField="value"
+                    v-model="model.status"
+                    v-model:display="model.status"
+                    :initValue="model.status"
+                    :disabled="isView"
+                  ></TheComboBox>
                 </div>
                 <div class="d-flex flex1">
-                  <div class="m-label-text pl-10">
-                    Thời hạn hợp đồng &nbsp;<span>{{
-                      model.contract_term
-                    }}</span>
-                    &nbsp; tháng
-                  </div>
+                  <!-- <div class="m-label-text pl-10"> Thời hạn hợp đồng &nbsp;<span>{{ model.contract_term }}</span> &nbsp; tháng </div> -->
                 </div>
               </div>
             </div>
