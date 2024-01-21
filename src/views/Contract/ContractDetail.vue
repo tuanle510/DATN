@@ -514,7 +514,7 @@ export default defineComponent({
                 <div class="m-label-text">Phụ trách</div>
                 <TheInput
                   class="flex1"
-                  v-model="model.purchaser_name"
+                  v-model="model.assigned_to_name"
                   :disabled="isView"
                 ></TheInput>
               </div>

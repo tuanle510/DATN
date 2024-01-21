@@ -10,7 +10,11 @@
       <input
         type="text"
         ref="input"
-        :class="['m-input', { 'm-input-error': errorMessage }]"
+        :class="[
+          'm-input',
+          { 'm-input-error': errorMessage },
+          { pr60: quickAddForm },
+        ]"
         :maxlength="maxlength"
         :placeholder="placeholder"
         :disabled="isOnlyChoose || disabled"
@@ -446,6 +450,10 @@ export default defineComponent({
         await this.$emit("update:modelValue", null);
         this.displayValue = null;
         await this.$emit("update:display", null);
+      } else if (this.freeText) {
+        await this.$emit("update:modelValue", this.modelValue);
+
+        await this.$emit("update:display", this.modelValue);
       } else {
         var oldValue = this.modelValue;
         // Chọn theo index của matches list:
