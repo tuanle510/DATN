@@ -154,6 +154,7 @@ export default defineComponent({
       const param = {
         mode: proxy.$constants.formMode.View,
         id: row.contract_id,
+        reloadDetail: proxy.reloadDetail,
       };
       switch (row.contract_type) {
         case proxy.$constants.contractType.CK:
@@ -202,7 +203,7 @@ export default defineComponent({
                 });
                 if (res.data.length == 0) {
                   // Cập nhật lại List bên ngoài
-                  await this.reloadDetail();
+                  await proxy.reloadDetail();
                   //Hiển thị toast thành công
                   commonFn.toastSuccess("Xóa dữ liệu thành công");
                 }
@@ -217,6 +218,28 @@ export default defineComponent({
 
         default:
           break;
+      }
+    };
+
+    // Gán lại giá trị hiển thị cho đúng
+    const beforeBindData = (data, detail) => {
+      if (detail) {
+        detail.forEach((element) => {
+          switch (element.contract_type) {
+            case proxy.$constants.contractType.CK:
+              element.lessor_name = element.owner_name;
+              element.renter_name = element.client_name;
+              break;
+            case proxy.$constants.contractType.CCT:
+              element.lessor_name = element.owner_name;
+              element.renter_name = element.company_name;
+              break;
+            case proxy.$constants.contractType.CTK:
+              element.lessor_name = element.company_name;
+              element.renter_name = element.client_name;
+              break;
+          }
+        });
       }
     };
     return {
@@ -238,6 +261,7 @@ export default defineComponent({
       editDetail,
       reloadDetail,
       onClickAciton,
+      beforeBindData,
     };
   },
 });

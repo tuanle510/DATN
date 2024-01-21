@@ -190,8 +190,10 @@ class commonFn {
   generatePaymentDates(startDate, endDate, interval, desired) {
     const paymentPeriods = [];
     let currentDate = new Date(startDate).getDateOnly();
+    // dùng khi nhập số âm
+    var desiredMinus = desired;
     // Xử lí ngày dự tính thanh toán
-    desired = desired < 0 ? currentDate.getDate() + desired : desired;
+    desired = desired < 0 ? 0 : desired;
 
     while (currentDate <= new Date(endDate).getDateOnly()) {
       // Ngày bắt đầu kì
@@ -200,7 +202,7 @@ class commonFn {
       currentDate.setMonth(currentDate.getMonth() + interval);
       // Ngày kết thúc kì thanh toán
       var periodEnd = new Date();
-      if (currentDate > endDate) {
+      if (currentDate > new Date(endDate)) {
         periodEnd = new Date(endDate);
       } else {
         periodEnd = new Date(currentDate);
@@ -215,14 +217,36 @@ class commonFn {
       const paymentDate = new Date(new Date(periodStart).setDate(paymentDay));
       // Nếu ngày thực trả nhỏ hơn ngày kết thúc kì thì thêm vào
       if (paymentDate <= new Date(periodEnd)) {
+        var realPaymentDate = new Date(paymentDate);
+        realPaymentDate =
+          desiredMinus < 0
+            ? new Date(
+                realPaymentDate.setDate(
+                  realPaymentDate.getDate() + desiredMinus
+                )
+              )
+            : realPaymentDate;
         paymentPeriods.push({
           start_date: periodStart,
           end_date: periodEnd,
-          expected_payment_date: paymentDate,
+          expected_payment_date: realPaymentDate, // Nếu desiredMinus thì trừ đi
         });
       }
     }
     return paymentPeriods;
+  }
+
+  monthCount(from_date, to_date) {
+    // Chuyển đổi ngày nhập vào từ dạng string thành đối tượng Date
+    var from_date = new Date(from_date);
+    var to_date = new Date(to_date);
+
+    // Tính số tháng
+    var months;
+    months = (to_date.getFullYear() - from_date.getFullYear()) * 12;
+    months -= from_date.getMonth();
+    months += to_date.getMonth();
+    return months <= 0 ? 0 : months;
   }
 }
 export default new commonFn();

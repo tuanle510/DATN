@@ -3,7 +3,7 @@ import { getCurrentInstance, ref } from "vue";
 import moment from "moment";
 import commonFn from "@/common/commonFn";
 export default {
-  emits: ["update:list"],
+  emits: ["update:list", "updateRow"],
   props: {
     // Danh sách cột
     columns: Array,
@@ -143,17 +143,36 @@ export default {
 
     // Check sự thay đổi giá trị
     beforeEndEdit() {
-      if (this.data[this.editingCell.row].state == "update") {
-        return;
-      }
+
       // Lưu giá trị trước khi chuyển sang ô khác hoặc khong edit nữa
       var ref = `cell_${this.editingCell.row}-${this.editingCell.column}`;
+
       if (this.$refs[ref] && this.$refs[ref][0]) {
         var newCellValue = this.$refs[ref][0].modelValue;
+
         // So sánh ngày phải làm thế này thôi
         if (this.columns[this.editingCell.column].type == "date") {
-          newCellValue = new Date(newCellValue).setHours(0, 0, 0, 0);
-          this.oldCellValue = new Date(this.oldCellValue).setHours(0, 0, 0, 0);
+          if (newCellValue) {
+            newCellValue = new Date(newCellValue).getDateOnly();
+          }
+          if (this.oldCellValue) {
+            this.oldCellValue = new Date(this.oldCellValue).getDateOnly();
+          }
+        }
+        // Nếu thay đổi thì chạy vào không thì thôii
+        if (newCellValue != this.oldCellValue) {
+          // Giá trị mới, cũ, cả dòng, cột
+          this.$emit(
+            "updateRow",
+            newCellValue,
+            this.oldCellValue,
+            this.data[this.editingCell.row],
+            this.columns[this.editingCell.column]
+          );
+        }
+        // Nếu là update rồi thì không cập nhật lại trạng thái
+        if (this.data[this.editingCell.row].state == "update") {
+          return;
         }
         // Nếu thay đổi giá trị thì gán cho dòng đấy bằng state Sửa
         if (

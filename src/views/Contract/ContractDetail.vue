@@ -6,6 +6,7 @@ import popupUtil from "@/components/base/DynamicModal/popupUtil";
 import commonFn from "@/common/commonFn";
 import { comboboxColumns } from "@/common/comboboxColumns";
 import { comboboxLoadData } from "@/common/comboboxLoadData";
+import { confirmYes, confirm } from "@/common/dialogFn";
 
 export default defineComponent({
   extends: baseDetail,
@@ -37,6 +38,32 @@ export default defineComponent({
      * Hiển thị form nhập ngày thanh toán
      */
     const choseDesired = () => {
+      // Validate vài trường cần nhập
+      let input = [];
+      if (!proxy.model.unit_price) {
+        input.push("Giá thuê");
+      }
+      if (!proxy.model.start_date) {
+        input.push("Từ ngày");
+      }
+      if (!proxy.model.end_date) {
+        input.push("Tới ngày");
+      }
+      if (!proxy.model.payment_period) {
+        input.push("Kỳ thanh toán");
+      }
+      if (input.length > 0) {
+        let message =
+          'Bạn cần nhập các thông tin <span class="strong-text">{0}</span> của Bộ hồ sơ';
+        message = commonFn.replaceTextWithHTML(message, input.join(", "));
+        confirmYes("Thông báo", message).then((answer) => {
+          if (answer) {
+            // Tắt alert thì focus sau
+          }
+        });
+        return;
+      }
+
       popupUtil.show("DesiredQuestion", {
         submit: proxy.genPayment,
       });
@@ -160,6 +187,9 @@ export default defineComponent({
 
     // overide hàm save
     const save = async () => {
+      if (!proxy.model.status) {
+        proxy.model.status = "Hoạt động";
+      }
       try {
         proxy.handleParam();
         var param = {
@@ -222,6 +252,7 @@ export default defineComponent({
      */
     const changeUpperTab = (value) => {
       upperTab.value = value;
+      underTab.value = value;
     };
 
     /**
@@ -229,6 +260,7 @@ export default defineComponent({
      * @param {*} value
      */
     const changeUnderTab = (value) => {
+      upperTab.value = value;
       underTab.value = value;
     };
 
@@ -283,6 +315,60 @@ export default defineComponent({
       commonFn.standardizedParam(proxy.model);
     };
 
+    // Tinh số tháng
+    const monthCount = () => {
+      if (proxy.model.start_date && proxy.model.end_date) {
+        proxy.model.contract_term = commonFn.monthCount(
+          proxy.model.start_date,
+          proxy.model.end_date
+        );
+      }
+    };
+
+    /**
+     * Cập nhật trạng thái dòng thanh toán
+     */
+    const updateRow = (newVal, oldVal, rowVal, colVal) => {
+      // Nhập ngày trả thì tự cập nhật trạng thái
+      switch (colVal.dataField) {
+        case "real_payment_date":
+          if (newVal) {
+            rowVal.status = "Đã trả";
+          } else {
+            rowVal.status = null;
+          }
+          proxy.setContractStatus();
+          break;
+        case "status":
+          proxy.setContractStatus();
+          break;
+        default:
+          break;
+      }
+    };
+
+    /**
+     * Cập nhật trạng thái hợp đồng
+     */
+    const setContractStatus = () => {
+      var emp = ["delete", "empty"];
+      var isDetailDone =
+        proxy.modelDetail.filter(
+          (x) => !emp.includes(x.state) && x.status == "Đã trả"
+        ).length ==
+        proxy.modelDetail.filter((x) => !emp.includes(x.state)).length;
+      var isServicelDone =
+        proxy.serviceDetail.filter(
+          (x) => !emp.includes(x.state) && x.status == "Đã trả"
+        ).length ==
+        proxy.serviceDetail.filter((x) => !emp.includes(x.state)).length;
+      if (isDetailDone && isServicelDone) {
+        proxy.model.status = "Kết thúc";
+      } else {
+        proxy.model.status = "Hoạt động";
+      }
+    };
+
     return {
       module,
       columns,
@@ -309,6 +395,9 @@ export default defineComponent({
       handlePayment,
       handleService,
       handleParam,
+      monthCount,
+      updateRow,
+      setContractStatus,
     };
   },
 });
@@ -379,7 +468,6 @@ export default defineComponent({
                   :initValue="model.client_name"
                   :columns="clientColumns"
                   :loadComboboxData="loadClientData"
-                  :rules="[{ name: 'required' }]"
                   :disabled="isView"
                 ></TheComboBox>
               </div>
@@ -469,6 +557,7 @@ export default defineComponent({
                     class="flex1"
                     v-model="model.start_date"
                     :disabled="isView"
+                    @handleDate="monthCount"
                   ></TheDatepicker>
                 </div>
                 <div class="d-flex flex1">
@@ -478,6 +567,7 @@ export default defineComponent({
                     :minDate="model.start_date"
                     v-model="model.end_date"
                     :disabled="isView"
+                    @handleDate="monthCount"
                   ></TheDatepicker>
                 </div>
               </div>
@@ -574,6 +664,7 @@ export default defineComponent({
               v-model:list="modelDetail"
               :idField="'payment_transaction_id'"
               :propsData="propsData"
+              @updateRow="updateRow"
             ></GridEditor>
           </div>
           <div class="grids-tab-container" v-show="underTab == 1">
@@ -584,6 +675,7 @@ export default defineComponent({
               v-model:list="serviceDetail"
               :idField="'payment_service_id'"
               :propsData="propsData"
+              @updateRow="updateRow"
             ></GridEditor>
           </div>
         </div>

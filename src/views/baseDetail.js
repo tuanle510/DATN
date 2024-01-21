@@ -11,7 +11,7 @@ export default {
     // Gán form mode cho dễ dùng
     this.mode = me._formParam.mode;
     // Gán thêm dữ liệu trc khi binddata nếu cần
-    this.beforeBindData(this.data);
+    this.beforeBindData(this.data, this.dataDetail);
     this.bindData(this.data, this.dataDetail);
     if (me._popup.component != "DesiredQuestion") {
       window._listDetail = this;
@@ -138,7 +138,7 @@ export default {
      * Gán thêm dữ liệu trc khi binddata nếu cần
      * @param {*} data
      */
-    beforeBindData(data) {},
+    beforeBindData(data, detail) {},
 
     /**
      * Gán dữ liệu vào model

@@ -41,7 +41,7 @@ input.m-input:hover {
 }
 
 input.m-input:disabled {
-  background-color: #f4f5f8;
+  background-color: #f4f5f8 !important;
 }
 
 input.m-input:disabled:hover {
@@ -54,6 +54,9 @@ input.m-input:disabled:hover {
 
 .m-combobox .combobox-contaner .input-focus {
   border: 1px solid #22a7ca;
+}
+.m-combobox .combobox-contaner .m-input:disabled.input-focus {
+  border: 1px solid #afafaf;
 }
 
 .combobox-icon {
@@ -160,6 +163,48 @@ input.m-input:disabled:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.m-option-loading {
+  position: absolute;
+  border-radius: 2.5px;
+  background-color: #fff;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  z-index: 100000;
+  height: 152px;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.m-option-loading .m-option-loading-icon {
+  border: 8px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 8px solid #22a7ca;
+  width: 50px;
+  height: 50px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .m-option-table {

@@ -158,6 +158,7 @@ export default defineComponent({
       } else {
         await this.$emit("update:modelValue", null);
       }
+      this.$emit("handleDate", value);
       this.onKeyup(value);
       this.validate();
     },

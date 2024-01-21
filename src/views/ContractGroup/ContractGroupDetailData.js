@@ -1,10 +1,5 @@
 export const ContractGroupDetailData = () => {
   const columns = [
-    // {
-    //   width: 150,
-    //   name: "Mã HĐ",
-    //   dataField: "payment_batch",
-    // },
     {
       width: 200,
       name: "Tên căn hộ",
@@ -14,12 +9,12 @@ export const ContractGroupDetailData = () => {
       autoRezie: true,
       width: 200,
       name: "Bên cho thuê",
-      dataField: "client_name",
+      dataField: "lessor_name",
     },
     {
       width: 300,
       name: "Bên thuê/Môi giới",
-      dataField: "client_name",
+      dataField: "renter_name",
     },
     {
       width: 150,
@@ -34,6 +29,11 @@ export const ContractGroupDetailData = () => {
       dataField: "end_date",
       align: "center",
       type: "date",
+    },
+    {
+      width: 150,
+      name: "Trạng thái",
+      dataField: "status",
     },
     {
       width: 250,

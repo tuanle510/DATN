@@ -37,13 +37,20 @@
     </div>
     <Teleport to="body">
       <div
+        v-if="isOptionShow && loading"
+        class="m-option-loading"
+        :style="optionPos"
+      >
+        <div class="m-option-loading-icon"></div>
+      </div>
+      <div
         class="m-option-list hust-no-click-out"
         :style="optionPos"
-        v-if="isOptionShow"
+        v-if="isOptionShow && !loading"
         ref="optionList"
       >
         <!-- Dạng bảng -->
-        <table v-if="columns" class="m-option-table">
+        <table v-if="columns && !loading" class="m-option-table">
           <thead>
             <tr class="m-option-table-header">
               <th
@@ -250,10 +257,13 @@ export default defineComponent({
         // Load remote
         if (this.queryMode == "remote" && (!this.datax || this.forceReload)) {
           this.loading = true;
+          // Loading
+          this.setOptionListPosition();
           this.datax = await this.loadComboboxData();
           this.reloadData = false;
           this.$nextTick(() => {
             this.setMatches(this.$refs.input.value);
+            this.loading = false;
           });
         }
         this.$nextTick(() => {
@@ -566,9 +576,9 @@ export default defineComponent({
     setOptionListPosition() {
       // Chiều dài 1 item
       var item = 30;
-      var height = item;
+      var height = 120;
       // Tính chiều dài của dropdown (cộng 8 là padding 2 đầu)
-      if (this.matches && this.matches.length > 0) {
+      if (this.matches && this.matches.length > 0 && !this.loading) {
         height = item * this.matches.length + 8;
       }
       let container = this.$refs.container.getBoundingClientRect();
@@ -599,7 +609,7 @@ export default defineComponent({
      */
     scrollToItem() {
       this.$nextTick(() => {
-        if (this.isOptionShow == true) {
+        if (this.isOptionShow == true && this.selecedIndex != null) {
           this.$refs.optionList.scrollTop = this.selecedIndex * 30;
         }
       });
