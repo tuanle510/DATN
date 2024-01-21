@@ -51,26 +51,31 @@ export default defineComponent({
           {
             width: 150,
             name: "Bên cho thuê",
-            dataField: "owner_name",
+            dataField: "lessor_name",
           },
           {
             width: 150,
             name: "Bên thuê",
-            dataField: "client_name",
+            dataField: "renter_name",
           },
           {
-            width: 150,
+            width: 100,
             name: "Ngày bắt đầu",
             dataField: "start_date",
             align: "center",
             type: "date",
           },
           {
-            width: 150,
+            width: 100,
             name: "Ngày kết thúc",
             dataField: "end_date",
             align: "center",
             type: "date",
+          },
+          {
+            width: 100,
+            name: "Trạng thái",
+            dataField: "status",
           },
           {
             width: 150,
@@ -100,6 +105,24 @@ export default defineComponent({
           break;
         case 2:
           dataTab.value = tab2.value;
+          if (dataTab.value) {
+            dataTab.value.forEach((element) => {
+              switch (element.contract_type) {
+                case proxy.$constants.contractType.CK:
+                  element.lessor_name = element.owner_name;
+                  element.renter_name = element.client_name;
+                  break;
+                case proxy.$constants.contractType.CCT:
+                  element.lessor_name = element.owner_name;
+                  element.renter_name = element.company_name;
+                  break;
+                case proxy.$constants.contractType.CTK:
+                  element.lessor_name = element.company_name;
+                  element.renter_name = element.client_name;
+                  break;
+              }
+            });
+          }
           break;
       }
     };

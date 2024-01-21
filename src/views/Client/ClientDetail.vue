@@ -52,11 +52,11 @@ export default defineComponent({
       },
       {
         width: 100,
-        name: "Tình trạng",
+        name: "Trạng thái",
         dataField: "status",
       },
       {
-        width: 120,
+        width: 150,
         name: "Kiểu hợp đồng",
         dataField: "contract_type",
       },

@@ -177,7 +177,7 @@ export default defineComponent({
         );
         proxy.data = res.data.master;
         proxy.dataDetail = res.data.details;
-        proxy.beforeBindData(proxy.data);
+        proxy.beforeBindData(proxy.data, proxy.dataDetail);
         proxy.bindData(proxy.data, proxy.dataDetail);
         window._listDetail = proxy;
       } catch (error) {
