@@ -35,31 +35,27 @@ export default defineComponent({
           model.value.client_records = res.data.dashBoard[0].client_records;
           model.value.building_count = res.data.dashBoard[0].building_count;
           model.value.owner_count = res.data.dashBoard[0].owner_count;
+          var month = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+          var data = [];
+          month.forEach((x) => {
+            var match = res.data.dashBoardChart.find((i) => i.month == x);
+            if (match) {
+              data.push(match.total_records);
+            } else {
+              data.push(0);
+            }
+          });
           leftData.value = {
-            labels: [
-              "T1",
-              "T.2",
-              "T.3",
-              "T.4",
-              "T.5",
-              "T.6",
-              "T.7",
-              "T.8",
-              "T.9",
-              "T.10",
-              "T.11",
-              "T.12",
-            ],
+            labels: month.map((x) => "T." + x),
             datasets: [
               {
                 label: "Tổng số hợp đồng",
-                data: res.data.dashBoardChart.map((x) => x.total_records),
+                data: data,
                 backgroundColor: ["#77CEFF"],
               },
             ],
           };
           rightData.value = {
-            // labels: ["HĐ Chủ - khách", "HĐ Chủ - C.ty", "HĐ C.ty - khách"],
             labels: res.data.dashBoardCircle.map((x) => x.contract_type),
             datasets: [
               {

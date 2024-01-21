@@ -1,49 +1,124 @@
 <script>
 import { defineComponent, getCurrentInstance, ref } from "vue";
 import baseList from "@/views/baseList";
+import commonFn from "@/common/commonFn";
+import popupUtil from "@/components/base/DynamicModal/popupUtil";
 
 export default defineComponent({
   extends: baseList,
   props: {},
   setup() {
     const { proxy } = getCurrentInstance();
-    const columns = ref([
+    const columns = [
       {
         width: 150,
-        name: "Tên khách hàng",
-        dataField: "client_name",
-        align: "left",
+        name: "Bộ hồ sơ",
+        dataField: "contract_group_name",
       },
-      // {
-      //   width: 150,
-      //   name: "Công ty",
-      //   dataField: "company_name",
-      //   align: "left",
-      // },
       {
-        width: 100,
-        name: "Điện thoại",
-        dataField: "phone_number",
-        align: "left",
+        width: 120,
+        name: "Tên căn hộ",
+        dataField: "apartment_name",
       },
       {
         width: 150,
-        name: "Email",
-        dataField: "email",
-        align: "left",
+        name: "Bên cho thuê",
+        dataField: "lessor_name",
+      },
+      {
+        width: 150,
+        name: "Bên thuê/Môi giới",
+        dataField: "renter_name",
       },
       {
         width: 100,
-        name: "Ngày sinh",
-        dataField: "birthdate",
-        align: "left",
+        name: "Ngày bắt đầu",
+        dataField: "start_date",
+        align: "center",
+        type: "date",
       },
       {
-        name: "Ghi chú",
-        dataField: "note",
-        align: "left",
+        width: 100,
+        name: "Ngày kết thúc",
+        dataField: "end_date",
+        align: "center",
+        type: "date",
       },
-    ]);
+      {
+        width: 120,
+        name: "Trạng thái",
+        dataField: "status",
+      },
+      {
+        name: "Kiểu hợp đồng",
+        dataField: "contract_type",
+      },
+    ];
+    /**
+     * Xử lí columns
+     * @param {*} payload
+     */
+    const processColumns = (payload) => {
+      // Các cột config trong bảng
+      var columns = proxy.columns.map((x) => x.dataField);
+      if (proxy.primaryKey && !columns.includes(proxy.primaryKey)) {
+        columns.push(proxy.primaryKey);
+      }
+      payload.columns = columns.join(",");
+      payload.columns = payload.columns.replace(
+        "lessor_name,renter_name",
+        "owner_name,company_name,client_name"
+      );
+    };
+
+    const bindData = (data) => {
+      data = data.forEach((element) => {
+        switch (element.contract_type) {
+          case proxy.$constants.contractType.CK:
+            element.lessor_name = element.owner_name;
+            element.renter_name = element.client_name;
+            break;
+          case proxy.$constants.contractType.CCT:
+            element.lessor_name = element.owner_name;
+            element.renter_name = element.company_name;
+            break;
+          case proxy.$constants.contractType.CTK:
+            element.lessor_name = element.company_name;
+            element.renter_name = element.client_name;
+            break;
+        }
+      });
+    };
+
+    // Hiển thị form chi tiết hợp đồng
+    const editDetail = (row) => {
+      commonFn.mask();
+      const param = {
+        mode: proxy.$constants.formMode.View,
+        id: row.contract_id,
+        reloadDetail: proxy.reload,
+      };
+      switch (row.contract_type) {
+        case proxy.$constants.contractType.CK:
+          popupUtil.show("ContractDetail", param);
+          break;
+        case proxy.$constants.contractType.CTK:
+          popupUtil.show("ContractDetailCtyKhach", param);
+          break;
+        case proxy.$constants.contractType.CCT:
+          popupUtil.show("ContractDetailCtyChu", param);
+          break;
+      }
+    };
+
+    /**
+     * Mở form view (chỉ xem)
+     * @param {*} row
+     */
+    const view = (row) => {
+      proxy.editDetail(row);
+    };
+
     const formDetailName = "ContractDetail";
     const module = "Contract";
     const primaryKey = "contract_id";
@@ -56,6 +131,10 @@ export default defineComponent({
       primaryKey,
       nameKey,
       headerText,
+      processColumns,
+      bindData,
+      editDetail,
+      view,
     };
   },
 });
@@ -82,9 +161,6 @@ export default defineComponent({
           >
             <div class="refresh"></div>
           </div>
-          <!-- <div class="toolbar-btn">
-            <div class="excel"></div>
-          </div> -->
           <div class="toolbar-btn">
             <div class="remove"></div>
           </div>
@@ -96,11 +172,33 @@ export default defineComponent({
           :isPaging="true"
           :columns="columns"
           :data="data"
-          @onDbClick="edit"
+          @onDbClick="editDetail"
           @onPaginate="onPaginate"
+          :isFilterHeader="true"
+          @filterHeader="filterHeader"
           :loading="tableLoading"
           :total="total"
         >
+          <template #action="{ row }">
+            <span class="action-link" @click="onClickAciton(row, 'View')"
+              >Xem/Sửa</span
+            >
+            <TheMenuWrapper>
+              <template #toggle-button="{ toggle }">
+                <div class="icon-box-24" @click="toggle">
+                  <div class="dropdown"></div>
+                </div>
+              </template>
+              <template #default>
+                <TheMenuItem @click="onClickAciton(row, 'Delete')"
+                  >Xóa</TheMenuItem
+                >
+                <TheMenuItem @click="onClickAciton(row)"
+                  >Thêm căn hộ</TheMenuItem
+                >
+              </template>
+            </TheMenuWrapper>
+          </template>
         </GridViewer>
       </div>
     </div>

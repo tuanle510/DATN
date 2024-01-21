@@ -32,6 +32,7 @@ export default {
         // Lưu vào sau còn dùng
         // Dùng thế nào thì chưa biết
         this.lastPayload = Object.assign({}, payload);
+        this.bindData(res.data.Data);
         this.data = res.data.Data;
         this.total = res.data.Sum;
       } catch (error) {
@@ -41,6 +42,7 @@ export default {
       }
     },
 
+    bindData(data) {},
     /**
      * Load lại danh sách theo payload cũ
      */
@@ -53,6 +55,7 @@ export default {
             `${this.module}/list`,
             this.lastPayload
           );
+          this.bindData(res.data.Data);
           this.data = res.data.Data;
           this.total = res.data.Sum;
         } catch (error) {

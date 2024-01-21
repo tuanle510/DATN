@@ -266,7 +266,7 @@ export default {
             field: item.dataField,
             value:
               item.type == "date"
-                ? dayjs(item.filterValue).format("YYYY-MM-DDTHH:mm:ssZ")
+                ? dayjs(item.filterValue).format("YYYY-MM-DD")
                 : item.filterValue,
             op: item.type == "date" ? "=" : "*",
           });

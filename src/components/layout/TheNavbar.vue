@@ -34,14 +34,14 @@ export default {
         icon: "apartment",
         name: "Căn hộ",
       },
-      // {
-      //   path: "/contract",
-      //   icon: "setting",
-      //   name: "Hợp đồng",
-      // },
+      {
+        path: "/contract",
+        icon: "contract",
+        name: "Hợp đồng",
+      },
       {
         path: "/contractgroup",
-        icon: "contract",
+        icon: "contract-group",
         name: "Bộ hồ sơ",
       },
     ]);
