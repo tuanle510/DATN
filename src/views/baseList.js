@@ -232,9 +232,8 @@ export default {
       var length = res.length < 10 ? "0" + res.length : res.length;
       var text =
         '<span class="strong-text">{0} </span> bản ghi được chọn không thể xóa vì đã phát sinh dữ liệu. Vui lòng kiểm tra lại trước khi thực hiện xóa.<br>';
-      if (res[0] && res[0].Data) {
+      if (res && res.length == 1 && res[0] && res[0].Data) {
         var errs = res[0].Data;
-        console.log(errs);
         for (let key in errs) {
           if (errs[key] != 0) {
             switch (key) {

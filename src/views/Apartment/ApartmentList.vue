@@ -8,13 +8,13 @@ export default defineComponent({
     const { proxy } = getCurrentInstance();
     const columns = ref([
       {
-        width: 250,
+        width: 150,
         name: "Tên căn hộ",
         dataField: "apartment_name",
         align: "left",
       },
       {
-        width: 250,
+        width: 150,
         name: "Chủ sở hữu",
         dataField: "owner_name",
         align: "left",
@@ -26,7 +26,7 @@ export default defineComponent({
         align: "left",
       },
       {
-        width: 350,
+        width: 250,
         name: "Địa chỉ",
         dataField: "apartment_address",
         align: "left",
