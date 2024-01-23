@@ -12,7 +12,7 @@ export const ContractGroupDetailData = () => {
       dataField: "lessor_name",
     },
     {
-      width: 300,
+      width: 250,
       name: "Bên thuê/Môi giới",
       dataField: "renter_name",
     },
@@ -36,7 +36,6 @@ export const ContractGroupDetailData = () => {
       dataField: "status",
     },
     {
-      width: 250,
       name: "Kiểu hợp đồng",
       dataField: "contract_type",
     },

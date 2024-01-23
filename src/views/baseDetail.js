@@ -196,7 +196,9 @@ export default {
           "input:not([disabled]), textarea:not([disabled])"
         );
         if (firstInput) {
-          firstInput.focus();
+          setTimeout(() => {
+            firstInput.focus();
+          }, 100);
         }
       });
     },

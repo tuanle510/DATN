@@ -18,10 +18,16 @@ export default defineComponent({
     const isDetailMaster = true;
     const { columns, columnsService, columnsServiceDetail } =
       ContractDetailData();
-    const { clientColumns, contractGroupColumns } = comboboxColumns();
-    const { loadClientData, loadContractGroupData } = comboboxLoadData();
+    const { clientColumns, contractGroupColumns, apartmentColumns } =
+      comboboxColumns();
+    const { loadClientData, loadContractGroupData, loadApartmentData } =
+      comboboxLoadData();
     const upperTab = ref(0);
     const underTab = ref(0);
+    const isContract = ref(false);
+    onMounted(() => {
+      isContract.value = proxy._formParam.isContract || false;
+    });
     const statusData = ref([
       { value: "Hoạt động" },
       { value: "Hoãn" },
@@ -406,6 +412,23 @@ export default defineComponent({
       }
     };
 
+    // Gán giá trị cho căn hộ, chủ hộ
+    const selectContractGroup = (param) => {
+      proxy.model.apartment_id = param.obj.apartment_id;
+      proxy.model.apartment_name = param.obj.apartment_name;
+      proxy.model.owner_id = param.obj.owner_id;
+      proxy.model.owner_name = param.obj.owner_name;
+    };
+
+    /**
+     * Gán thông tin chủ nhà
+     * @param {*} param
+     */
+    const selectApartment = (param) => {
+      proxy.model.owner_name = param.obj.owner_name;
+      proxy.model.owner_id = param.obj.owner_id;
+    };
+
     return {
       module,
       columns,
@@ -413,7 +436,9 @@ export default defineComponent({
       clientColumns,
       columnsServiceDetail,
       contractGroupColumns,
+      apartmentColumns,
       loadContractGroupData,
+      loadApartmentData,
       loadClientData,
       isDetailMaster,
       upperTab,
@@ -437,6 +462,9 @@ export default defineComponent({
       updateRow,
       setContractStatus,
       statusData,
+      selectApartment,
+      selectContractGroup,
+      isContract,
     };
   },
 });
@@ -463,7 +491,24 @@ export default defineComponent({
             <div class="grids-tab-container">
               <div class="modal-row">
                 <div class="m-label-text">Căn hộ</div>
+                <TheComboBox
+                  v-if="isContract"
+                  class="flex1"
+                  valueField="apartment_id"
+                  displayField="apartment_name"
+                  :queryMode="'remote'"
+                  dropdownWidth="450"
+                  v-model="model.apartment_id"
+                  v-model:display="model.apartment_name"
+                  :initValue="model.apartment_name"
+                  :columns="apartmentColumns"
+                  :loadComboboxData="loadApartmentData"
+                  @selectItem="selectApartment"
+                  :disabled="isView"
+                  :rules="[{ name: 'required' }]"
+                ></TheComboBox>
                 <TheInput
+                  v-else
                   class="flex1"
                   disabled
                   v-model="model.apartment_name"
@@ -489,8 +534,8 @@ export default defineComponent({
                   v-model:display="model.contract_group_name"
                   :initValue="model.contract_group_name"
                   :columns="contractGroupColumns"
+                  @selectItem="selectContractGroup"
                   :loadComboboxData="loadContractGroupData"
-                  :rules="[{ name: 'required' }]"
                   :disabled="isView"
                 ></TheComboBox>
               </div>

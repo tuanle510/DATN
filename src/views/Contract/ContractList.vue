@@ -119,6 +119,17 @@ export default defineComponent({
       proxy.editDetail(row);
     };
 
+    /**
+     * Mở form thêm mới
+     */
+    const add = () => {
+      const param = {
+        mode: proxy.$constants.formMode.Add,
+        isContract: true,
+      };
+      proxy.showDetailForm(param);
+    };
+
     const formDetailName = "ContractDetail";
     const module = "Contract";
     const primaryKey = "contract_id";
@@ -135,6 +146,7 @@ export default defineComponent({
       bindData,
       editDetail,
       view,
+      add,
     };
   },
 });

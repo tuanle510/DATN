@@ -452,7 +452,6 @@ export default defineComponent({
         await this.$emit("update:display", null);
       } else if (this.freeText) {
         await this.$emit("update:modelValue", this.modelValue);
-
         await this.$emit("update:display", this.modelValue);
       } else {
         var oldValue = this.modelValue;
@@ -517,8 +516,9 @@ export default defineComponent({
       }
       // Hiển thị đến cuối thì quay lại đầu
       if (
-        this.selecedIndex >= this.matches.length - 1 ||
-        this.selecedIndex == null
+        this.matches &&
+        (this.selecedIndex >= this.matches.length - 1 ||
+          this.selecedIndex == null)
       ) {
         this.selecedIndex = 0;
         return;
@@ -575,7 +575,10 @@ export default defineComponent({
           this.matches = [...this.datax];
         }
         // Nếu có giá trị trùng với giá trị trong combo
-        var listValue = this.matches.map((x) => x[this.valueField]);
+
+        var listValue = this.matches
+          ? this.matches.map((x) => x[this.valueField])
+          : null;
         if (this.modelValue && listValue.includes(this.modelValue)) {
           this.selecedIndex = listValue.findIndex((x) => x == this.modelValue);
         }

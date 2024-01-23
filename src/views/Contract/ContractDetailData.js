@@ -82,7 +82,7 @@ export const ContractDetailData = () => {
     {
       width: 120,
       name: "Định mức",
-      dataField: "quota",
+      dataField: "dimension",
       align: "right",
       type: "currency",
     },
